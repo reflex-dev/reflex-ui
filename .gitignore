@@ -1,0 +1,9 @@
+.web
+.states
+*.db
+*.py[cod]
+assets/external/
+__pycache__/
+.ruff_cache/
+.venv/
+playground/

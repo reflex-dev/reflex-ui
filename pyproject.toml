@@ -1,0 +1,18 @@
+[project]
+name = "reflex-ui"
+version = "0.0.1"
+description = "A set of reusable components built on top of Base UI and Tailwind, designed for use across any Reflex project"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "reflex>=0.7.14",
+]
+
+[dependency-groups]
+dev = [
+    "playwright",
+	"pyright==1.1.401",
+]
+
+[tool.codespell]
+skip = "*.pyi, uv.lock"
