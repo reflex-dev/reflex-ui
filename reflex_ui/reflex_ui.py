@@ -2,13 +2,10 @@
 
 import reflex as rx
 
-from reflex_ui.playground.playground import playground
-
 
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.el.div(
-        playground(),
         class_name="flex flex-col items-center justify-center h-screen",
     )
 
