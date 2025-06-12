@@ -11,8 +11,8 @@ _SUBMODULES = {"components", "utils"}
 _SUBMOD_ATTRS = {
     **_REFLEX_UI_MAPPING,
     "components": ["base"],
-    "components.icons.hugeicon": ["hi"],
-    "components.icons.icon": ["icon"],
+    "components.icons.hugeicon": ["hi", "icon"],
+    "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
 }
 

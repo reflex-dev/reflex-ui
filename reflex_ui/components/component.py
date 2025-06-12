@@ -1,4 +1,4 @@
-"""Core component for all components"""
+"""Core component for all components."""
 
 from typing import Any
 
@@ -21,6 +21,7 @@ class CoreComponent(Component):
         Args:
             props: The component props dictionary
             default_class_name: The default class name to use
+
         """
         if "render_" in props:
             return

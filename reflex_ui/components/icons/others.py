@@ -11,13 +11,14 @@ from reflex_ui.utils.twmerge import cn
 def spinner_component(
     class_name: str | Var[str] = "",
 ) -> Component:
-    """A spinner SVG icon.
+    """Create a spinner SVG icon.
 
     Args:
         class_name: The class name of the spinner.
 
     Returns:
         The spinner SVG icon.
+
     """
     return svg(
         svg.path(

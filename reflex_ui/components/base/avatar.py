@@ -9,6 +9,8 @@ from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
 
 class ClassNames:
+    """Class names for avatar components."""
+
     ROOT = "shrink-0 inline-flex size-6 items-center justify-center overflow-hidden rounded-full bg-secondary-1 align-middle text-base font-medium text-secondary-12 select-none"
     IMAGE = "size-full object-cover shrink-0"
     FALLBACK = "flex size-full items-center justify-center text-sm animate-pulse bg-secondary-6"
@@ -21,6 +23,7 @@ class AvatarBaseComponent(BaseUIComponent):
 
     @property
     def import_var(self):
+        """Return the import variable for the avatar component."""
         return ImportVar(tag="Avatar", package_path="", install=False)
 
 
