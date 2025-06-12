@@ -15,6 +15,7 @@ def cn(
 
     Returns:
         Var: A Var representing the merged classes string.
+
     """
     return (
         Var(

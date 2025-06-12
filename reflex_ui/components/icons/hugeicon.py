@@ -39,6 +39,7 @@ class HugeIcon(CoreComponent):
 
         Returns:
             The created component.
+
         """
         if children and isinstance(children[0], str) and "icon" not in props:
             props["icon"] = children[0]
@@ -58,4 +59,4 @@ class HugeIcon(CoreComponent):
         return super().create(*children, **props)
 
 
-hi = HugeIcon.create
+hi = icon = HugeIcon.create

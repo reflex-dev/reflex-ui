@@ -24,3 +24,43 @@ dev = ["pyright==1.1.402", "pre-commit"]
 
 [tool.codespell]
 skip = "*.pyi, uv.lock"
+
+[tool.ruff]
+target-version = "py313"
+output-format = "concise"
+lint.isort.split-on-trailing-comma = false
+lint.select = ["ALL"]
+lint.ignore = [
+    "A",
+    "ANN002",
+    "ANN003",
+    "ANN2",
+    "ANN4",
+    "ARG",
+    "BLE",
+    "C901",
+    "COM",
+    "D205",
+    "DTZ",
+    "E501",
+    "F403",
+    "FBT",
+    "FIX",
+    "G004",
+    "ISC003",
+    "PLC",
+    "PLR",
+    "PLW",
+    "PT011",
+    "PT012",
+    "PYI",
+    "RUF012",
+    "S",
+    "SLF",
+    "SLOT",
+    "TC",
+    "TD",
+    "TRY0",
+    "UP038",
+]
+lint.pydocstyle.convention = "google"

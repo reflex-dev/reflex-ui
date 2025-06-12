@@ -7,7 +7,7 @@ from reflex.components.el import Button as BaseButton
 from reflex.vars import Var
 
 from reflex_ui.components.component import CoreComponent
-from reflex_ui.components.icons.icon import spinner
+from reflex_ui.components.icons.others import spinner
 
 LiteralButtonVariant = Literal[
     "primary", "destructive", "outline", "secondary", "ghost", "link", "dark"
@@ -82,17 +82,21 @@ class Button(BaseButton, CoreComponent):
 
     @staticmethod
     def validate_variant(variant: LiteralButtonVariant):
+        """Validate the button variant."""
         if variant not in BUTTON_VARIANTS["variant"]:
-            raise ValueError(
-                f"Invalid variant: {variant}. Available variants: {', '.join(BUTTON_VARIANTS['variant'].keys())}"
+            available_variants = ", ".join(BUTTON_VARIANTS["variant"].keys())
+            message = (
+                f"Invalid variant: {variant}. Available variants: {available_variants}"
             )
+            raise ValueError(message)
 
     @staticmethod
     def validate_size(size: LiteralButtonSize):
+        """Validate the button size."""
         if size not in BUTTON_VARIANTS["size"]:
-            raise ValueError(
-                f"Invalid size: {size}. Available sizes: {', '.join(BUTTON_VARIANTS['size'].keys())}"
-            )
+            available_sizes = ", ".join(BUTTON_VARIANTS["size"].keys())
+            message = f"Invalid size: {size}. Available sizes: {available_sizes}"
+            raise ValueError(message)
 
     def _exclude_props(self) -> list[str]:
         return [
