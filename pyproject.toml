@@ -11,7 +11,7 @@ dependencies = [
 [dependency-groups]
 dev = [
     "playwright",
-	"pyright==1.1.401",
+	"pyright==1.1.402",
 ]
 
 [tool.codespell]

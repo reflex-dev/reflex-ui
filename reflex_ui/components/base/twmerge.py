@@ -1,7 +1,8 @@
 """Merge Tailwind CSS classes utility."""
 
+from reflex.utils.imports import ImportVar
 from reflex.vars import FunctionVar, Var
-from reflex.vars.base import ImportVar, VarData
+from reflex.vars.base import VarData
 
 
 def cn(

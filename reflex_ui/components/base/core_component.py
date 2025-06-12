@@ -12,7 +12,7 @@ class CoreComponent(Component):
     """Core component for all components."""
 
     # Whether the component should be unstyled
-    unstyled: Var[bool] = False
+    unstyled: Var[bool]
 
     @classmethod
     def set_class_name(cls, default_class_name: str, props: dict[str, Any]) -> None:

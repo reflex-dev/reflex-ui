@@ -12,25 +12,22 @@ class HugeIcon(CoreComponent):
 
     library = "@hugeicons/react@^1.0.5"
 
-    tag: str = "HugeiconsIcon"
+    tag = "HugeiconsIcon"
 
     # The main icon to display
     icon: Var[str]
 
     # Alternative icon for states/interactions
-    alt_icon: Var[str | None] = None
+    alt_icon: Var[str | None]
 
     # Whether to show the alternative icon
-    show_alt: Var[bool] = False
+    show_alt: Var[bool]
 
     # The size of the icon in pixels
-    size: Var[int] = 16
-
-    # The color of the icon
-    color: Var[str] = "currentColor"
+    size: Var[int] = Var.create(16)
 
     # The stroke width of the icon
-    stroke_width: Var[float] = 2
+    stroke_width: Var[float] = Var.create(2)
 
     @classmethod
     def create(cls, *children, **props) -> Component:

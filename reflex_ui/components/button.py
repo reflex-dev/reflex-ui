@@ -2,7 +2,6 @@
 
 from typing import Literal
 
-from reflex.components.component import Component
 from reflex.components.core.cond import cond
 from reflex.components.el import Button as BaseButton
 from reflex.vars import Var
@@ -46,16 +45,16 @@ class Button(BaseButton, CoreComponent):
     """A custom button component."""
 
     # Button variant
-    variant: Var[LiteralButtonVariant] = "primary"
+    variant: Var[LiteralButtonVariant]
 
     # Button size
-    size: Var[LiteralButtonSize] = "md"
+    size: Var[LiteralButtonSize]
 
     # The loading state of the button
-    loading: Var[bool] = False
+    loading: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseButton:
         """Create the button component."""
         variant = props.pop("variant", "primary")
         cls.validate_variant(variant)
