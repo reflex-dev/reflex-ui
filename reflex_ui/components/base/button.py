@@ -6,8 +6,8 @@ from reflex.components.core.cond import cond
 from reflex.components.el import Button as BaseButton
 from reflex.vars import Var
 
-from .base.core_component import CoreComponent
-from .icons.icon import spinner
+from reflex_ui.components.component import CoreComponent
+from reflex_ui.components.icons.icon import spinner
 
 LiteralButtonVariant = Literal[
     "primary", "destructive", "outline", "secondary", "ghost", "link", "dark"

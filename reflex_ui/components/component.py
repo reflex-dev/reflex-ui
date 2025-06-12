@@ -5,7 +5,7 @@ from typing import Any
 from reflex.components.component import Component
 from reflex.vars import Var
 
-from .twmerge import cn
+from reflex_ui.utils.twmerge import cn
 
 
 class CoreComponent(Component):

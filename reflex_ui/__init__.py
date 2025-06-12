@@ -1,0 +1,27 @@
+"""Reflex UI package."""
+
+from reflex.utils import lazy_loader
+
+_REFLEX_UI_MAPPING = {
+    "components.base.button": ["button"],
+    "components.base.avatar": ["avatar"],
+}
+
+_SUBMODULES = {"components", "utils"}
+_SUBMOD_ATTRS = {
+    **_REFLEX_UI_MAPPING,
+    "components": ["base"],
+    "components.icons.hugeicon": ["hi"],
+    "components.icons.icon": ["icon"],
+    "utils.twmerge": ["cn"],
+}
+
+getattr, __dir__, __all__ = lazy_loader.attach(
+    __name__,
+    submodules=_SUBMODULES,
+    submod_attrs=_SUBMOD_ATTRS,
+)
+
+
+def __getattr__(name: str):
+    return getattr(name)
