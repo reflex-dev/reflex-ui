@@ -28,4 +28,4 @@ jobs:
       - name: Install Requirements
         run: uv sync
 
-      - run: pre-commit run --all-files --show-diff-on-failure --color=always
+      - run: uv run pre-commit run --all-files --show-diff-on-failure --color=always

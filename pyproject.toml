@@ -10,8 +10,8 @@ dependencies = [
 
 [dependency-groups]
 dev = [
-    "playwright",
 	"pyright==1.1.402",
+	"pre-commit",
 ]
 
 [tool.codespell]
