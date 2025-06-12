@@ -4,7 +4,7 @@ from reflex.components.component import Component
 from reflex.utils.imports import ImportVar
 from reflex.vars.base import Var, VarData
 
-from ..base.core_component import CoreComponent
+from reflex_ui.components.component import CoreComponent
 
 
 class HugeIcon(CoreComponent):

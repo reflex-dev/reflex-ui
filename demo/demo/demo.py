@@ -2,11 +2,16 @@
 
 import reflex as rx
 
+import reflex_ui as rxui
+
 
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.el.div(
-        class_name="flex flex-col items-center justify-center h-screen",
+        rxui.button(rxui.hi("SmileIcon"), "Click me"),
+        class_name=rxui.cn(
+            "flex flex-col items-center justify-center h-screen", "bg-secondary-1"
+        ),
     )
 
 

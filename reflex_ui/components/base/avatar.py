@@ -5,7 +5,7 @@ from reflex.event import EventHandler, no_args_event_spec
 from reflex.utils.imports import ImportVar
 from reflex.vars import Var
 
-from .base.base_ui import PACKAGE_NAME, BaseUIComponent
+from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
 
 class ClassNames:

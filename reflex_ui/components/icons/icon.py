@@ -4,7 +4,7 @@ from reflex.components.component import Component, memo
 from reflex.components.el import svg
 from reflex.vars.base import Var
 
-from ..base.twmerge import cn
+from reflex_ui.utils.twmerge import cn
 
 
 @memo

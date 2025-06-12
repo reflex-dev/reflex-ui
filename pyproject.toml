@@ -4,15 +4,23 @@ version = "0.0.1"
 description = "A set of reusable components built on top of Base UI and Tailwind, designed for use across any Reflex project"
 readme = "README.md"
 requires-python = ">=3.13"
-dependencies = [
-    "reflex>=0.7.14",
-]
+dependencies = ["reflex>=0.7.14"]
+
+[build-system]
+requires = ["hatchling", "uv-dynamic-versioning"]
+build-backend = "hatchling.build"
+
+[tool.hatch.version]
+source = "uv-dynamic-versioning"
+
+[tool.uv-dynamic-versioning]
+vcs = "git"
+style = "pep440"
+bump = true
+metadata = false
 
 [dependency-groups]
-dev = [
-	"pyright==1.1.402",
-	"pre-commit",
-]
+dev = ["pyright==1.1.402", "pre-commit"]
 
 [tool.codespell]
 skip = "*.pyi, uv.lock"
