@@ -1,4 +1,4 @@
-"""Theme switcher component"""
+"""Theme switcher component."""
 
 from reflex.components.component import Component, memo
 from reflex.components.core.cond import cond
@@ -10,6 +10,7 @@ from reflex_ui.utils.twmerge import cn
 
 
 def theme_switcher_item(mode: LiteralColorMode, icon: str) -> Component:
+    """Create a theme switcher item button for a specific mode."""
     active_cn = "text-secondary-12 shadow-small bg-secondary-1"
     unactive_cn = "hover:text-secondary-12 text-secondary-9"
     return Button.create(
@@ -25,7 +26,7 @@ def theme_switcher_item(mode: LiteralColorMode, icon: str) -> Component:
 
 @memo
 def theme_switcher(class_name: str = "") -> Component:
-    """Theme switcher component"""
+    """Theme switcher component."""
     return Div.create(
         theme_switcher_item("system", "ComputerIcon"),
         theme_switcher_item("light", "Sun01Icon"),
