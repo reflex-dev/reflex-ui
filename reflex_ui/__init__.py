@@ -5,6 +5,7 @@ from reflex.utils import lazy_loader
 _REFLEX_UI_MAPPING = {
     "components.base.button": ["button"],
     "components.base.avatar": ["avatar"],
+    "components.base.theme_switcher": ["theme_switcher"],
 }
 
 _SUBMODULES = {"components", "utils"}

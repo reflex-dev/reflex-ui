@@ -16,6 +16,7 @@ def index() -> rx.Component:
                 position="top-center",
             ),
         ),
+        ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
             "flex flex-col items-center justify-center h-screen", "bg-secondary-1"
         ),
