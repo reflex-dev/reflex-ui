@@ -51,6 +51,31 @@
 	--secondary-a10: var(--slate-a10);
 	--secondary-a11: var(--slate-a11);
 	--secondary-a12: var(--slate-a12);
+	/* Info */
+	--info-1: var(--blue-1);
+	--info-2: var(--blue-2);
+	--info-3: var(--blue-3);
+	--info-4: var(--blue-4);
+	--info-5: var(--blue-5);
+	--info-6: var(--blue-6);
+	--info-7: var(--blue-7);
+	--info-8: var(--blue-8);
+	--info-9: var(--blue-9);
+	--info-10: var(--blue-10);
+	--info-11: var(--blue-11);
+	--info-12: var(--blue-12);
+	--info-a1: var(--blue-a1);
+	--info-a2: var(--blue-a2);
+	--info-a3: var(--blue-a3);
+	--info-a4: var(--blue-a4);
+	--info-a5: var(--blue-a5);
+	--info-a6: var(--blue-a6);
+	--info-a7: var(--blue-a7);
+	--info-a8: var(--blue-a8);
+	--info-a9: var(--blue-a9);
+	--info-a10: var(--blue-a10);
+	--info-a11: var(--blue-a11);
+	--info-a12: var(--blue-a12);
 	/* Success */
 	--success-1: var(--jade-1);
 	--success-2: var(--jade-2);
@@ -184,6 +209,31 @@
 	--color-secondary-a10: var(--secondary-a10);
 	--color-secondary-a11: var(--secondary-a11);
 	--color-secondary-a12: var(--secondary-a12);
+	/* Info */
+	--color-info-1: var(--info-1);
+	--color-info-2: var(--info-2);
+	--color-info-3: var(--info-3);
+	--color-info-4: var(--info-4);
+	--color-info-5: var(--info-5);
+	--color-info-6: var(--info-6);
+	--color-info-7: var(--info-7);
+	--color-info-8: var(--info-8);
+	--color-info-9: var(--info-9);
+	--color-info-10: var(--info-10);
+	--color-info-11: var(--info-11);
+	--color-info-12: var(--info-12);
+	--color-info-a1: var(--info-a1);
+	--color-info-a2: var(--info-a2);
+	--color-info-a3: var(--info-a3);
+	--color-info-a4: var(--info-a4);
+	--color-info-a5: var(--info-a5);
+	--color-info-a6: var(--info-a6);
+	--color-info-a7: var(--info-a7);
+	--color-info-a8: var(--info-a8);
+	--color-info-a9: var(--info-a9);
+	--color-info-a10: var(--info-a10);
+	--color-info-a11: var(--info-a11);
+	--color-info-a12: var(--info-a12);
 	/* Success */
 	--color-success-1: var(--success-1);
 	--color-success-2: var(--success-2);
@@ -1049,7 +1099,7 @@
 		0px -8px 8px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0)),
 		0px -2px 6px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0));
 	/* Radius */
-	--radius-xs: calc(var(--radius) - 0rem);
+	--radius-xs: calc(var(--radius) - 0.375rem);
 	--radius-sm: calc(var(--radius) - 0.25rem);
 	--radius-md: calc(var(--radius) - 0.125rem);
 	--radius-lg: var(--radius);
