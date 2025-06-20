@@ -9,7 +9,7 @@ _SUBMODULES: set[str] = {
 
 _SUBMOD_ATTRS: dict[str, list[str]] = {
     "hugeicon": ["hi", "icon"],
-    "others": ["spinner"],
+    "others": ["spinner", "select_arrow"],
 }
 
 __getattr__, __dir__, __all__ = lazy_loader.attach(

@@ -20,23 +20,23 @@ BUTTON_VARIANTS = {
     "variant": {
         "primary": "bg-primary-9 text-white hover:bg-primary-10",
         "destructive": "bg-destructive-9 hover:bg-destructive-10 text-white",
-        "outline": "border border-secondary-5/80 hover:bg-border-secondary-6/80 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
+        "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
         "ghost": "hover:bg-secondary-3 text-secondary-12",
         "link": "text-secondary-12 underline-offset-4 hover:underline",
         "dark": "bg-secondary-12 text-secondary-1 hover:bg-secondary-12/80",
     },
     "size": {
-        "xs": "px-1.5 h-7 rounded-sm gap-1.5",
-        "sm": "px-2 h-8 rounded-lg gap-2",
-        "md": "px-2.5 h-9 rounded-lg gap-2",
-        "lg": "px-3 h-10 rounded-xl gap-2.5",
-        "xl": "px-3.5 h-12 rounded-2xl gap-3",
-        "icon-xs": "size-7 rounded-md",
-        "icon-sm": "size-8 rounded-md",
-        "icon-md": "size-9 rounded-lg",
-        "icon-lg": "size-10 rounded-xl",
-        "icon-xl": "size-12 rounded-2xl",
+        "xs": "px-1.5 h-7 rounded-xs gap-1.5",
+        "sm": "px-2 h-8 rounded-sm gap-2",
+        "md": "px-2.5 h-9 rounded-md gap-2",
+        "lg": "px-3 h-10 rounded-lg gap-2.5",
+        "xl": "px-3.5 h-12 rounded-xl gap-3",
+        "icon-xs": "size-7 rounded-xs",
+        "icon-sm": "size-8 rounded-sm",
+        "icon-md": "size-9 rounded-md",
+        "icon-lg": "size-10 rounded-lg",
+        "icon-xl": "size-12 rounded-xl",
     },
 }
 
@@ -44,10 +44,10 @@ BUTTON_VARIANTS = {
 class Button(BaseButton, CoreComponent):
     """A custom button component."""
 
-    # Button variant
+    # Button variant. Defaults to "primary".
     variant: Var[LiteralButtonVariant]
 
-    # Button size
+    # Button size. Defaults to "md".
     size: Var[LiteralButtonSize]
 
     # The loading state of the button

@@ -489,7 +489,7 @@ wheels = [
 
 [[package]]
 name = "reflex"
-version = "0.7.14"
+version = "0.8.0a4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "alembic" },
@@ -511,9 +511,9 @@ dependencies = [
     { name = "typing-extensions" },
     { name = "wrapt" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/b5/11/52994ec428691991959d486fa48df57fe6a571a5d8d98ebd590377bf7f07/reflex-0.7.14.tar.gz", hash = "sha256:9a36eee47e60c64630cdc341565416ee838a53ee3c60d281eea0b7887b67f1e3", size = 576039, upload-time = "2025-06-03T02:01:54.855Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/08/7b/a95fa7b315bd41e0d2f6eda09f0afb6e94c276c2ee7eeea078a330178851/reflex-0.8.0a4.tar.gz", hash = "sha256:7768f5a5e499c9620f4ef135b07c018ef1c87545620a69b6dfb5d49e0a707592", size = 579935, upload-time = "2025-06-19T22:50:10.258Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/45/e2/9dc1156cbfc1b7cde889ab09f89b0ae0938e694c32c4c553c52f3ad0796b/reflex-0.7.14-py3-none-any.whl", hash = "sha256:7b1e0e37a88e9129aa896c5a47c212a29c620fa2e82148813cd335c172974948", size = 873575, upload-time = "2025-06-03T02:01:52.853Z" },
+    { url = "https://files.pythonhosted.org/packages/ae/63/b804c839a674a437461488e5da65e216a0431aad7fab6e1eb111b2057a05/reflex-0.8.0a4-py3-none-any.whl", hash = "sha256:ce7cf0f66ccf81d12519a736422c4ea8939801769426bcfe0b06fcd4bfe25b1c", size = 873956, upload-time = "2025-06-19T22:50:07.853Z" },
 ]
 
 [[package]]
@@ -549,7 +549,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "reflex", specifier = ">=0.7.14" }]
+requires-dist = [{ name = "reflex", specifier = ">=0.8.0a4" }]
 
 [package.metadata.requires-dev]
 dev = [

@@ -39,3 +39,24 @@ def spinner_component(
 
 
 spinner = spinner_component
+
+
+def select_arrow_icon(
+    class_name: str | Var[str] = "",
+) -> Component:
+    """A select arrow SVG icon."""
+    return svg(
+        svg.path(
+            d="M4.99902 10.0003L7.99967 13.0003L10.999 10.0003M4.99902 6.00033L7.99967 3.00033L10.999 6.00033",
+            stroke="currentColor",
+            stroke_width="1.5",
+            stroke_linecap="round",
+            stroke_linejoin="round",
+        ),
+        xmlns="http://www.w3.org/2000/svg",
+        custom_attrs={"viewBox": "0 0 16 16"},
+        class_name=cn("size-4 fill-none", class_name),
+    )
+
+
+select_arrow = select_arrow_icon

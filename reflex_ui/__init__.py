@@ -4,8 +4,9 @@ from reflex.utils import lazy_loader
 
 _REFLEX_UI_MAPPING = {
     "components.base.avatar": ["avatar"],
-    "components.base.button": ["button"],
     "components.base.badge": ["badge"],
+    "components.base.button": ["button"],
+    "components.base.select": ["select"],
     "components.base.theme_switcher": ["theme_switcher"],
 }
 
