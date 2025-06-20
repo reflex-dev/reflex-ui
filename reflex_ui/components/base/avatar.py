@@ -1,7 +1,7 @@
 """Custom avatar component."""
 
 from reflex.components.component import Component, ComponentNamespace
-from reflex.event import EventHandler, no_args_event_spec
+from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
 from reflex.vars import Var
 
@@ -51,7 +51,7 @@ class AvatarImage(AvatarBaseComponent):
     src: Var[str]
 
     # Callback when loading status changes
-    on_loading_status_change: EventHandler[no_args_event_spec]
+    on_loading_status_change: EventHandler[passthrough_event_spec(str)]
 
     # The component to render
     render_: Var[Component]
@@ -88,7 +88,7 @@ class HighLevelAvatar(AvatarRoot):
     src: Var[str]
 
     # Callback when loading status changes
-    on_loading_status_change: EventHandler[no_args_event_spec]
+    on_loading_status_change: EventHandler[passthrough_event_spec(str)]
 
     # How long to wait before showing the fallback. Specified in milliseconds
     delay: Var[int]

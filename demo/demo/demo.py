@@ -16,9 +16,27 @@ def index() -> rx.Component:
                 position="top-center",
             ),
         ),
+        ui.select(
+            items=[
+                "Item 1",
+                "Item 2",
+                "Item 3",
+                "Item 4",
+                "Item 5",
+                "Item 6",
+                "Item 7",
+                "Item 8",
+                "Item 9",
+                "Item 10",
+            ],
+            name="select",
+            placeholder="Select an item",
+            on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
+            on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
+        ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
-            "flex flex-col items-center justify-center h-screen", "bg-secondary-1"
+            "flex flex-col gap-4 items-center justify-center h-screen", "bg-secondary-1"
         ),
     )
 
