@@ -98,9 +98,7 @@ class SelectRoot(SelectBaseComponent):
 
 
 class SelectTrigger(SelectBaseComponent):
-    """A button that opens the select menu.
-    Renders a `<div>` element.
-    """
+    """A button that opens the select menu."""
 
     tag = "Select.Trigger"
 
@@ -160,39 +158,39 @@ class SelectPositioner(SelectBaseComponent):
 
     tag = "Select.Positioner"
 
-    # How to align the popup relative to the specified side.
-    align: Var[LiteralAlign] = Var.create("center")
+    # How to align the popup relative to the specified side. Defaults to "center".
+    align: Var[LiteralAlign]
 
-    # Additional offset along the alignment axis in pixels.
-    align_offset: Var[int] = Var.create(0)
+    # Additional offset along the alignment axis in pixels. Defaults to 0.
+    align_offset: Var[int]
 
-    # Which side of the anchor element to align the popup against. May automatically change to avoid collisions.
-    side: Var[LiteralSide] = Var.create("bottom")
+    # Which side of the anchor element to align the popup against. May automatically change to avoid collisions. Defaults to "bottom".
+    side: Var[LiteralSide]
 
     # Minimum distance to maintain between the arrow and the edges of the popup.
-    # Use it to prevent the arrow element from hanging out of the rounded corners of a popup.
-    arrow_padding: Var[int] = Var.create(5)
+    # Use it to prevent the arrow element from hanging out of the rounded corners of a popup. Defaults to 5.
+    arrow_padding: Var[int]
 
-    # Additional space to maintain from the edge of the collision boundary.
-    collision_padding: Var[int | list[int]] = Var.create(5)
+    # Additional space to maintain from the edge of the collision boundary. Defaults to 5.
+    collision_padding: Var[int | list[int]]
 
-    # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view.
-    sticky: Var[bool] = Var.create(False)
+    # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to False.
+    sticky: Var[bool]
 
-    # Determines which CSS position property to use.
-    position_method: Var[LiteralPosition] = Var.create("absolute")
+    # Determines which CSS position property to use. Defaults to "absolute".
+    position_method: Var[LiteralPosition]
 
-    # Whether the positioner overlaps the trigger so the selected item's text is aligned with the trigger's value text. This only applies to mouse input and is automatically disabled if there is not enough space.
+    # Whether the positioner overlaps the trigger so the selected item's text is aligned with the trigger's value text. This only applies to mouse input and is automatically disabled if there is not enough space. Defaults to False.
     align_item_with_trigger: Var[bool] = Var.create(False)
 
-    # Whether the popup tracks any layout shift of its positioning anchor.
-    track_anchor: Var[bool] = Var.create(True)
+    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
+    track_anchor: Var[bool]
 
     # Distance between the anchor and the popup in pixels.
-    side_offset: Var[int] = Var.create(0)
+    side_offset: Var[int] = Var.create(4)
 
     # Determines how to handle collisions when positioning the popup.
-    collision_avoidance: Var[str] = Var.create("shift")
+    collision_avoidance: Var[str]
 
     # The render prop
     render_: Component
@@ -231,7 +229,7 @@ class SelectItem(SelectBaseComponent):
     value: Var[Any]
 
     # Whether the component should ignore user interaction.
-    disabled: Var[bool] = Var.create(False)
+    disabled: Var[bool]
 
     # The render prop
     render_: Var[Component]
@@ -263,8 +261,8 @@ class SelectItemIndicator(SelectBaseComponent):
 
     tag = "Select.ItemIndicator"
 
-    # Whether to keep the HTML element in the DOM when the item is not selected.
-    keep_mounted: Var[bool] = Var.create(False)
+    # Whether to keep the HTML element in the DOM when the item is not selected. Defaults to False.
+    keep_mounted: Var[bool]
 
     # The render prop
     render_: Var[Component]
@@ -359,8 +357,8 @@ class SelectScrollUpArrow(SelectBaseComponent):
 
     tag = "Select.ScrollUpArrow"
 
-    # Whether to keep the component mounted when not visible
-    keep_mounted: Var[bool] = Var.create(False)
+    # Whether to keep the component mounted when not visible. Defaults to False.
+    keep_mounted: Var[bool]
 
     # The render prop
     render_: Var[Component]
@@ -377,11 +375,11 @@ class SelectScrollDownArrow(SelectBaseComponent):
 
     tag = "Select.ScrollDownArrow"
 
-    # Whether to keep the component mounted when not visible
-    keep_mounted: Var[bool] = Var.create(False)
+    # Whether to keep the component mounted when not visible. Defaults to False.
+    keep_mounted: Var[bool]
 
     # The render prop
-    render_: Component
+    render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> Component:
@@ -437,7 +435,6 @@ class HighLevelSelect(SelectRoot):
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
         }
-        positioner_props.setdefault("side_offset", 4)
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
 
         # Get extracted values with defaults
