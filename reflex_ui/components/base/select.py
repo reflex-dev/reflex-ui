@@ -193,7 +193,7 @@ class SelectPositioner(SelectBaseComponent):
     collision_avoidance: Var[str]
 
     # The render prop
-    render_: Component
+    render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> Component:
@@ -208,7 +208,7 @@ class SelectPopup(SelectBaseComponent):
     tag = "Select.Popup"
 
     # The render prop
-    render_: Component
+    render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> Component:
