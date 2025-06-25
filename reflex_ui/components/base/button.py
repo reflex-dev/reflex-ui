@@ -12,7 +12,9 @@ from reflex_ui.components.icons.others import spinner
 LiteralButtonVariant = Literal[
     "primary", "destructive", "outline", "secondary", "ghost", "link", "dark"
 ]
-LiteralButtonSize = Literal["xs", "sm", "md", "lg", "icon"]
+LiteralButtonSize = Literal[
+    "xs", "sm", "md", "lg", "xl", "icon-xs", "icon-sm", "icon-md", "icon-lg", "icon-xl"
+]
 
 DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:border disabled:border-secondary-4/80 disabled:bg-secondary-3 disabled:text-secondary-8 shrink-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-medium cursor-pointer box-border"
 
