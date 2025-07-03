@@ -30,7 +30,7 @@ def index() -> rx.Component:
                 "Item 10",
             ],
             name="select",
-            placeholder="Select an item",
+            default_value="Select an item",
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),

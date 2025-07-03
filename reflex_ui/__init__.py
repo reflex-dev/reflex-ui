@@ -7,6 +7,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.badge": ["badge"],
     "components.base.button": ["button"],
     "components.base.select": ["select"],
+    "components.base.skeleton": ["skeleton"],
     "components.base.theme_switcher": ["theme_switcher"],
 }
 
