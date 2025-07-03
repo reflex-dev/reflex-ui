@@ -120,9 +120,6 @@ class SelectValue(SelectBaseComponent):
 
     tag = "Select.Value"
 
-    # A placeholder to display before an item has been chosen.
-    placeholder: Var[str]
-
     # The render prop
     render_: Var[Component]
 
@@ -438,7 +435,6 @@ class HighLevelSelect(SelectRoot):
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
 
         # Get extracted values with defaults
-        placeholder = trigger_props.get("placeholder", "")
         size = trigger_props.get("size", "md")
         items = items_props.get("items", [])
 
@@ -486,7 +482,7 @@ class HighLevelSelect(SelectRoot):
         return SelectRoot.create(
             SelectTrigger.create(
                 render_=button(
-                    SelectValue.create(placeholder=placeholder),
+                    SelectValue.create(),
                     SelectIcon.create(select_arrow(class_name="size-4")),
                     variant="outline",
                     size=size,
