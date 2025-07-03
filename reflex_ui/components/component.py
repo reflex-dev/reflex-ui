@@ -15,7 +15,9 @@ class CoreComponent(Component):
     unstyled: Var[bool]
 
     @classmethod
-    def set_class_name(cls, default_class_name: str, props: dict[str, Any]) -> None:
+    def set_class_name(
+        cls, default_class_name: str | Var[str], props: dict[str, Any]
+    ) -> None:
         """Set the class name in props, merging with the default if necessary.
 
         Args:
