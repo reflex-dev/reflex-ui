@@ -16,6 +16,10 @@ def index() -> rx.Component:
                 position="top-center",
             ),
         ),
+        ui.slider(
+            on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
+            class_name="max-w-xs",
+        ),
         ui.select(
             items=[
                 "Item 1",

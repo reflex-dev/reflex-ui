@@ -9,6 +9,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
     "components.base.skeleton": ["skeleton"],
+    "components.base.slider": ["slider"],
     "components.base.theme_switcher": ["theme_switcher"],
 }
 
