@@ -20,6 +20,9 @@ def index() -> rx.Component:
             on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
             class_name="max-w-xs",
         ),
+        ui.switch(
+            on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+        ),
         ui.select(
             items=[
                 "Item 1",
