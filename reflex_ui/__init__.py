@@ -12,6 +12,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.slider": ["slider"],
     "components.base.switch": ["switch"],
     "components.base.theme_switcher": ["theme_switcher"],
+    "components.base.tooltip": ["tooltip"],
 }
 
 _SUBMODULES = {"components", "utils"}
