@@ -53,6 +53,7 @@ class TooltipProvider(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip provider component."""
+        props["data-slot"] = "tooltip-provider"
         return super().create(*children, **props)
 
 
@@ -91,6 +92,7 @@ class TooltipRoot(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip root component."""
+        props["data-slot"] = "tooltip-root"
         return super().create(*children, **props)
 
 
@@ -105,6 +107,7 @@ class TooltipTrigger(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip trigger component."""
+        props["data-slot"] = "tooltip-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
         return super().create(*children, **props)
 
@@ -168,6 +171,7 @@ class TooltipPositioner(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip positioner component."""
+        props["data-slot"] = "tooltip-positioner"
         return super().create(*children, **props)
 
 
@@ -182,6 +186,7 @@ class TooltipPopup(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip popup component."""
+        props["data-slot"] = "tooltip-popup"
         cls.set_class_name(ClassNames.POPUP, props)
         return super().create(*children, **props)
 
@@ -194,6 +199,7 @@ class TooltipArrow(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip arrow component."""
+        props["data-slot"] = "tooltip-arrow"
         cls.set_class_name(ClassNames.ARROW, props)
         return super().create(*children, **props)
 
@@ -233,6 +239,7 @@ class HighLevelTooltip(TooltipRoot):
         "position_method",
         "track_anchor",
         "collision_avoidance",
+        "class_name",
     }
 
     @classmethod
