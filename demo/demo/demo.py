@@ -8,13 +8,16 @@ import reflex_ui as ui
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.el.div(
-        ui.button(
-            ui.icon("SmileIcon"),
-            "Click me",
-            on_click=rx.toast.success(
-                "You are cool :)",
-                position="top-center",
+        ui.tooltip(
+            ui.button(
+                ui.icon("SmileIcon"),
+                "Click me",
+                on_click=rx.toast.success(
+                    "You are cool :)",
+                    position="top-center",
+                ),
             ),
+            content="Seriously, click me",
         ),
         ui.slider(
             on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
