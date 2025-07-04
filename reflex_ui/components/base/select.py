@@ -96,6 +96,12 @@ class SelectRoot(SelectBaseComponent):
     # Whether the user must choose a value before submitting a form
     required: Var[bool] = Var.create(False)
 
+    @classmethod
+    def create(cls, *children, **props) -> Component:
+        """Create the select root component."""
+        props["data-slot"] = "select"
+        return super().create(*children, **props)
+
 
 class SelectTrigger(SelectBaseComponent):
     """A button that opens the select menu."""
@@ -111,6 +117,7 @@ class SelectTrigger(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the select trigger component."""
+        props["data-slot"] = "select-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
         return super().create(*children, **props)
 
@@ -126,6 +133,7 @@ class SelectValue(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-value"
         cls.set_class_name(ClassNames.VALUE, props)
         return super().create(*children, **props)
 
@@ -195,6 +203,7 @@ class SelectPositioner(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-positioner"
         cls.set_class_name(ClassNames.POSITIONER, props)
         return super().create(*children, **props)
 
@@ -210,6 +219,7 @@ class SelectPopup(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-popup"
         cls.set_class_name(ClassNames.POPUP, props)
         return super().create(*children, **props)
 
@@ -234,6 +244,7 @@ class SelectItem(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-item"
         cls.set_class_name(ClassNames.ITEM, props)
         return super().create(*children, **props)
 
@@ -249,6 +260,7 @@ class SelectItemText(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-item-text"
         cls.set_class_name(ClassNames.ITEM_TEXT, props)
         return super().create(*children, **props)
 
@@ -267,6 +279,7 @@ class SelectItemIndicator(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-item-indicator"
         cls.set_class_name(ClassNames.ITEM_INDICATOR, props)
         return super().create(*children, **props)
 
@@ -282,6 +295,7 @@ class SelectGroup(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-group"
         cls.set_class_name(ClassNames.GROUP, props)
         return super().create(*children, **props)
 
@@ -297,6 +311,7 @@ class SelectGroupLabel(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-group-label"
         cls.set_class_name(ClassNames.GROUP_LABEL, props)
         return super().create(*children, **props)
 
@@ -315,6 +330,7 @@ class SelectSeparator(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-separator"
         cls.set_class_name(ClassNames.SEPARATOR, props)
         return super().create(*children, **props)
 
@@ -330,6 +346,7 @@ class SelectIcon(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-icon"
         cls.set_class_name(ClassNames.ICON, props)
         return super().create(*children, **props)
 
@@ -345,6 +362,7 @@ class SelectArrow(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-arrow"
         cls.set_class_name(ClassNames.ARROW, props)
         return super().create(*children, **props)
 
@@ -363,6 +381,7 @@ class SelectScrollUpArrow(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-scroll-up-arrow"
         cls.set_class_name(ClassNames.SCROLL_ARROW_UP, props)
         return super().create(*children, **props)
 
@@ -381,6 +400,7 @@ class SelectScrollDownArrow(SelectBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
+        props["data-slot"] = "select-scroll-down-arrow"
         cls.set_class_name(ClassNames.SCROLL_ARROW_DOWN, props)
         return super().create(*children, **props)
 

@@ -8,7 +8,6 @@ from reflex.utils.imports import ImportVar
 from reflex.vars import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
-from reflex_ui.utils.twmerge import cn
 
 LiteralOrientation = Literal["horizontal", "vertical"]
 
@@ -99,6 +98,7 @@ class SliderRoot(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider root component."""
+        props["data-slot"] = "slider"
         cls.set_class_name(ClassNames.ROOT, props)
         return super().create(*children, **props)
 
@@ -114,6 +114,7 @@ class SliderValue(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider value component."""
+        props["data-slot"] = "slider-value"
         cls.set_class_name(ClassNames.VALUE, props)
         return super().create(*children, **props)
 
@@ -129,6 +130,7 @@ class SliderControl(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider control component."""
+        props["data-slot"] = "slider-control"
         cls.set_class_name(ClassNames.CONTROL, props)
         return super().create(*children, **props)
 
@@ -144,6 +146,7 @@ class SliderTrack(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider track component."""
+        props["data-slot"] = "slider-track"
         cls.set_class_name(ClassNames.TRACK, props)
         return super().create(*children, **props)
 
@@ -159,6 +162,7 @@ class SliderIndicator(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider indicator component."""
+        props["data-slot"] = "slider-indicator"
         cls.set_class_name(ClassNames.INDICATOR, props)
         return super().create(*children, **props)
 
@@ -183,21 +187,13 @@ class SliderThumb(SliderBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the slider thumb component."""
+        props["data-slot"] = "slider-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
         return super().create(*children, **props)
 
 
 class HighLevelSlider(SliderRoot):
     """High-level wrapper for the Slider component."""
-
-    # Class name for the indicator
-    indicator_class_name: Var[str]
-
-    # Class name for the track
-    track_class_name: Var[str]
-
-    # Class name for the control
-    control_class_name: Var[str]
 
     @classmethod
     def create(cls, **props) -> Component:
@@ -209,21 +205,12 @@ class HighLevelSlider(SliderRoot):
         Returns:
             The slider component.
         """
-        # Extract custom class names for the indicator, track, and control
-        indicator_class_name = props.pop("indicator_class_name", "")
-        track_class_name = props.pop("track_class_name", "")
-        control_class_name = props.pop("control_class_name", "")
-
         return SliderRoot.create(
             SliderControl.create(
                 SliderTrack.create(
-                    SliderIndicator.create(
-                        class_name=cn(ClassNames.INDICATOR, indicator_class_name)
-                    ),
+                    SliderIndicator.create(),
                     SliderThumb.create(),
-                    class_name=cn(ClassNames.TRACK, track_class_name),
                 ),
-                class_name=cn(ClassNames.CONTROL, control_class_name),
             ),
             **props,
         )
