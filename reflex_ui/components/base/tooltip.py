@@ -36,27 +36,6 @@ class TooltipBaseComponent(BaseUIComponent):
         return ImportVar(tag="Tooltip", package_path="", install=False)
 
 
-class TooltipProvider(TooltipBaseComponent):
-    """Provider component for tooltips."""
-
-    tag = "Tooltip.Provider"
-
-    # How long to wait before opening a tooltip. Specified in milliseconds.
-    delay: Var[int]
-
-    # How long to wait before closing a tooltip. Specified in milliseconds.
-    close_delay: Var[int]
-
-    # Another tooltip will open instantly if the previous tooltip is closed within this timeout. Specified in milliseconds. Defaults to 400.
-    timeout: Var[int]
-
-    @classmethod
-    def create(cls, *children, **props) -> Component:
-        """Create the tooltip provider component."""
-        props["data-slot"] = "tooltip-provider"
-        return super().create(*children, **props)
-
-
 class TooltipRoot(TooltipBaseComponent):
     """Root component for a tooltip."""
 
@@ -92,7 +71,28 @@ class TooltipRoot(TooltipBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the tooltip root component."""
-        props["data-slot"] = "tooltip-root"
+        props["data-slot"] = "tooltip"
+        return super().create(*children, **props)
+
+
+class TooltipProvider(TooltipBaseComponent):
+    """Provider component for tooltips."""
+
+    tag = "Tooltip.Provider"
+
+    # How long to wait before opening a tooltip. Specified in milliseconds.
+    delay: Var[int]
+
+    # How long to wait before closing a tooltip. Specified in milliseconds.
+    close_delay: Var[int]
+
+    # Another tooltip will open instantly if the previous tooltip is closed within this timeout. Specified in milliseconds. Defaults to 400.
+    timeout: Var[int]
+
+    @classmethod
+    def create(cls, *children, **props) -> Component:
+        """Create the tooltip provider component."""
+        props["data-slot"] = "tooltip-provider"
         return super().create(*children, **props)
 
 

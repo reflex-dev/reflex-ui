@@ -38,6 +38,7 @@ class AvatarRoot(AvatarBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the avatar root component."""
+        props["data-slot"] = "avatar"
         cls.set_class_name(ClassNames.ROOT, props)
         return super().create(*children, **props)
 
@@ -59,6 +60,7 @@ class AvatarImage(AvatarBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the avatar image component."""
+        props["data-slot"] = "avatar-image"
         cls.set_class_name(ClassNames.IMAGE, props)
         return super().create(*children, **props)
 
@@ -77,6 +79,7 @@ class AvatarFallback(AvatarBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the avatar fallback component."""
+        props["data-slot"] = "avatar-fallback"
         cls.set_class_name(ClassNames.FALLBACK, props)
         return super().create(*children, **props)
 

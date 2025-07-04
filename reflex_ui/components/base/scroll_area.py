@@ -48,6 +48,7 @@ class ScrollAreaRoot(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area root component."""
+        props["data-slot"] = "scroll-area"
         cls.set_class_name(ClassNames.ROOT, props)
         return super().create(*children, **props)
 
@@ -63,6 +64,7 @@ class ScrollAreaViewport(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area viewport component."""
+        props["data-slot"] = "scroll-area-viewport"
         cls.set_class_name(ClassNames.VIEWPORT, props)
         return super().create(*children, **props)
 
@@ -78,6 +80,7 @@ class ScrollAreaContent(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area content component."""
+        props["data-slot"] = "scroll-area-content"
         cls.set_class_name(ClassNames.CONTENT, props)
         return super().create(*children, **props)
 
@@ -99,6 +102,7 @@ class ScrollAreaScrollbar(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area scrollbar component."""
+        props["data-slot"] = "scroll-area-scrollbar"
         orientation = props.get("orientation", "vertical")
 
         scrollbar_classes = cn(
@@ -125,6 +129,7 @@ class ScrollAreaThumb(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area thumb component."""
+        props["data-slot"] = "scroll-area-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
         return super().create(*children, **props)
 
@@ -140,6 +145,7 @@ class ScrollAreaCorner(ScrollAreaBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the scroll area corner component."""
+        props["data-slot"] = "scroll-area-corner"
         cls.set_class_name(ClassNames.CORNER, props)
         return super().create(*children, **props)
 

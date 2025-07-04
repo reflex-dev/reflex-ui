@@ -64,6 +64,7 @@ class SwitchRoot(SwitchBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the switch root component."""
+        props["data-slot"] = "switch"
         cls.set_class_name(ClassNames.ROOT, props)
         return super().create(*children, **props)
 
@@ -79,6 +80,7 @@ class SwitchThumb(SwitchBaseComponent):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the switch thumb component."""
+        props["data-slot"] = "switch-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
         return super().create(*children, **props)
 
