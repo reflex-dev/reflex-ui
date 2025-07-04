@@ -10,6 +10,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.select": ["select"],
     "components.base.skeleton": ["skeleton"],
     "components.base.slider": ["slider"],
+    "components.base.switch": ["switch"],
     "components.base.theme_switcher": ["theme_switcher"],
 }
 
