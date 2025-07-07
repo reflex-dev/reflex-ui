@@ -19,6 +19,35 @@ def index() -> rx.Component:
             ),
             content="Seriously, click me",
         ),
+        ui.dialog(
+            trigger=ui.button(
+                ui.icon("Add02Icon"),
+                "Open dialog",
+                variant="secondary",
+            ),
+            title="Welcome to My App",
+            description="This dialog provides an overview of the application features and functionality.",
+            content=rx.el.div(
+                rx.el.p(
+                    "Did you click the button?",
+                    class_name="text-secondary-11 text-sm font-medium",
+                ),
+                rx.el.div(
+                    ui.dialog.close(
+                        render_=ui.button(
+                            "Cancel",
+                            variant="outline",
+                        ),
+                    ),
+                    ui.button(
+                        "Click me",
+                        on_click=rx.toast.success("You are cool :)"),
+                    ),
+                    class_name="flex flex-row gap-2 justify-end",
+                ),
+                class_name="flex flex-col gap-2 w-full",
+            ),
+        ),
         ui.checkbox(
             label="Click me",
             on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),

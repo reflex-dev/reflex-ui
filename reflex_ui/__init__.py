@@ -8,6 +8,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.button": ["button"],
     "components.base.card": ["card"],
     "components.base.checkbox": ["checkbox"],
+    "components.base.dialog": ["dialog"],
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
     "components.base.skeleton": ["skeleton"],
