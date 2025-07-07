@@ -191,8 +191,8 @@ class SelectPositioner(SelectBaseComponent):
     # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
     track_anchor: Var[bool]
 
-    # Distance between the anchor and the popup in pixels.
-    side_offset: Var[int] = Var.create(4)
+    # Distance between the anchor and the popup in pixels. Defaults to 0.
+    side_offset: Var[int]
 
     # Determines how to handle collisions when positioning the popup.
     collision_avoidance: Var[str]
@@ -204,6 +204,7 @@ class SelectPositioner(SelectBaseComponent):
     def create(cls, *children, **props) -> Component:
         """Create the dialog trigger component."""
         props["data-slot"] = "select-positioner"
+        props.setdefault("side_offset", 4)
         cls.set_class_name(ClassNames.POSITIONER, props)
         return super().create(*children, **props)
 
