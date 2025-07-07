@@ -19,6 +19,10 @@ def index() -> rx.Component:
             ),
             content="Seriously, click me",
         ),
+        ui.checkbox(
+            label="Click me",
+            on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+        ),
         ui.slider(
             on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
             class_name="max-w-xs",
