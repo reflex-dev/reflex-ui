@@ -6,6 +6,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.avatar": ["avatar"],
     "components.base.badge": ["badge"],
     "components.base.button": ["button"],
+    "components.base.card": ["card"],
     "components.base.checkbox": ["checkbox"],
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
