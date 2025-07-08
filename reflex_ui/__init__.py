@@ -17,6 +17,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.skeleton": ["skeleton"],
     "components.base.slider": ["slider"],
     "components.base.switch": ["switch"],
+    "components.base.tabs": ["tabs"],
     "components.base.theme_switcher": ["theme_switcher"],
     "components.base.toggle": ["toggle"],
     "components.base.tooltip": ["tooltip"],
