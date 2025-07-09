@@ -1,14 +1,14 @@
 fail_fast: true
 
 repos:
-  - repo: https://github.com/charliermarsh/ruff-pre-commit
-    rev: v0.11.9
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.12.2
     hooks:
-      - id: ruff-format
-        files: ^reflex_ui/
-      - id: ruff
+      - id: ruff-check
         files: ^reflex_ui/
         args: ["--fix", "--exit-non-zero-on-fix", "--no-unsafe-fixes"]
+      - id: ruff-format
+        files: ^reflex_ui/
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.1
@@ -17,7 +17,7 @@ repos:
         files: ^reflex_ui/
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.402
+    rev: v1.1.403
     hooks:
       - id: pyright
         files: ^reflex_ui/
