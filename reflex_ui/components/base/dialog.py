@@ -6,7 +6,7 @@ from reflex.components.component import Component, ComponentNamespace
 from reflex.components.el import Div
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base.button import button
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent

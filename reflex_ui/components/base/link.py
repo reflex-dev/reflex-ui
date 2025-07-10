@@ -2,8 +2,8 @@
 
 from typing import Literal
 
-from reflex.components.react_router.dom import ReactRouterLink
-from reflex.vars import Var
+from reflex.components.react_router.dom import ReactRouterLink, To
+from reflex.vars.base import Var
 
 from reflex_ui.components.component import CoreComponent
 from reflex_ui.components.icons.hugeicon import hi
@@ -44,6 +44,9 @@ class Link(ReactRouterLink, CoreComponent):
 
     # Whether to show the icon. Defaults to False.
     show_icon: Var[bool]
+
+    # The page to link to.
+    to: Var[str | To]
 
     @classmethod
     def create(cls, *children, **props) -> ReactRouterLink:

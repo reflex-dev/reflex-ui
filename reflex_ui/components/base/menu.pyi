@@ -9,7 +9,6 @@ from typing import Any, Literal
 from reflex.components.component import Component, ComponentNamespace
 from reflex.components.core.breakpoints import Breakpoints
 from reflex.event import EventHandler, EventType, PointerEventInfo
-from reflex.vars import Var
 from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import BaseUIComponent

@@ -3,7 +3,7 @@
 from typing import Literal
 
 from reflex.components.el import Span
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.component import CoreComponent
 

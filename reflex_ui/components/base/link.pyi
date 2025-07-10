@@ -7,9 +7,8 @@ from collections.abc import Mapping, Sequence
 from typing import Any, Literal
 
 from reflex.components.core.breakpoints import Breakpoints
-from reflex.components.react_router.dom import ReactRouterLink
+from reflex.components.react_router.dom import ReactRouterLink, To
 from reflex.event import EventType, PointerEventInfo
-from reflex.vars import Var
 from reflex.vars.base import Var
 
 from reflex_ui.components.component import CoreComponent

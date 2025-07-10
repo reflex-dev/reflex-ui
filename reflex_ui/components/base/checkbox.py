@@ -4,7 +4,7 @@ from reflex.components.component import ComponentNamespace
 from reflex.components.el import Label
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 from reflex_ui.components.icons.hugeicon import hi

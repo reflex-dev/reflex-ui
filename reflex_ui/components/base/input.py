@@ -7,8 +7,7 @@ from reflex.components.el import Button, Div, Span
 from reflex.components.el import Input as ReflexInput
 from reflex.event import EventHandler, passthrough_event_spec, set_focus, set_value
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
-from reflex.vars.base import get_unique_variable_name
+from reflex.vars.base import Var, get_unique_variable_name
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 from reflex_ui.components.icons.hugeicon import hi
