@@ -28,7 +28,7 @@ class ClassNames:
     VALUE = "flex-1 text-left"
     ICON = "flex size-4 text-secondary-10 group-data-[disabled]/trigger:text-current"
     POPUP = "group/popup max-h-[17.25rem] overflow-y-auto origin-(--transform-origin) p-1 border border-secondary-a4 bg-secondary-1 shadow-large transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 outline-none scrollbar-thin scrollbar-thumb-secondary-9 scrollbar-track-transparent"
-    ITEM = "grid min-w-(--anchor-width) grid-cols-[1fr_auto] items-center gap-2 text-sm select-none font-[450] group-data-[side=none]/popup:min-w-[calc(var(--anchor-width)+1rem)] data-[selected]:text-secondary-12 text-secondary-11 cursor-pointer placeholder:text-secondary-11 data-[selected]:font-medium outline-none data-[highlighted]:bg-secondary-3 scroll-m-1"
+    ITEM = "grid min-w-(--anchor-width) grid-cols-[1fr_auto] items-center gap-2 text-sm select-none font-[450] group-data-[side=none]/popup:min-w-[calc(var(--anchor-width)+1rem)] data-[selected]:text-secondary-12 text-secondary-11 cursor-pointer placeholder:text-secondary-9 data-[selected]:font-medium outline-none data-[highlighted]:bg-secondary-3 scroll-m-1"
     ITEM_INDICATOR = "text-current"
     ITEM_TEXT = "text-start"
     GROUP = "p-1"
@@ -504,7 +504,9 @@ class HighLevelSelect(SelectRoot):
             SelectTrigger.create(
                 render_=button(
                     SelectValue.create(),
-                    SelectIcon.create(select_arrow(class_name="size-4")),
+                    SelectIcon.create(
+                        select_arrow(class_name="size-4 text-secondary-9")
+                    ),
                     variant="outline",
                     size=size,
                     class_name=ClassNames.TRIGGER,

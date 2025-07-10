@@ -10,6 +10,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.checkbox": ["checkbox"],
     "components.base.dialog": ["dialog"],
     "components.base.gradient_profile": ["gradient_profile"],
+    "components.base.input": ["input"],
     "components.base.link": ["link"],
     "components.base.popover": ["popover"],
     "components.base.scroll_area": ["scroll_area"],
