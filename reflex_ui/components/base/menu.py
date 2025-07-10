@@ -544,7 +544,6 @@ class HighLevelMenu(MenuRoot):
     # Props for different component parts
     _item_props = {"close_on_click"}
     _trigger_props = {"placeholder", "size", "close_on_click"}
-    _items_props = {"items"}
     _positioner_props = {
         "align",
         "align_offset",
@@ -573,22 +572,17 @@ class HighLevelMenu(MenuRoot):
         # Extract props for different parts
         item_props = {k: props.pop(k) for k in cls._item_props & props.keys()}
         trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
-        items_props = {k: props.pop(k) for k in cls._items_props & props.keys()}
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
         }
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
 
-        # Get the size of the menu
+        items = props.pop("items", [])
         size = trigger_props.get("size", "md")
-        # Get extracted values with defaults
-        items = items_props.get("items", [])
         trigger_label = trigger_props.get("placeholder", "Open Menu")
 
-        # Helper function to create menu item from either string or tuple
         def create_menu_item(item: str | tuple[str, EventHandler]) -> Component:
             if isinstance(item, tuple):
-                # Handle tuple: (label, on_click_handler)
                 label, on_click_handler = item
                 return MenuItem.create(
                     render_=button(
@@ -601,7 +595,6 @@ class HighLevelMenu(MenuRoot):
                     ),
                     **item_props,
                 )
-            # Handle string
             return MenuItem.create(
                 render_=button(
                     item,
@@ -613,7 +606,6 @@ class HighLevelMenu(MenuRoot):
                 **item_props,
             )
 
-        # Create the items children
         if isinstance(items, Var):
             items_children = foreach(items, create_menu_item)
         else:
