@@ -52,7 +52,7 @@ class Toggle(ToggleBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the toggle component."""
         props["data-slot"] = "toggle"
         cls.set_class_name(ClassNames.ROOT, props)

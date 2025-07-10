@@ -58,7 +58,7 @@ class InputRoot(InputBaseComponent, ReflexInput):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> ReflexInput:
+    def create(cls, *children, **props) -> BaseUIComponent:  # pyright: ignore[reportIncompatibleMethodOverride]
         """Create a high level input component with simplified API."""
         props["data-slot"] = "input"
         cls.set_class_name(ClassNames.INPUT, props)
@@ -120,7 +120,7 @@ class HighLevelInput(InputBaseComponent):
     }
 
     @classmethod
-    def create(cls, *children, **props) -> Div:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a high level input component with simplified API."""
         # Extract and prepare input props
         input_props = {k: props.pop(k) for k in cls._el_input_props & props.keys()}
@@ -143,7 +143,7 @@ class HighLevelInput(InputBaseComponent):
             }
         )
 
-        return Div.create(
+        return Div.create(  # pyright: ignore[reportReturnType]
             (
                 Span.create(
                     hi(icon, class_name="text-secondary-9 size-4 pointer-events-none"),
@@ -161,7 +161,7 @@ class HighLevelInput(InputBaseComponent):
         )
 
     @staticmethod
-    def _create_clear_button(id: str, clear_events: list[EventHandler]) -> Component:
+    def _create_clear_button(id: str, clear_events: list[EventHandler]) -> Button:
         """Create the clear button component."""
         return Button.create(
             hi("CancelCircleIcon"),

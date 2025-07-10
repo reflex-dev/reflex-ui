@@ -74,7 +74,7 @@ class PopoverRoot(PopoverBaseComponent):
     close_delay: Var[int]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover root component."""
         props["data-slot"] = "popover"
         return super().create(*children, **props)
@@ -92,7 +92,7 @@ class PopoverTrigger(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover trigger component."""
         props["data-slot"] = "popover-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
@@ -108,7 +108,7 @@ class PopoverBackdrop(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover backdrop component."""
         props["data-slot"] = "popover-backdrop"
         cls.set_class_name(ClassNames.BACKDROP, props)
@@ -172,7 +172,7 @@ class PopoverPositioner(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover positioner component."""
         props["data-slot"] = "popover-positioner"
         props.setdefault("side_offset", 4)
@@ -195,7 +195,7 @@ class PopoverPopup(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover popup component."""
         props["data-slot"] = "popover-popup"
         cls.set_class_name(ClassNames.POPUP, props)
@@ -211,7 +211,7 @@ class PopoverArrow(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover arrow component."""
         props["data-slot"] = "popover-arrow"
         cls.set_class_name(ClassNames.ARROW, props)
@@ -227,7 +227,7 @@ class PopoverTitle(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover title component."""
         props["data-slot"] = "popover-title"
         cls.set_class_name(ClassNames.TITLE, props)
@@ -243,7 +243,7 @@ class PopoverDescription(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover description component."""
         props["data-slot"] = "popover-description"
         cls.set_class_name(ClassNames.DESCRIPTION, props)
@@ -259,7 +259,7 @@ class PopoverClose(PopoverBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover close component."""
         props["data-slot"] = "popover-close"
         cls.set_class_name(ClassNames.CLOSE, props)
@@ -293,7 +293,7 @@ class HighLevelPopover(PopoverRoot):
     _portal_props = {"container", "keep_mounted"}
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a popover component.
 
         Args:

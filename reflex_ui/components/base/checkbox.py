@@ -1,8 +1,6 @@
 """Checkbox component from base-ui components."""
 
-from __future__ import annotations
-
-from reflex.components.component import Component, ComponentNamespace
+from reflex.components.component import ComponentNamespace
 from reflex.components.el import Label
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
@@ -74,7 +72,7 @@ class CheckboxRoot(CheckboxBaseComponent):
     read_only: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the checkbox root component."""
         props["data-slot"] = "checkbox"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -87,7 +85,7 @@ class CheckboxIndicator(CheckboxBaseComponent):
     tag = "Checkbox.Indicator"
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the checkbox indicator component."""
         if len(children) == 0:
             children = (hi("Tick02Icon", size=14),)
@@ -100,7 +98,7 @@ class HighLevelCheckbox(CheckboxRoot):
     """High level wrapper for the Checkbox component."""
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a high level checkbox component.
 
         Args:
@@ -112,7 +110,7 @@ class HighLevelCheckbox(CheckboxRoot):
         """
         class_name = props.pop("class_name", "")
         if label := props.pop("label", None):
-            return Label.create(
+            return Label.create(  # pyright: ignore[reportReturnType]
                 CheckboxRoot.create(
                     CheckboxIndicator.create(),
                     *children,

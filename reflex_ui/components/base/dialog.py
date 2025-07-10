@@ -64,7 +64,7 @@ class DialogRoot(DialogBaseComponent):
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog root component."""
         props["data-slot"] = "dialog"
         return super().create(*children, **props)
@@ -82,7 +82,7 @@ class DialogTrigger(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog trigger component."""
         props["data-slot"] = "dialog-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
@@ -110,7 +110,7 @@ class DialogBackdrop(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog backdrop component."""
         props["data-slot"] = "dialog-backdrop"
         cls.set_class_name(ClassNames.BACKDROP, props)
@@ -132,7 +132,7 @@ class DialogPopup(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog popup component."""
         props["data-slot"] = "dialog-popup"
         cls.set_class_name(ClassNames.POPUP, props)
@@ -148,7 +148,7 @@ class DialogTitle(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog title component."""
         props["data-slot"] = "dialog-title"
         cls.set_class_name(ClassNames.TITLE, props)
@@ -164,7 +164,7 @@ class DialogDescription(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog description component."""
         props["data-slot"] = "dialog-description"
         cls.set_class_name(ClassNames.DESCRIPTION, props)
@@ -183,7 +183,7 @@ class DialogClose(DialogBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog close component."""
         props["data-slot"] = "dialog-close"
         cls.set_class_name(ClassNames.CLOSE, props)
@@ -200,7 +200,7 @@ class HighLevelDialog(DialogRoot):
     description: Var[str | Component | None]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the dialog component."""
         trigger = props.pop("trigger", None)
         content = props.pop("content", None)

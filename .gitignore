@@ -7,3 +7,7 @@ __pycache__/
 .ruff_cache/
 .venv/
 playground/
+.pyi_generator_last_run
+.pyi_generator_diff
+**/.DS_Store
+**/*.pyc

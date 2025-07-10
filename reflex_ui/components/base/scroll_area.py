@@ -46,7 +46,7 @@ class ScrollAreaRoot(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area root component."""
         props["data-slot"] = "scroll-area"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -62,7 +62,7 @@ class ScrollAreaViewport(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area viewport component."""
         props["data-slot"] = "scroll-area-viewport"
         cls.set_class_name(ClassNames.VIEWPORT, props)
@@ -78,7 +78,7 @@ class ScrollAreaContent(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area content component."""
         props["data-slot"] = "scroll-area-content"
         cls.set_class_name(ClassNames.CONTENT, props)
@@ -100,7 +100,7 @@ class ScrollAreaScrollbar(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area scrollbar component."""
         props["data-slot"] = "scroll-area-scrollbar"
         orientation = props.get("orientation", "vertical")
@@ -127,7 +127,7 @@ class ScrollAreaThumb(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area thumb component."""
         props["data-slot"] = "scroll-area-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
@@ -143,7 +143,7 @@ class ScrollAreaCorner(ScrollAreaBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the scroll area corner component."""
         props["data-slot"] = "scroll-area-corner"
         cls.set_class_name(ClassNames.CORNER, props)
@@ -163,7 +163,7 @@ class HighLevelScrollArea(ScrollAreaRoot):
     _scrollbar_props = {"orientation", "keep_mounted"}
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a high level scroll area component.
 
         Args:

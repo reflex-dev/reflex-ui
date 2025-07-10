@@ -36,7 +36,7 @@ class AvatarRoot(AvatarBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the avatar root component."""
         props["data-slot"] = "avatar"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -58,7 +58,7 @@ class AvatarImage(AvatarBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the avatar image component."""
         props["data-slot"] = "avatar-image"
         cls.set_class_name(ClassNames.IMAGE, props)
@@ -77,7 +77,7 @@ class AvatarFallback(AvatarBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the avatar fallback component."""
         props["data-slot"] = "avatar-fallback"
         cls.set_class_name(ClassNames.FALLBACK, props)
@@ -103,7 +103,7 @@ class HighLevelAvatar(AvatarRoot):
     _fallback_props = {"delay"}
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the avatar component."""
         # Extract props for each subcomponent
         image_props = {k: props.pop(k) for k in cls._image_props & props.keys()}

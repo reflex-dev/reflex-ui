@@ -41,6 +41,7 @@ def spinner_component(
 spinner = spinner_component
 
 
+@memo
 def select_arrow_icon(
     class_name: str | Var[str] = "",
 ) -> Component:

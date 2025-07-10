@@ -62,7 +62,7 @@ class SwitchRoot(SwitchBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the switch root component."""
         props["data-slot"] = "switch"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -78,7 +78,7 @@ class SwitchThumb(SwitchBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the switch thumb component."""
         props["data-slot"] = "switch-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
@@ -89,7 +89,7 @@ class HighLevelSwitch(SwitchRoot):
     """High-level wrapper for the Switch component."""
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a complete switch component.
 
         Args:

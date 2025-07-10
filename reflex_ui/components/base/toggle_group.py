@@ -59,7 +59,7 @@ class ToggleGroupRoot(ToggleGroupBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the toggle group root component."""
         props["data-slot"] = "toggle-group"
         cls.set_class_name(ClassNames.ROOT, props)
