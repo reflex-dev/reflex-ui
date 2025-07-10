@@ -6,7 +6,7 @@ from reflex.components.component import Component, ComponentNamespace
 from reflex.components.core.foreach import foreach
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base.button import button
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
@@ -110,7 +110,7 @@ class MenuRoot(MenuBaseComponent):
     orientation: Var[LiteralMenuOrientation]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu root component."""
         props["data-slot"] = "menu"
         return super().create(*children, **props)
@@ -131,7 +131,7 @@ class MenuTrigger(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu trigger component."""
         props["data-slot"] = "menu-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
@@ -150,7 +150,7 @@ class MenuPortal(MenuBaseComponent):
     keep_mounted: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu portal component."""
         props["data-slot"] = "menu-portal"
         cls.set_class_name(ClassNames.PORTAL, props)
@@ -199,7 +199,7 @@ class MenuPositioner(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu positioner component."""
         props["data-slot"] = "menu-positioner"
         props.setdefault("side_offset", 4)
@@ -219,7 +219,7 @@ class MenuPopup(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu popup component."""
         props["data-slot"] = "menu-popup"
         cls.set_class_name(ClassNames.POPUP, props)
@@ -235,7 +235,7 @@ class MenuArrow(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu arrow component."""
         props["data-slot"] = "menu-arrow"
         cls.set_class_name(ClassNames.ARROW, props)
@@ -263,7 +263,7 @@ class MenuItem(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu item component."""
         props["data-slot"] = "menu-item"
         cls.set_class_name(ClassNames.ITEM, props)
@@ -312,7 +312,7 @@ class MenuSubMenuRoot(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu submenu root component."""
         props["data-slot"] = "menu-submenu-root"
         cls.set_class_name(ClassNames.ITEM_TEXT, props)
@@ -334,7 +334,7 @@ class MenuSubMenuTrigger(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu submenu trigger component."""
         props["data-slot"] = "menu-submenu-trigger"
         cls.set_class_name(ClassNames.SUBMENU_TRIGGER, props)
@@ -350,7 +350,7 @@ class MenuGroup(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu group component."""
         props["data-slot"] = "menu-group"
         cls.set_class_name(ClassNames.GROUP, props)
@@ -366,7 +366,7 @@ class MenuGroupLabel(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu group label component."""
         props["data-slot"] = "menu-group-label"
         cls.set_class_name(ClassNames.GROUP_LABEL, props)
@@ -394,7 +394,7 @@ class MenuRadioGroup(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu radio group component."""
         props["data-slot"] = "menu-radio-group"
         cls.set_class_name(ClassNames.RADIO_GROUP, props)
@@ -425,7 +425,7 @@ class MenuRadioItem(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu radio item component."""
         props["data-slot"] = "menu-radio-item"
         cls.set_class_name(ClassNames.RADIO_ITEM, props)
@@ -444,7 +444,7 @@ class MenuRadioItemIndicator(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu radio item indicator component."""
         props["data-slot"] = "menu-radio-item-indicator"
         cls.set_class_name(ClassNames.RADIO_ITEM_INDICATOR, props)
@@ -481,7 +481,7 @@ class MenuCheckboxItem(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu checkbox item component."""
         props["data-slot"] = "menu-checkbox-item"
         cls.set_class_name(ClassNames.CHECKBOX_ITEM, props)
@@ -500,7 +500,7 @@ class MenuCheckboxItemIndicator(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu checkbox item indicator component."""
         props["data-slot"] = "menu-checkbox-item-indicator"
         cls.set_class_name(ClassNames.CHECKBOX_ITEM_INDICATOR, props)
@@ -519,7 +519,7 @@ class MenuSeparator(MenuBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the menu separator component."""
         props["data-slot"] = "menu-separator"
         cls.set_class_name(ClassNames.SEPARATOR, props)
@@ -559,7 +559,7 @@ class HighLevelMenu(MenuRoot):
     _portal_props = {"container"}
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create a menu component.
 
         Args:
@@ -581,7 +581,7 @@ class HighLevelMenu(MenuRoot):
         size = trigger_props.get("size", "md")
         trigger_label = trigger_props.get("placeholder", "Open Menu")
 
-        def create_menu_item(item: str | tuple[str, EventHandler]) -> Component:
+        def create_menu_item(item: str | tuple[str, EventHandler]) -> BaseUIComponent:
             if isinstance(item, tuple):
                 label, on_click_handler = item
                 return MenuItem.create(

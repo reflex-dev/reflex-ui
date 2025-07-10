@@ -5,7 +5,7 @@ from typing import Literal
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
@@ -96,7 +96,7 @@ class SliderRoot(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider root component."""
         props["data-slot"] = "slider"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -112,7 +112,7 @@ class SliderValue(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider value component."""
         props["data-slot"] = "slider-value"
         cls.set_class_name(ClassNames.VALUE, props)
@@ -128,7 +128,7 @@ class SliderControl(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider control component."""
         props["data-slot"] = "slider-control"
         cls.set_class_name(ClassNames.CONTROL, props)
@@ -144,7 +144,7 @@ class SliderTrack(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider track component."""
         props["data-slot"] = "slider-track"
         cls.set_class_name(ClassNames.TRACK, props)
@@ -160,7 +160,7 @@ class SliderIndicator(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider indicator component."""
         props["data-slot"] = "slider-indicator"
         cls.set_class_name(ClassNames.INDICATOR, props)
@@ -185,7 +185,7 @@ class SliderThumb(SliderBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the slider thumb component."""
         props["data-slot"] = "slider-thumb"
         cls.set_class_name(ClassNames.THUMB, props)
@@ -196,7 +196,7 @@ class HighLevelSlider(SliderRoot):
     """High-level wrapper for the Slider component."""
 
     @classmethod
-    def create(cls, **props) -> Component:
+    def create(cls, **props) -> BaseUIComponent:
         """Create a complete slider component.
 
         Args:

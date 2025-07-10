@@ -5,7 +5,7 @@ from typing import Literal
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 from reflex_ui.components.icons.others import arrow_svg
@@ -69,7 +69,7 @@ class TooltipRoot(TooltipBaseComponent):
     hoverable: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip root component."""
         props["data-slot"] = "tooltip"
         return super().create(*children, **props)
@@ -90,7 +90,7 @@ class TooltipProvider(TooltipBaseComponent):
     timeout: Var[int]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip provider component."""
         props["data-slot"] = "tooltip-provider"
         return super().create(*children, **props)
@@ -105,7 +105,7 @@ class TooltipTrigger(TooltipBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip trigger component."""
         props["data-slot"] = "tooltip-trigger"
         cls.set_class_name(ClassNames.TRIGGER, props)
@@ -122,6 +122,12 @@ class TooltipPortal(TooltipBaseComponent):
 
     # Whether to keep the portal mounted in the DOM while the popup is hidden. Defaults to False.
     keep_mounted: Var[bool]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the tooltip portal component."""
+        props["data-slot"] = "tooltip-portal"
+        return super().create(*children, **props)
 
 
 class TooltipPositioner(TooltipBaseComponent):
@@ -169,7 +175,7 @@ class TooltipPositioner(TooltipBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip positioner component."""
         props["data-slot"] = "tooltip-positioner"
         return super().create(*children, **props)
@@ -184,7 +190,7 @@ class TooltipPopup(TooltipBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip popup component."""
         props["data-slot"] = "tooltip-popup"
         cls.set_class_name(ClassNames.POPUP, props)
@@ -197,7 +203,7 @@ class TooltipArrow(TooltipBaseComponent):
     tag = "Tooltip.Arrow"
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip arrow component."""
         props["data-slot"] = "tooltip-arrow"
         cls.set_class_name(ClassNames.ARROW, props)
@@ -248,7 +254,7 @@ class HighLevelTooltip(TooltipRoot):
         trigger_component: Component,
         content: str | Component | None = None,
         **props,
-    ) -> Component:
+    ) -> BaseUIComponent:
         """Create a high level tooltip component.
 
         Args:

@@ -64,3 +64,14 @@ lint.ignore = [
     "UP038",
 ]
 lint.pydocstyle.convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+"*.pyi" = ["D301", "D415", "D417", "D418", "E742", "N", "PGH"]
+"**/alembic/*.py" = ["D", "ERA"]
+"__init__.py" = ["ERA"]
+
+[tool.pyright]
+reportIncompatibleMethodOverride = false
+reportMissingImports = false
+reportInconsistentOverload = false
+exclude = ["**/alembic/*", "demo/*", "reflex_ui/**/*.pyi"]

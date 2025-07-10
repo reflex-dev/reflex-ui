@@ -3,7 +3,7 @@
 from reflex.components.component import Component
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
@@ -52,7 +52,7 @@ class Toggle(ToggleBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the toggle component."""
         props["data-slot"] = "toggle"
         cls.set_class_name(ClassNames.ROOT, props)

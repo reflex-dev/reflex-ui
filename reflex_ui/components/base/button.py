@@ -4,7 +4,7 @@ from typing import Literal
 
 from reflex.components.core.cond import cond
 from reflex.components.el import Button as BaseButton
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.component import CoreComponent
 from reflex_ui.components.icons.others import spinner

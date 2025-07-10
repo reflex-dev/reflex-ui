@@ -5,7 +5,7 @@ from typing import Literal
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
-from reflex.vars import Var
+from reflex.vars.base import Var
 
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
@@ -54,7 +54,7 @@ class TabsRoot(TabsBaseComponent):
     render_: Var[Component]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs root component."""
         props["data-slot"] = "tabs"
         cls.set_class_name(ClassNames.ROOT, props)
@@ -73,7 +73,7 @@ class TabsList(TabsBaseComponent):
     loop: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs list component."""
         props["data-slot"] = "tabs-list"
         cls.set_class_name(ClassNames.LIST, props)
@@ -95,7 +95,7 @@ class TabsTab(TabsBaseComponent):
     disabled: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs tab component."""
         props["data-slot"] = "tabs-tab"
         cls.set_class_name(ClassNames.TAB, props)
@@ -111,7 +111,7 @@ class TabsIndicator(TabsBaseComponent):
     render_before_hydration: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs indicator component."""
         props["data-slot"] = "tabs-indicator"
         cls.set_class_name(ClassNames.INDICATOR, props)
@@ -130,7 +130,7 @@ class TabsPanel(TabsBaseComponent):
     keep_mounted: Var[bool]
 
     @classmethod
-    def create(cls, *children, **props) -> Component:
+    def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs panel component."""
         props["data-slot"] = "tabs-panel"
         cls.set_class_name(ClassNames.PANEL, props)
