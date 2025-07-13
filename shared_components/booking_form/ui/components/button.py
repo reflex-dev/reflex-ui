@@ -2,7 +2,7 @@ from typing import Literal
 
 import reflex as rx
 
-from shared_components.utils.twmerge import cn
+from shared_components.booking_form.utils.twmerge import cn
 
 LiteralButtonVariant = Literal[
     "primary", "secondary", "transparent", "destructive", "outline"

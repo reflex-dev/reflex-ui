@@ -3,7 +3,7 @@ from typing import Literal
 import reflex as rx
 from reflex.event import EventType
 
-from shared_components.ui.components.icons import get_icon, hi, spinner
+from shared_components.booking_form.ui.components.icons import get_icon, hi, spinner
 
 SelectVariant = Literal["primary", "secondary", "outline", "transparent"]
 SelectSize = Literal["xs", "sm", "md", "lg"]

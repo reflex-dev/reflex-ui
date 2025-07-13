@@ -1,7 +1,6 @@
-from typing import Any
 import httpx
 from pydantic import BaseModel
-from shared_components import constants
+from shared_components.booking_form import constants
 
 class DemoEvent(BaseModel):
     distinct_id: str

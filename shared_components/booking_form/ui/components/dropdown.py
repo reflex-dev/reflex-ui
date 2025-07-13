@@ -2,7 +2,7 @@ from typing import Literal
 
 import reflex as rx
 
-from shared_components.utils.twmerge import cn
+from shared_components.booking_form.utils.twmerge import cn
 
 DropdownVariant = Literal["selectable", "actions"]
 DEFAULT_CLASS_NAME = "flex p-1 rounded-xl items-center justify-start flex-col shadow-large bg-slate-1 border border-slate-5"
