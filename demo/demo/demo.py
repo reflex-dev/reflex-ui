@@ -61,13 +61,87 @@ def index() -> rx.Component:
         ui.navigation_menu.root(
             ui.navigation_menu.list(
                 ui.navigation_menu.item(
-                    ui.navigation_menu.trigger("Home", on_click=lambda: rx.toast.success("Home clicked")),
+                    ui.navigation_menu.trigger(
+                        "Overview",
+                        ui.navigation_menu.icon("▼"),
+                    ),
+                    ui.navigation_menu.content(
+                        rx.el.ul(
+                            rx.el.li(
+                                ui.navigation_menu.link(
+                                    rx.el.h3("Quick Start", class_name="font-medium text-sm"),
+                                    rx.el.p("Install and assemble your first component.", class_name="text-xs text-secondary-11"),
+                                    href="/quick-start",
+                                    on_click=lambda: rx.toast.success("Quick Start clicked"),
+                                    class_name="block p-3 rounded hover:bg-secondary-3",
+                                )
+                            ),
+                            rx.el.li(
+                                ui.navigation_menu.link(
+                                    rx.el.h3("Accessibility", class_name="font-medium text-sm"),
+                                    rx.el.p("Learn how we build accessible components.", class_name="text-xs text-secondary-11"),
+                                    href="/accessibility",
+                                    on_click=lambda: rx.toast.success("Accessibility clicked"),
+                                    class_name="block p-3 rounded hover:bg-secondary-3",
+                                )
+                            ),
+                            rx.el.li(
+                                ui.navigation_menu.link(
+                                    rx.el.h3("Releases", class_name="font-medium text-sm"),
+                                    rx.el.p("See what's new in the latest versions.", class_name="text-xs text-secondary-11"),
+                                    href="/releases",
+                                    on_click=lambda: rx.toast.success("Releases clicked"),
+                                    class_name="block p-3 rounded hover:bg-secondary-3",
+                                )
+                            ),
+                            class_name="grid grid-cols-2 gap-2 w-96 p-2",
+                        )
+                    ),
                 ),
                 ui.navigation_menu.item(
-                    ui.navigation_menu.trigger("About", on_click=lambda: rx.toast.success("About clicked")),
+                    ui.navigation_menu.trigger(
+                        "Handbook",
+                        ui.navigation_menu.icon("▼"),
+                    ),
+                    ui.navigation_menu.content(
+                        rx.el.ul(
+                            rx.el.li(
+                                ui.navigation_menu.link(
+                                    rx.el.h3("Styling", class_name="font-medium text-sm"),
+                                    rx.el.p("Components can be styled with CSS, Tailwind, or CSS-in-JS.", class_name="text-xs text-secondary-11"),
+                                    href="/styling",
+                                    on_click=lambda: rx.toast.success("Styling clicked"),
+                                    class_name="block p-3 rounded hover:bg-secondary-3",
+                                )
+                            ),
+                            rx.el.li(
+                                ui.navigation_menu.link(
+                                    rx.el.h3("Animation", class_name="font-medium text-sm"),
+                                    rx.el.p("Components can be animated with CSS or JavaScript.", class_name="text-xs text-secondary-11"),
+                                    href="/animation",
+                                    on_click=lambda: rx.toast.success("Animation clicked"),
+                                    class_name="block p-3 rounded hover:bg-secondary-3",
+                                )
+                            ),
+                            class_name="flex flex-col gap-2 w-80 p-2",
+                        )
+                    ),
                 ),
                 ui.navigation_menu.item(
-                    ui.navigation_menu.trigger("Contact", on_click=lambda: rx.toast.success("Contact clicked")),
+                    ui.navigation_menu.link(
+                        "GitHub",
+                        href="https://github.com/reflex-dev/reflex-ui",
+                        on_click=lambda: rx.toast.success("GitHub clicked"),
+                    ),
+                ),
+            ),
+            ui.navigation_menu.portal(
+                ui.navigation_menu.positioner(
+                    ui.navigation_menu.popup(
+                        ui.navigation_menu.arrow(),
+                        ui.navigation_menu.viewport(),
+                    ),
+                    side_offset=10,
                 ),
             ),
         ),

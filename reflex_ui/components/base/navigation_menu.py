@@ -22,15 +22,15 @@ class ClassNames:
     ROOT = "relative"
     LIST = "flex items-center gap-1"
     ITEM = "relative"
-    TRIGGER = "flex items-center gap-1 px-3 py-2 text-sm font-medium rounded-md hover:bg-secondary-3 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4 cursor-pointer select-none"
-    CONTENT = "absolute top-full left-0 mt-1 min-w-48 origin-top-left border border-secondary-a4 bg-secondary-1 shadow-large rounded-md p-1 z-50 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
-    LINK = "block px-3 py-2 text-sm text-secondary-12 hover:bg-secondary-3 rounded-sm cursor-pointer select-none outline-none focus:bg-secondary-3"
-    ICON = "size-4 text-secondary-10"
+    TRIGGER = "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md hover:bg-secondary-3 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4 cursor-pointer select-none transition-colors"
+    CONTENT = "absolute top-full left-0 mt-2 min-w-64 origin-top-left border border-secondary-a4 bg-secondary-1 shadow-large rounded-lg p-2 z-50 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
+    LINK = "block px-3 py-2 text-sm text-secondary-12 hover:bg-secondary-3 rounded-md cursor-pointer select-none outline-none focus:bg-secondary-3 transition-colors"
+    ICON = "size-4 text-secondary-10 transition-transform data-[popup-open]:rotate-180"
     PORTAL = "relative"
     POSITIONER = "outline-none"
     POPUP = "outline-none"
-    VIEWPORT = "relative overflow-hidden"
-    ARROW = "data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
+    VIEWPORT = "relative overflow-hidden rounded-lg"
+    ARROW = "fill-secondary-1 stroke-secondary-a4 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
     BACKDROP = "fixed inset-0 z-40"
 
 
@@ -58,6 +58,14 @@ class NavigationMenuRoot(NavigationMenuBaseComponent):
 
     orientation: Var[LiteralNavigationMenuOrientation]
 
+    delay: Var[int]
+
+    close_delay: Var[int]
+
+    actions_ref: Var[str]
+
+    on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+
     # The render prop.
     render_: Var[Component]
 
@@ -70,7 +78,7 @@ class NavigationMenuRoot(NavigationMenuBaseComponent):
 
 
 class NavigationMenuList(NavigationMenuBaseComponent):
-    """Contains the navigation menu items. Renders a <ul> element."""
+    """Contains a list of navigation menu items. Renders a <div> element."""
 
     tag = "NavigationMenu.List"
 
@@ -86,7 +94,7 @@ class NavigationMenuList(NavigationMenuBaseComponent):
 
 
 class NavigationMenuItem(NavigationMenuBaseComponent):
-    """Contains all parts of a navigation menu item. Renders a <li> element."""
+    """An individual navigation menu item. Renders a <div> element."""
 
     tag = "NavigationMenu.Item"
 
@@ -104,7 +112,7 @@ class NavigationMenuItem(NavigationMenuBaseComponent):
 
 
 class NavigationMenuTrigger(NavigationMenuBaseComponent):
-    """The button that toggles the content. Renders a <button> element."""
+    """Opens the navigation menu popup when hovered or clicked, revealing the associated content. Renders a <button> element."""
 
     tag = "NavigationMenu.Trigger"
 
@@ -123,7 +131,7 @@ class NavigationMenuTrigger(NavigationMenuBaseComponent):
 
 
 class NavigationMenuContent(NavigationMenuBaseComponent):
-    """Contains the content associated with each trigger. Renders a <div> element."""
+    """A container for the content of the navigation menu item that is moved into the popup when the item is active. Renders a <div> element."""
 
     tag = "NavigationMenu.Content"
 
@@ -139,7 +147,7 @@ class NavigationMenuContent(NavigationMenuBaseComponent):
 
 
 class NavigationMenuLink(NavigationMenuBaseComponent):
-    """A navigational link. Renders an <a> element."""
+    """A link in the navigation menu that can be used to navigate to a different page or section. Renders an <a> element."""
 
     tag = "NavigationMenu.Link"
 
@@ -157,7 +165,7 @@ class NavigationMenuLink(NavigationMenuBaseComponent):
 
 
 class NavigationMenuIcon(NavigationMenuBaseComponent):
-    """An optional icon to render alongside the trigger text. Renders a <span> element."""
+    """An icon that indicates that the trigger button opens a menu. Renders a <span> element."""
 
     tag = "NavigationMenu.Icon"
 
