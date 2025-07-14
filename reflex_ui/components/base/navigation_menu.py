@@ -3,14 +3,11 @@
 from typing import Literal
 
 from reflex.components.component import Component, ComponentNamespace
-from reflex.components.core.foreach import foreach
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
 from reflex.vars.base import Var
 
-from reflex_ui.components.base.button import button
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
-from reflex_ui.utils.twmerge import cn
 
 LiteralNavigationMenuOrientation = Literal["horizontal", "vertical"]
 LiteralSide = Literal["top", "right", "bottom", "left"]
@@ -305,90 +302,6 @@ class NavigationMenuBackdrop(NavigationMenuBaseComponent):
         return super().create(*children, **props)
 
 
-class HighLevelNavigationMenu(NavigationMenuRoot):
-    """High level wrapper for the NavigationMenu component."""
-
-    # The list of items to display in the navigation menu - can be strings or tuples of (label, on_click_handler)
-    items: Var[list[str | tuple[str, EventHandler]]]
-
-    # Props for different component parts
-    _item_props = {"value"}
-    _trigger_props = {"disabled"}
-    _content_props = {}
-    _link_props = {"active"}
-    _positioner_props = {
-        "align",
-        "align_offset",
-        "side",
-        "arrow_padding",
-        "collision_padding",
-        "sticky",
-        "position_method",
-        "track_anchor",
-        "side_offset",
-        "collision_avoidance",
-    }
-    _portal_props = {"container"}
-
-    @classmethod
-    def create(cls, *children, **props) -> BaseUIComponent:
-        """Create a navigation menu component.
-
-        Args:
-            *children: Additional children to include in the navigation menu.
-            **props: Additional properties to apply to the navigation menu component.
-
-        Returns:
-            The navigation menu component.
-        """
-        # Extract props for different parts
-        item_props = {k: props.pop(k) for k in cls._item_props & props.keys()}
-        trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
-        content_props = {k: props.pop(k) for k in cls._content_props & props.keys()}
-        link_props = {k: props.pop(k) for k in cls._link_props & props.keys()}
-        positioner_props = {
-            k: props.pop(k) for k in cls._positioner_props & props.keys()
-        }
-        portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
-
-        items = props.pop("items", [])
-
-        def create_navigation_menu_item(item: str | tuple[str, EventHandler], index: int = 0) -> BaseUIComponent:
-            if isinstance(item, tuple):
-                label, on_click_handler = item
-                return button(
-                    label,
-                    variant="ghost",
-                    class_name=ClassNames.TRIGGER,
-                    disabled=props.get("disabled", False),
-                    on_click=on_click_handler,
-                    key=f"nav-item-{index}",
-                )
-            return button(
-                item,
-                variant="ghost", 
-                class_name=ClassNames.TRIGGER,
-                disabled=props.get("disabled", False),
-                key=f"nav-item-{index}",
-            )
-
-        if isinstance(items, Var):
-            items_children = foreach(items, lambda item, index: create_navigation_menu_item(item, index))
-        else:
-            items_children = [create_navigation_menu_item(item, i) for i, item in enumerate(items)]
-
-        from reflex.components.tags import nav, div
-        
-        return nav(
-            div(
-                *items_children,
-                class_name=ClassNames.LIST,
-            ),
-            class_name=ClassNames.ROOT,
-            **props,
-        )
-
-
 class NavigationMenu(ComponentNamespace):
     """Namespace for NavigationMenu components."""
 
@@ -405,7 +318,6 @@ class NavigationMenu(ComponentNamespace):
     viewport = staticmethod(NavigationMenuViewport.create)
     arrow = staticmethod(NavigationMenuArrow.create)
     backdrop = staticmethod(NavigationMenuBackdrop.create)
-    __call__ = staticmethod(HighLevelNavigationMenu.create)
 
 
 navigation_menu = NavigationMenu()
