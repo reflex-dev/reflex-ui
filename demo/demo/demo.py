@@ -58,6 +58,13 @@ def index() -> rx.Component:
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),
+        ui.navigation_menu(
+            items=[
+                ("Home", lambda: rx.toast.success("Home clicked")),
+                ("About", lambda: rx.toast.success("About clicked")),
+                ("Contact", lambda: rx.toast.success("Contact clicked")),
+            ],
+        ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
             "flex flex-col gap-6 items-center justify-center h-screen", "bg-secondary-1"

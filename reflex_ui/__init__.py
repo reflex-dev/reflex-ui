@@ -13,6 +13,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.input": ["input"],
     "components.base.link": ["link"],
     "components.base.menu": ["menu"],
+    "components.base.navigation_menu": ["navigation_menu"],
     "components.base.popover": ["popover"],
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
