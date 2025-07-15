@@ -101,6 +101,7 @@ class ContextMenuPortal(ContextMenuBaseComponent):
     tag = "ContextMenu.Portal"
 
     container: Var[str]
+    # Whether to keep the portal mounted when closed. Defaults to False.
     keep_mounted: Var[bool]
 
     @classmethod
@@ -132,6 +133,7 @@ class ContextMenuPositioner(ContextMenuBaseComponent):
     tag = "ContextMenu.Positioner"
 
     collision_avoidance: Var[bool | LiteralCollisionAvoidance]
+    # How to align the popup relative to the trigger. Defaults to "center".
     align: Var[LiteralAlign]
     align_offset: Var[int]
     side: Var[LiteralSide]
@@ -208,6 +210,7 @@ class ContextMenuSeparator(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Separator"
 
+    # The orientation of the separator. Defaults to "horizontal".
     orientation: Var[LiteralMenuOrientation]
     render_: Var[Component]
 
