@@ -15,6 +15,7 @@ from .gradient_profile import gradient_profile
 from .input import input
 from .link import link
 from .menu import menu
+from .navigation_menu import navigation_menu
 from .popover import popover
 from .scroll_area import scroll_area
 from .select import select
@@ -43,6 +44,7 @@ __all__ = [
     "input",
     "link",
     "menu",
+    "navigation_menu",
     "popover",
     "scroll_area",
     "select",
