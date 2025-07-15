@@ -49,7 +49,6 @@ class CollapsibleTrigger(CollapsibleBaseComponent):
 class CollapsiblePanel(CollapsibleBaseComponent):
     tag: str
     hidden_until_found: Var[bool]
-    class_name: Var[str]
     keep_mounted: Var[bool]
     render_: Var[Component]
     @classmethod
@@ -57,7 +56,6 @@ class CollapsiblePanel(CollapsibleBaseComponent):
         cls,
         *children,
         hidden_until_found: bool | Var[bool] | None = None,
-        class_name: str | Var[str] | None = None,
         keep_mounted: bool | Var[bool] | None = None,
         render_: Component | Var[Component] | None = None,
         **props,

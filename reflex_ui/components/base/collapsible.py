@@ -75,8 +75,6 @@ class CollapsiblePanel(CollapsibleBaseComponent):
 
     hidden_until_found: Var[bool]
 
-    class_name: Var[str]
-
     keep_mounted: Var[bool]
 
     # The render prop.
