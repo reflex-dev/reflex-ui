@@ -17,6 +17,7 @@ from .link import link
 from .menu import menu
 from .navigation_menu import navigation_menu
 from .popover import popover
+from .preview_card import preview_card
 from .scroll_area import scroll_area
 from .select import select
 from .skeleton import skeleton
@@ -46,6 +47,7 @@ __all__ = [
     "menu",
     "navigation_menu",
     "popover",
+    "preview_card",
     "scroll_area",
     "select",
     "skeleton",

@@ -17,6 +17,7 @@ from .components.base.link import link
 from .components.base.menu import menu
 from .components.base.navigation_menu import navigation_menu
 from .components.base.popover import popover
+from .components.base.preview_card import preview_card
 from .components.base.scroll_area import scroll_area
 from .components.base.select import select
 from .components.base.skeleton import skeleton
@@ -44,6 +45,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.menu": ["menu"],
     "components.base.navigation_menu": ["navigation_menu"],
     "components.base.popover": ["popover"],
+    "components.base.preview_card": ["preview_card"],
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
     "components.base.skeleton": ["skeleton"],
@@ -82,6 +84,7 @@ __all__ = [
     "menu",
     "navigation_menu",
     "popover",
+    "preview_card",
     "scroll_area",
     "select",
     "skeleton",
