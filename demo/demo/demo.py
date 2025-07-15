@@ -58,6 +58,16 @@ def index() -> rx.Component:
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),
+        ui.preview_card(
+            trigger=ui.button("Hover for preview", variant="outline"),
+            content=rx.el.div(
+                rx.el.h3("Preview Card", class_name="text-lg font-semibold mb-2"),
+                rx.el.p("This is a preview card component that shows content on hover.", class_name="text-sm text-secondary-11"),
+                class_name="p-4"
+            ),
+            delay=300,
+            close_delay=100,
+        ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
             "flex flex-col gap-6 items-center justify-center h-screen", "bg-secondary-1"
