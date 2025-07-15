@@ -58,6 +58,15 @@ def index() -> rx.Component:
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),
+        ui.collapsible(
+            trigger=ui.button("Toggle Content", variant="outline"),
+            content=rx.el.div(
+                "This is the collapsible content! It can contain any components.",
+                rx.el.p("Here's another paragraph inside the collapsible panel."),
+                class_name="p-4 bg-secondary-2 rounded-md mt-2",
+            ),
+            on_open_change=lambda value: rx.toast.success(f"Collapsible open: {value}"),
+        ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
             "flex flex-col gap-6 items-center justify-center h-screen", "bg-secondary-1"
