@@ -3,10 +3,16 @@
 import reflex as rx
 
 import reflex_ui as ui
+from reflex_ui.components.base.context_menu import context_menu
 
 
 class State(rx.State):
     seed: int = 0
+    context_menu_action: str = "No action selected"
+    
+    def handle_context_action(self, action: str):
+        """Handle context menu action."""
+        self.context_menu_action = f"Selected: {action}"
 
 
 def index() -> rx.Component:
@@ -57,6 +63,53 @@ def index() -> rx.Component:
             default_value="Select an item",
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
+        ),
+        context_menu.root(
+            context_menu.trigger(
+                rx.el.div(
+                    "Right-click me for context menu!",
+                    class_name="p-4 border-2 border-dashed border-gray-400 rounded-lg text-center bg-gray-50 hover:bg-gray-100 cursor-context-menu",
+                )
+            ),
+            context_menu.portal(
+                context_menu.positioner(
+                    context_menu.popup(
+                        context_menu.item(
+                            "Copy",
+                            on_click=State.handle_context_action("Copy")
+                        ),
+                        context_menu.item(
+                            "Cut",
+                            on_click=State.handle_context_action("Cut")
+                        ),
+                        context_menu.item(
+                            "Paste",
+                            on_click=State.handle_context_action("Paste")
+                        ),
+                        context_menu.separator(),
+                        context_menu.group(
+                            context_menu.group_label("Actions"),
+                            context_menu.item(
+                                "Delete",
+                                on_click=State.handle_context_action("Delete")
+                            ),
+                            context_menu.item(
+                                "Rename",
+                                on_click=State.handle_context_action("Rename")
+                            ),
+                        ),
+                        context_menu.separator(),
+                        context_menu.item(
+                            "Properties",
+                            on_click=State.handle_context_action("Properties")
+                        )
+                    )
+                )
+            )
+        ),
+        rx.el.div(
+            State.context_menu_action,
+            class_name="mt-4 p-2 bg-blue-100 rounded text-sm"
         ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
