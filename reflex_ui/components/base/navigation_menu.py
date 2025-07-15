@@ -19,18 +19,18 @@ LiteralCollisionAvoidance = Literal["flip", "shift", "auto"]
 class ClassNames:
     """Class names for navigation menu components."""
 
-    ROOT = "relative"
-    LIST = "flex items-center gap-1"
+    ROOT = "min-w-max rounded-lg bg-secondary-1 p-1 text-secondary-12"
+    LIST = "relative flex"
     ITEM = "relative"
-    TRIGGER = "flex items-center gap-2 px-4 py-2 text-sm font-medium rounded-md hover:bg-secondary-3 focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4 cursor-pointer select-none transition-colors"
-    CONTENT = "absolute top-full left-0 mt-2 min-w-64 origin-top-left border border-secondary-a4 bg-secondary-1 shadow-large rounded-lg p-2 z-50 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0"
-    LINK = "block px-3 py-2 text-sm text-secondary-12 hover:bg-secondary-3 rounded-md cursor-pointer select-none outline-none focus:bg-secondary-3 transition-colors"
-    ICON = "size-4 text-secondary-10 transition-transform data-[popup-open]:rotate-180"
-    PORTAL = "relative"
-    POSITIONER = "outline-none"
-    POPUP = "outline-none"
-    VIEWPORT = "relative overflow-hidden rounded-lg"
-    ARROW = "fill-secondary-1 stroke-secondary-a4 data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
+    TRIGGER = "box-border flex items-center justify-center gap-1.5 h-10 px-2 xs:px-3.5 m-0 rounded-md bg-secondary-1 text-secondary-12 font-medium text-[0.925rem] xs:text-base leading-6 select-none no-underline hover:bg-secondary-3 active:bg-secondary-3 data-[popup-open]:bg-secondary-3 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-4"
+    CONTENT = "w-max max-w-[calc(100vw-40px)] sm:max-w-[600px] p-6 transition-[opacity,transform,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[starting-style]:opacity-0 data-[ending-style]:opacity-0 data-[starting-style]:data-[activation-direction=left]:translate-x-[-50%] data-[starting-style]:data-[activation-direction=right]:translate-x-[50%] data-[ending-style]:data-[activation-direction=left]:translate-x-[50%] data-[ending-style]:data-[activation-direction=right]:translate-x-[-50%]"
+    LINK = "block rounded-md p-2 xs:p-3 no-underline text-inherit hover:bg-secondary-3 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary-4"
+    ICON = "transition-transform duration-200 ease-in-out data-[popup-open]:rotate-180 text-secondary-10"
+    PORTAL = ""
+    POSITIONER = "box-border h-[var(--positioner-height)] w-[var(--positioner-width)] max-w-[var(--available-width)] transition-[top,left,right,bottom] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] before:absolute before:content-[''] data-[instant]:transition-none data-[side=bottom]:before:top-[-10px] data-[side=bottom]:before:right-0 data-[side=bottom]:before:left-0 data-[side=bottom]:before:h-2.5 data-[side=left]:before:top-0 data-[side=left]:before:right-[-10px] data-[side=left]:before:bottom-0 data-[side=left]:before:w-2.5 data-[side=right]:before:top-0 data-[side=right]:before:bottom-0 data-[side=right]:before:left-[-10px] data-[side=right]:before:w-2.5 data-[side=top]:before:right-0 data-[side=top]:before:bottom-[-10px] data-[side=top]:before:left-0 data-[side=top]:before:h-2.5"
+    POPUP = "relative h-[var(--popup-height)] w-max origin-[var(--transform-origin)] rounded-lg bg-secondary-1 text-secondary-12 shadow-large border border-secondary-a4 transition-[opacity,transform,width,height,scale,translate] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[ending-style]:duration-150 data-[starting-style]:scale-90 data-[starting-style]:opacity-0 min-[500px]:w-[var(--popup-width)] xs:w-[var(--popup-width)]"
+    VIEWPORT = "relative h-full w-full overflow-hidden"
+    ARROW = "flex transition-[left] duration-[0.35s] ease-[cubic-bezier(0.22,1,0.36,1)] data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
     BACKDROP = "fixed inset-0 z-40"
 
 
@@ -46,24 +46,29 @@ class NavigationMenuBaseComponent(BaseUIComponent):
 
 
 class NavigationMenuRoot(NavigationMenuBaseComponent):
-    """Groups all parts of the navigation menu. Renders a <nav> element."""
+    """Groups all parts of the navigation menu. Renders a <nav> element at the root, or <div> element when nested."""
 
     tag = "NavigationMenu.Root"
 
+    # The controlled value of the navigation menu item that should be currently open. When non-nullish, the menu will be open. When nullish, the menu will be closed. To render an uncontrolled navigation menu, use the defaultValue prop instead.
     value: Var[str]
 
+    # The uncontrolled value of the item that should be initially selected. To render a controlled navigation menu, use the value prop instead.
     default_value: Var[str]
 
+    # Callback fired when the value changes.
     on_value_change: EventHandler[passthrough_event_spec(str, dict)]
 
+    # The orientation of the navigation menu.
     orientation: Var[LiteralNavigationMenuOrientation]
 
+    # How long to wait before opening the navigation menu. Specified in milliseconds. Defaults to 50.
     delay: Var[int]
 
+    # How long to wait before closing the navigation menu. Specified in milliseconds. Defaults to 50.
     close_delay: Var[int]
 
-    actions_ref: Var[str]
-
+    # Event handler called after any animations complete when the navigation menu is closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
 
     # The render prop.
@@ -241,7 +246,7 @@ class NavigationMenuPositioner(NavigationMenuBaseComponent):
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the navigation menu positioner component."""
         props["data-slot"] = "navigation-menu-positioner"
-        props.setdefault("side_offset", 4)
+        props.setdefault("side_offset", 10)
         cls.set_class_name(ClassNames.POSITIONER, props)
         return super().create(*children, **props)
 

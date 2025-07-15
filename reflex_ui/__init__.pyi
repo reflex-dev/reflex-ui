@@ -15,6 +15,7 @@ from .components.base.gradient_profile import gradient_profile
 from .components.base.input import input
 from .components.base.link import link
 from .components.base.menu import menu
+from .components.base.navigation_menu import navigation_menu
 from .components.base.popover import popover
 from .components.base.scroll_area import scroll_area
 from .components.base.select import select
@@ -41,6 +42,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.input": ["input"],
     "components.base.link": ["link"],
     "components.base.menu": ["menu"],
+    "components.base.navigation_menu": ["navigation_menu"],
     "components.base.popover": ["popover"],
     "components.base.scroll_area": ["scroll_area"],
     "components.base.select": ["select"],
@@ -78,6 +80,7 @@ __all__ = [
     "input",
     "link",
     "menu",
+    "navigation_menu",
     "popover",
     "scroll_area",
     "select",
