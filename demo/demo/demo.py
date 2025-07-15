@@ -59,12 +59,19 @@ def index() -> rx.Component:
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),
         ui.collapsible(
-            trigger=ui.button("Toggle Content", variant="outline"),
-            content=rx.el.div(
-                "This is the collapsible content! It can contain any components.",
-                rx.el.p("Here's another paragraph inside the collapsible panel."),
-                class_name="p-4 bg-secondary-2 rounded-md mt-2",
+            trigger=ui.button(
+                rx.el.span("▶", class_name="transition-all ease-out group-data-[panel-open]:rotate-90 inline-block mr-2"),
+                "Recovery keys",
+                variant="outline",
+                class_name="group flex items-center gap-2 rounded-sm bg-gray-100 px-2 py-1 text-sm font-medium hover:bg-gray-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-blue-800 active:bg-gray-200",
             ),
+            content=rx.el.div(
+                rx.el.div("alien-bean-pasta", class_name="text-sm"),
+                rx.el.div("wild-irish-burrito", class_name="text-sm"),
+                rx.el.div("horse-battery-staple", class_name="text-sm"),
+                class_name="mt-1 flex cursor-text flex-col gap-2 rounded-sm bg-gray-100 py-2 pl-7",
+            ),
+            class_name="flex min-h-36 w-56 flex-col justify-center text-gray-900",
             on_open_change=lambda value: rx.toast.success(f"Collapsible open: {value}"),
         ),
         ui.theme_switcher(class_name="absolute top-4 right-4"),

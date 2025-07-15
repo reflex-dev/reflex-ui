@@ -13,7 +13,7 @@ class ClassNames:
 
     ROOT = ""
     TRIGGER = "cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4"
-    PANEL = "overflow-hidden transition-all duration-200 data-[state=closed]:animate-collapse-up data-[state=open]:animate-collapse-down"
+    PANEL = "flex h-[var(--collapsible-panel-height)] flex-col justify-end overflow-hidden transition-all ease-out data-[ending-style]:h-0 data-[starting-style]:h-0"
 
 
 class CollapsibleBaseComponent(BaseUIComponent):
