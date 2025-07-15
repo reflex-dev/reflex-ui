@@ -1,6 +1,5 @@
 """Type stubs for collapsible component."""
 
-
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventType
 from reflex.vars.base import Var

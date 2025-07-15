@@ -1,6 +1,5 @@
 """Custom collapsible component."""
 
-
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
