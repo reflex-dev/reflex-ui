@@ -43,10 +43,10 @@ class PreviewCardRoot(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Root"
 
-    # Whether the preview card is open by default. Defaults to False.
+    # Whether the preview card is initially open. To render a controlled preview card, use the `open` prop instead. Defaults to false.
     default_open: Var[bool]
 
-    # Whether the preview card is open.
+    # Whether the preview card is currently open.
     open: Var[bool]
 
     # Event handler called when the preview card is opened or closed.
@@ -55,7 +55,7 @@ class PreviewCardRoot(PreviewCardBaseComponent):
     # Event handler called after any animations complete when the preview card is opened or closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
 
-    # How long to wait before opening the preview card on hover. Specified in milliseconds. Defaults to 600.
+    # How long to wait before the preview card opens. Specified in milliseconds. Defaults to 600.
     delay: Var[int]
 
     # How long to wait before closing the preview card that was opened on hover. Specified in milliseconds. Defaults to 300.
@@ -73,7 +73,6 @@ class PreviewCardTrigger(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Trigger"
 
-    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -89,7 +88,6 @@ class PreviewCardBackdrop(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Backdrop"
 
-    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -108,7 +106,7 @@ class PreviewCardPortal(PreviewCardBaseComponent):
     # A parent element to render the portal element into.
     container: Var[str]
 
-    # Whether to keep the portal mounted in the DOM while the popup is hidden. Defaults to False.
+    # Whether to keep the portal mounted in the DOM while the popup is hidden. Defaults to false.
     keep_mounted: Var[bool]
 
 
@@ -117,16 +115,19 @@ class PreviewCardPositioner(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Positioner"
 
-    # How to align the popup relative to the specified side. Defaults to "center".
+    # Determines how to handle collisions when positioning the popup.
+    collision_avoidance: Var[str]
+
+    # How to align the popup relative to the specified side. Defaults to center.
     align: Var[LiteralAlign]
 
-    # Additional offset along the alignment axis in pixels. Defaults to 0.
+    # Additional offset along the alignment axis in pixels. Also accepts a function that returns the offset to read the dimensions of the popup. Defaults to 0.
     align_offset: Var[int]
 
-    # Which side of the anchor element to align the popup against. May automatically change to avoid collisions. Defaults to "bottom".
+    # Which side of the anchor element to align the popup against. May automatically change to avoid collisions. Defaults to bottom.
     side: Var[LiteralSide]
 
-    # Distance between the anchor and the popup in pixels. Defaults to 0.
+    # Distance between the anchor and the popup in pixels. Also accepts a function that returns the distance to read the dimensions of the popup. Defaults to 0.
     side_offset: Var[int]
 
     # Minimum distance to maintain between the arrow and the edges of the popup. Use it to prevent the arrow element from hanging out of the rounded corners of a popup. Defaults to 5.
@@ -135,25 +136,21 @@ class PreviewCardPositioner(PreviewCardBaseComponent):
     # An element to position the popup against. By default, the popup will be positioned against the trigger.
     anchor: Var[str]
 
-    # An element or a rectangle that delimits the area that the popup is confined to. Defaults to "clipping-ancestors".
+    # An element or a rectangle that delimits the area that the popup is confined to. Defaults to clipping-ancestors.
     collision_boundary: Var[str]
 
     # Additional space to maintain from the edge of the collision boundary. Defaults to 5.
     collision_padding: Var[int | list[int]]
 
-    # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to False.
+    # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to false.
     sticky: Var[bool]
 
-    # Determines which CSS position property to use. Defaults to "absolute".
+    # Determines which CSS position property to use. Defaults to absolute.
     position_method: Var[LiteralPosition]
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
+    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to true.
     track_anchor: Var[bool]
 
-    # Determines how to handle collisions when positioning the popup.
-    collision_avoidance: Var[str]
-
-    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -170,7 +167,6 @@ class PreviewCardPopup(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Popup"
 
-    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -186,7 +182,6 @@ class PreviewCardArrow(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Arrow"
 
-    # The render prop
     render_: Var[Component]
 
     @classmethod
