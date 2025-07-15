@@ -1,6 +1,5 @@
 """Type stubs for collapsible component."""
 
-from typing import Any, Literal
 
 from reflex.components.component import Component, ComponentNamespace
 from reflex.event import EventType
