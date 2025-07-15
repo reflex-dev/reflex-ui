@@ -75,6 +75,7 @@ class CollapsiblePanel(CollapsibleBaseComponent):
 
     hidden_until_found: Var[bool]
 
+    # Whether to keep the element in the DOM while the panel is hidden. This prop is ignored when `hiddenUntilFound` is used.
     keep_mounted: Var[bool]
 
     # The render prop.

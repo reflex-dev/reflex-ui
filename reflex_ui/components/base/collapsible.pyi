@@ -48,7 +48,9 @@ class CollapsibleTrigger(CollapsibleBaseComponent):
 
 class CollapsiblePanel(CollapsibleBaseComponent):
     tag: str
+    # Allows the browser's built-in page search to find and expand the panel contents. Overrides the `keepMounted` prop and uses `hidden="until-found"` to hide the element without removing it from the DOM.
     hidden_until_found: Var[bool]
+    # Whether to keep the element in the DOM while the panel is hidden. This prop is ignored when `hiddenUntilFound` is used.
     keep_mounted: Var[bool]
     render_: Var[Component]
     @classmethod
