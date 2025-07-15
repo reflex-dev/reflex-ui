@@ -562,7 +562,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [{ name = "reflex", specifier = ">=0.8.2" }]
+requires-dist = [{ name = "reflex", specifier = ">=0.8.0" }]
 
 [package.metadata.requires-dev]
 dev = [
