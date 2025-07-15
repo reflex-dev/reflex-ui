@@ -88,6 +88,7 @@ class PreviewCardBackdrop(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Backdrop"
 
+    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -151,13 +152,14 @@ class PreviewCardPositioner(PreviewCardBaseComponent):
     # Whether the popup tracks any layout shift of its positioning anchor. Defaults to true.
     track_anchor: Var[bool]
 
+    # The render prop
     render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the preview card positioner component."""
         props["data-slot"] = "preview-card-positioner"
-        props.setdefault("side_offset", 4)
+        props.setdefault("side_offset", 8)
         cls.set_class_name(ClassNames.POSITIONER, props)
         return super().create(*children, **props)
 
@@ -167,6 +169,7 @@ class PreviewCardPopup(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Popup"
 
+    # The render prop
     render_: Var[Component]
 
     @classmethod
@@ -182,6 +185,7 @@ class PreviewCardArrow(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Arrow"
 
+    # The render prop
     render_: Var[Component]
 
     @classmethod
