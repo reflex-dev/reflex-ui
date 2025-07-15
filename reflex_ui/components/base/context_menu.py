@@ -64,12 +64,18 @@ class ContextMenuRoot(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Root"
 
+    # Whether the context menu is initially open. To render a controlled context menu, use the open prop instead. Defaults to False.
     default_open: Var[bool]
+    # Whether the context menu is currently open.
     open: Var[bool]
+    # Event handler called when the context menu is opened or closed.
     on_open_change: EventHandler[passthrough_event_spec(bool, dict)]
     action_ref: Var[str]
+    # When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
     close_parent_on_esc: Var[bool]
+    # Event handler called after any animations complete when the context menu is closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
     @classmethod
@@ -84,6 +90,7 @@ class ContextMenuTrigger(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Trigger"
 
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
     render_: Var[Component]
 
@@ -100,8 +107,9 @@ class ContextMenuPortal(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Portal"
 
+    # A parent element to render the portal element into. Defaults to document.body.
     container: Var[str]
-    # Whether to keep the portal mounted when closed. Defaults to False.
+    # Whether to keep the portal mounted in the DOM while the popup is hidden. Defaults to False.
     keep_mounted: Var[bool]
 
     @classmethod
@@ -132,17 +140,27 @@ class ContextMenuPositioner(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Positioner"
 
+    # Determines how to handle collisions when positioning the popup. Defaults to True.
     collision_avoidance: Var[bool | LiteralCollisionAvoidance]
-    # How to align the popup relative to the trigger. Defaults to "center".
+    # How to align the popup relative to the specified side. Defaults to "center".
     align: Var[LiteralAlign]
+    # Additional offset along the alignment axis in pixels. Defaults to 0.
     align_offset: Var[int]
+    # Which side of the anchor element to align the popup against. May automatically change to avoid collisions. Defaults to "bottom".
     side: Var[LiteralSide]
+    # Distance between the anchor and the popup in pixels. Defaults to 4.
     side_offset: Var[int]
+    # Minimum distance to maintain between the arrow and the edges of the popup. Defaults to 5.
     arrow_padding: Var[int]
+    # Additional space to maintain from the edge of the collision boundary. Defaults to 5.
     collision_padding: Var[int]
+    # An element or a rectangle that delimits the area that the popup is confined to. Defaults to "clipping-ancestors".
     collision_boundary: Var[str]
+    # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to False.
     sticky: Var[bool]
+    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
     track_anchor: Var[bool]
+    # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPositionMethod]
     render_: Var[Component]
 
@@ -160,6 +178,7 @@ class ContextMenuPopup(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Popup"
 
+    # Determines the element to focus when the context menu is closed. By default, focus returns to the trigger.
     final_focus: Var[str]
     render_: Var[Component]
 
@@ -191,9 +210,13 @@ class ContextMenuItem(ContextMenuBaseComponent):
 
     tag = "ContextMenu.Item"
 
+    # Overrides the text label to use when the item is matched during keyboard text navigation.
     label: Var[str]
+    # Whether to close the context menu when the item is clicked. Defaults to True.
     close_on_click: Var[bool]
+    # Whether the component renders a native button element when replacing it via the render prop. Defaults to False.
     native_button: Var[bool]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
     render_: Var[Component]
 
@@ -258,8 +281,11 @@ class ContextMenuRadioGroup(ContextMenuBaseComponent):
     tag = "ContextMenu.RadioGroup"
 
     default_value: Var[str | int]
+    # The controlled value of the radio group.
     value: Var[str | int]
+    # Event handler called when the value changes.
     on_value_change: EventHandler[passthrough_event_spec(str | int, dict)]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
     render_: Var[Component]
 
@@ -276,10 +302,14 @@ class ContextMenuRadioItem(ContextMenuBaseComponent):
 
     tag = "ContextMenu.RadioItem"
 
+    # Overrides the text label to use when the item is matched during keyboard text navigation.
     label: Var[str]
     value: Var[str | int]
+    # Whether to close the context menu when the item is clicked. Defaults to True.
     close_on_click: Var[bool]
+    # Whether the component renders a native button element when replacing it via the render prop. Defaults to False.
     native_button: Var[bool]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
     render_: Var[Component]
 
@@ -296,6 +326,7 @@ class ContextMenuRadioItemIndicator(ContextMenuBaseComponent):
 
     tag = "ContextMenu.RadioItemIndicator"
 
+    # Whether to keep the indicator mounted in the DOM when the radio item is not checked. Defaults to False.
     keep_mounted: Var[bool]
     render_: Var[Component]
 
@@ -312,12 +343,18 @@ class ContextMenuCheckboxItem(ContextMenuBaseComponent):
 
     tag = "ContextMenu.CheckboxItem"
 
+    # Overrides the text label to use when the item is matched during keyboard text navigation.
     label: Var[str]
     default_checked: Var[bool]
+    # The controlled checked state of the checkbox item.
     checked: Var[bool]
+    # Event handler called when the checked state changes.
     on_checked_change: EventHandler[passthrough_event_spec(bool, dict)]
+    # Whether to close the context menu when the item is clicked. Defaults to True.
     close_on_click: Var[bool]
+    # Whether the component renders a native button element when replacing it via the render prop. Defaults to False.
     native_button: Var[bool]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
     render_: Var[Component]
 
@@ -334,6 +371,7 @@ class ContextMenuCheckboxItemIndicator(ContextMenuBaseComponent):
 
     tag = "ContextMenu.CheckboxItemIndicator"
 
+    # Whether to keep the indicator mounted in the DOM when the checkbox item is not checked. Defaults to False.
     keep_mounted: Var[bool]
     render_: Var[Component]
 
@@ -350,16 +388,27 @@ class ContextMenuSubmenuRoot(ContextMenuBaseComponent):
 
     tag = "ContextMenu.SubmenuRoot"
 
+    # Whether the submenu is initially open. To render a controlled submenu, use the open prop instead. Defaults to False.
     default_open: Var[bool]
+    # Whether the submenu is currently open.
     open: Var[bool]
+    # Event handler called when the submenu is opened or closed.
     on_open_change: EventHandler[passthrough_event_spec(bool, dict)]
+    # When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
     close_parent_on_esc: Var[bool]
+    # Event handler called after any animations complete when the submenu is closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
+    # Whether the submenu opens when the trigger is hovered. Defaults to False.
     open_on_hover: Var[bool]
+    # The delay in milliseconds before the submenu opens when hovering. Defaults to 0.
     delay: Var[int]
+    # The delay in milliseconds before the submenu closes when no longer hovering. Defaults to 0.
     close_delay: Var[int]
+    # Whether keyboard navigation should loop around when reaching the end of the items. Defaults to False.
     loop: Var[bool]
+    # The orientation of the submenu. Defaults to "vertical".
     orientation: Var[LiteralMenuOrientation]
     render_: Var[Component]
 
@@ -375,7 +424,9 @@ class ContextMenuSubmenuTrigger(ContextMenuBaseComponent):
 
     tag = "ContextMenu.SubmenuTrigger"
 
+    # Overrides the text label to use when the item is matched during keyboard text navigation.
     label: Var[str]
+    # Whether the component renders a native button element when replacing it via the render prop. Defaults to False.
     native_button: Var[bool]
     render_: Var[Component]
 
