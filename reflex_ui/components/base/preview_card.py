@@ -43,15 +43,19 @@ class PreviewCardRoot(PreviewCardBaseComponent):
 
     tag = "PreviewCard.Root"
 
+    # Whether the preview card is open by default. Defaults to False.
     default_open: Var[bool]
 
+    # Whether the preview card is open.
     open: Var[bool]
 
+    # Event handler called when the preview card is opened or closed.
     on_open_change: EventHandler[passthrough_event_spec(bool, dict, str)]
 
     # Event handler called after any animations complete when the preview card is opened or closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
 
+    # How long to wait before opening the preview card on hover. Specified in milliseconds. Defaults to 600.
     delay: Var[int]
 
     # How long to wait before closing the preview card that was opened on hover. Specified in milliseconds. Defaults to 300.
