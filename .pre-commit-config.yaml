@@ -2,7 +2,7 @@ fail_fast: true
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.12.2
+    rev: v0.12.3
     hooks:
       - id: ruff-check
         files: ^reflex_ui/
@@ -17,15 +17,15 @@ repos:
         files: ^reflex_ui/
 
   # Run pyi check before pyright because pyright can fail if pyi files are wrong.
-  - repo: local
-    hooks:
-      - id: update-pyi-files
-        name: update-pyi-files
-        always_run: true
-        language: system
-        require_serial: true
-        description: "Update pyi files as needed"
-        entry: python3 scripts/make_pyi.py
+  # - repo: local
+  #   hooks:
+  #     - id: update-pyi-files
+  #       name: update-pyi-files
+  #       always_run: true
+  #       language: system
+  #       require_serial: true
+  #       description: "Update pyi files as needed"
+  #       entry: python3 scripts/make_pyi.py
 
   - repo: https://github.com/RobertCraigie/pyright-python
     rev: v1.1.403
