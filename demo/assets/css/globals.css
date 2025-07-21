@@ -1099,6 +1099,7 @@
 		0px -8px 8px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0)),
 		0px -2px 6px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0));
 	/* Radius */
+	--radius-ui-xss: calc(var(--radius) - 0.25rem);
 	--radius-ui-xs: calc(var(--radius) - 0.125rem);
 	--radius-ui-sm: var(--radius);
 	--radius-ui-md: calc(var(--radius) + 0.125rem);
