@@ -11,13 +11,13 @@ from reflex_ui.utils.twmerge import cn
 
 def theme_switcher_item(mode: LiteralColorMode, icon: str) -> Component:
     """Create a theme switcher item button for a specific mode."""
-    active_cn = "text-secondary-12 shadow-small bg-secondary-1"
-    unactive_cn = "hover:text-secondary-12 text-secondary-9"
+    active_cn = "text-secondary-11 shadow-small bg-secondary-1"
+    unactive_cn = "hover:text-secondary-11 text-secondary-9"
     return Button.create(
         hi(icon, class_name="shrink-0", size=14),
         on_click=set_color_mode(mode),
         class_name=(
-            "flex items-center cursor-pointer justify-center rounded-ui-sm transition-color size-6",
+            "flex items-center cursor-pointer justify-center rounded-ui-xs transition-color size-6",
             cond(mode == color_mode, active_cn, unactive_cn),
         ),
         aria_label=f"Switch to {mode} mode",
