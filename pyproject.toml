@@ -3,7 +3,7 @@ name = "reflex-ui"
 version = "0.0.1"
 description = "A set of reusable components built on top of Base UI and Tailwind, designed for use across any Reflex project"
 readme = "README.md"
-requires-python = ">=3.13"
+requires-python = ">=3.12"
 dependencies = ["reflex (>=0.8.0)"]
 
 [build-system]

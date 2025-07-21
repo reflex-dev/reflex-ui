@@ -68,7 +68,7 @@ class Link(ReactRouterLink, CoreComponent):
             children.append(
                 hi(
                     "LinkSquare02Icon",
-                    class_name="absolute top-1/2 -translate-y-1/2 right-[-1.375rem] group-hover/link:opacity-100 text-secondary-9 opacity-0",
+                    class_name="absolute top-1/2 -translate-y-1/2 right-[-1.25rem] group-hover/link:opacity-100 text-secondary-9 opacity-0",
                 ),
             )
 

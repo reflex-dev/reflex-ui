@@ -106,9 +106,13 @@ class HighLevelCard(CardComponent):
         footer = props.pop("footer", "")
 
         return CardRoot.create(
-            CardHeader.create(
-                CardTitle.create(title) if title else None,
-                CardDescription.create(description) if description else None,
+            (
+                CardHeader.create(
+                    CardTitle.create(title) if title else None,
+                    CardDescription.create(description) if description else None,
+                )
+                if title or description
+                else None
             ),
             CardContent.create(content) if content else None,
             CardFooter.create(footer) if footer else None,

@@ -529,6 +529,9 @@ class MenuSeparator(MenuBaseComponent):
 class HighLevelMenu(MenuRoot):
     """High level wrapper for the Menu component."""
 
+    # The trigger component to use for the menu
+    trigger: Var[Component | None]
+
     # The list of items to display in the menu dropdown - can be strings or tuples of (label, on_click_handler)
     items: Var[list[str | tuple[str, EventHandler]]]
 
@@ -577,6 +580,7 @@ class HighLevelMenu(MenuRoot):
         }
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
 
+        trigger = props.pop("trigger", None)
         items = props.pop("items", [])
         size = trigger_props.get("size", "md")
         trigger_label = trigger_props.get("placeholder", "Open Menu")
@@ -593,6 +597,7 @@ class HighLevelMenu(MenuRoot):
                         on_click=on_click_handler,
                         size=size,
                     ),
+                    key=label,
                     **item_props,
                 )
             return MenuItem.create(
@@ -603,6 +608,7 @@ class HighLevelMenu(MenuRoot):
                     disabled=props.get("disabled", False),
                     size=size,
                 ),
+                key=item,
                 **item_props,
             )
 
@@ -613,13 +619,17 @@ class HighLevelMenu(MenuRoot):
 
         return MenuRoot.create(
             MenuTrigger.create(
-                render_=button(
-                    trigger_label,
-                    select_arrow(class_name="size-4 text-secondary-9"),
-                    variant="outline",
-                    class_name=ClassNames.TRIGGER,
-                    disabled=props.get("disabled", False),
-                    size=size,
+                render_=(
+                    trigger
+                    if trigger
+                    else button(
+                        trigger_label,
+                        select_arrow(class_name="size-4 text-secondary-9"),
+                        variant="outline",
+                        class_name=ClassNames.TRIGGER,
+                        disabled=props.get("disabled", False),
+                        size=size,
+                    )
                 ),
             ),
             MenuPortal.create(

@@ -478,6 +478,7 @@ class HighLevelSelect(SelectRoot):
                         disabled=props.get("disabled", False),
                     ),
                     value=item,
+                    key=item,
                 ),
             )
         else:
@@ -496,6 +497,7 @@ class HighLevelSelect(SelectRoot):
                         class_name=ClassNames.ITEM,
                     ),
                     value=item,
+                    key=item,
                 )
                 for item in items
             ]
