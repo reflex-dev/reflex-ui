@@ -15,7 +15,7 @@ LiteralOrientation = Literal["horizontal", "vertical"]
 class ClassNames:
     """Class names for toggle group components."""
 
-    ROOT = "inline-flex items-center gap-1 p-1 rounded-md bg-secondary-3 data-[orientation=vertical]:flex-col data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
+    ROOT = "inline-flex items-center gap-1 p-1 rounded-ui-md bg-secondary-3 data-[orientation=vertical]:flex-col data-[disabled]:opacity-50 data-[disabled]:cursor-not-allowed"
 
 
 class ToggleGroupBaseComponent(BaseUIComponent):

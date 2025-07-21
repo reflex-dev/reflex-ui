@@ -10,7 +10,7 @@ from reflex_ui.components.component import CoreComponent
 class ClassNames:
     """Class names for the card component."""
 
-    ROOT = "rounded-xl border border-secondary-a4 bg-secondary-1 shadow-small"
+    ROOT = "rounded-ui-xl border border-secondary-a4 bg-secondary-1 shadow-small"
     HEADER = "flex flex-col gap-2 p-6"
     TITLE = "text-2xl font-semibold text-secondary-12"
     DESCRIPTION = "text-sm text-secondary-11 font-[450]"

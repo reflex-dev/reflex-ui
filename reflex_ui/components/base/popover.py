@@ -23,7 +23,7 @@ class ClassNames:
     BACKDROP = ""
     PORTAL = ""
     POSITIONER = ""
-    POPUP = "origin-(--transform-origin) rounded-xl p-1 border border-secondary-a4 bg-secondary-1 shadow-large transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 outline-none min-w-36 flex flex-col gap-2"
+    POPUP = "origin-(--transform-origin) rounded-ui-xl p-1 border border-secondary-a4 bg-secondary-1 shadow-large transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 outline-none min-w-36 flex flex-col gap-2"
     ARROW = "data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
     TITLE = "text-lg font-semibold text-secondary-12"
     DESCRIPTION = "text-sm text-secondary-11 font-[450]"

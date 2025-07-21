@@ -36,8 +36,8 @@ class ClassNames:
     SEPARATOR = "-mx-1 my-1 h-px bg-muted"
     ARROW = "data-[side=bottom]:top-[-8px] data-[side=left]:right-[-13px] data-[side=left]:rotate-90 data-[side=right]:left-[-13px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-8px] data-[side=top]:rotate-180"
     POSITIONER = "outline-none"
-    SCROLL_ARROW_UP = "top-0 z-[1] flex h-4 w-full cursor-default items-center justify-center rounded-md bg-secondary-1 text-center text-xs before:absolute before:top-[-100%] before:left-0 before:h-full before:w-full before:content-[''] data-[direction=down]:bottom-0 data-[direction=down]:before:bottom-[-100%]"
-    SCROLL_ARROW_DOWN = "bottom-0 z-[1] flex h-4 w-full cursor-default items-center justify-center rounded-md bg-secondary-1 text-center text-xs before:absolute before:top-[-100%] before:left-0 before:h-full before:w-full before:content-[''] data-[direction=down]:bottom-0 data-[direction=down]:before:bottom-[-100%]"
+    SCROLL_ARROW_UP = "top-0 z-[1] flex h-4 w-full cursor-default items-center justify-center rounded-ui-md bg-secondary-1 text-center text-xs before:absolute before:top-[-100%] before:left-0 before:h-full before:w-full before:content-[''] data-[direction=down]:bottom-0 data-[direction=down]:before:bottom-[-100%]"
+    SCROLL_ARROW_DOWN = "bottom-0 z-[1] flex h-4 w-full cursor-default items-center justify-center rounded-ui-md bg-secondary-1 text-center text-xs before:absolute before:top-[-100%] before:left-0 before:h-full before:w-full before:content-[''] data-[direction=down]:bottom-0 data-[direction=down]:before:bottom-[-100%]"
 
 
 class SelectBaseComponent(BaseUIComponent):
@@ -521,7 +521,7 @@ class HighLevelSelect(SelectRoot):
                         items_children,
                         class_name=cn(
                             ClassNames.POPUP,
-                            f"rounded-[calc(var(--radius-{size})+0.25rem)]",
+                            f"rounded-[calc(var(--radius-ui-{size})+0.25rem)]",
                         ),
                     ),
                     **positioner_props,

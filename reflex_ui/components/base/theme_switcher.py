@@ -17,7 +17,7 @@ def theme_switcher_item(mode: LiteralColorMode, icon: str) -> Component:
         hi(icon, class_name="shrink-0", size=14),
         on_click=set_color_mode(mode),
         class_name=(
-            "flex items-center cursor-pointer justify-center rounded-sm transition-color size-6",
+            "flex items-center cursor-pointer justify-center rounded-ui-sm transition-color size-6",
             cond(mode == color_mode, active_cn, unactive_cn),
         ),
         aria_label=f"Switch to {mode} mode",
@@ -32,7 +32,7 @@ def theme_switcher(class_name: str = "") -> Component:
         theme_switcher_item("light", "Sun01Icon"),
         theme_switcher_item("dark", "Moon02Icon"),
         class_name=cn(
-            "flex flex-row items-center bg-secondary-3 p-1 rounded-md w-fit",
+            "flex flex-row items-center bg-secondary-3 p-1 rounded-ui-md w-fit",
             class_name,
         ),
     )

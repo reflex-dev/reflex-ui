@@ -14,7 +14,7 @@ from reflex.vars.base import Var
 from reflex_ui.components.base_ui import BaseUIComponent
 
 class ClassNames:
-    ROOT = "flex size-8 items-center justify-center rounded-sm text-secondary-11 select-none hover:bg-secondary-3 focus-visible:bg-none active:bg-secondary-4 data-[pressed]:text-secondary-12 data-[pressed]:bg-secondary-4 transition-colors"
+    ROOT = "flex size-8 items-center justify-center rounded-ui-sm text-secondary-11 select-none hover:bg-secondary-3 focus-visible:bg-none active:bg-secondary-4 data-[pressed]:text-secondary-12 data-[pressed]:bg-secondary-4 transition-colors"
 
 class ToggleBaseComponent(BaseUIComponent):
     @property
