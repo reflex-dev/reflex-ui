@@ -638,7 +638,7 @@ class HighLevelMenu(MenuRoot):
                         items_children,
                         class_name=cn(
                             ClassNames.POPUP,
-                            f"rounded-[calc(var(--radius-{size})+0.25rem)]",
+                            f"rounded-[calc(var(--radius-ui-{size})+0.25rem)]",
                         ),
                     ),
                     **positioner_props,

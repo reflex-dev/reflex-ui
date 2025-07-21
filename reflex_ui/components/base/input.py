@@ -14,11 +14,11 @@ from reflex_ui.components.icons.hugeicon import hi
 from reflex_ui.utils.twmerge import cn
 
 INPUT_SIZE_VARIANTS = {
-    "xs": "px-1.5 h-7 rounded-xs gap-1.5",
-    "sm": "px-2 h-8 rounded-sm gap-2",
-    "md": "px-2.5 h-9 rounded-md gap-2",
+    "xs": "px-1.5 h-7 rounded-ui-xs gap-1.5",
+    "sm": "px-2 h-8 rounded-ui-sm gap-2",
+    "md": "px-2.5 h-9 rounded-ui-md gap-2",
     "lg": "px-3 h-10 rounded-lg gap-2.5",
-    "xl": "px-3.5 h-12 rounded-xl gap-3",
+    "xl": "px-3.5 h-12 rounded-ui-xl gap-3",
 }
 
 LiteralControlSize = Literal["xs", "sm", "md", "lg", "xl"]

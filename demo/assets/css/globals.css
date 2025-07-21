@@ -1099,12 +1099,12 @@
 		0px -8px 8px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0)),
 		0px -2px 6px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0));
 	/* Radius */
-	--radius-xs: calc(var(--radius) - 0.125rem);
-	--radius-sm: var(--radius);
-	--radius-md: calc(var(--radius) + 0.125rem);
-	--radius-lg: calc(var(--radius) + 0.25rem);
-	--radius-xl: calc(var(--radius) + 0.375rem);
-	--radius-2xl: calc(var(--radius) + 0.5rem);
+	--radius-ui-xs: calc(var(--radius) - 0.125rem);
+	--radius-ui-sm: var(--radius);
+	--radius-ui-md: calc(var(--radius) + 0.125rem);
+	--radius-ui-lg: calc(var(--radius) + 0.25rem);
+	--radius-ui-xl: calc(var(--radius) + 0.375rem);
+	--radius-ui-2xl: calc(var(--radius) + 0.5rem);
 }
 
 @layer base {

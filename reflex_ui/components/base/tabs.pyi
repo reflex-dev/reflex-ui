@@ -17,9 +17,9 @@ LiteralOrientation = Literal["horizontal", "vertical"]
 
 class ClassNames:
     ROOT = "flex flex-col gap-2"
-    LIST = "bg-secondary-3 inline-flex gap-1 p-1 items-center justify-start rounded-md relative z-0"
-    TAB = "h-7 px-1.5 rounded-sm justify-center items-center gap-1.5 inline-flex text-sm font-medium text-secondary-11 cursor-pointer z-[1] hover:text-secondary-12 transition-color text-nowrap data-[selected]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8"
-    INDICATOR = "absolute top-1/2 left-0 -z-1 h-7 w-(--active-tab-width) -translate-y-1/2 translate-x-(--active-tab-left) rounded-sm bg-secondary-1 shadow-small transition-all duration-200 ease-in-out"
+    LIST = "bg-secondary-3 inline-flex gap-1 p-1 items-center justify-start rounded-ui-md relative z-0"
+    TAB = "h-7 px-1.5 rounded-ui-sm justify-center items-center gap-1.5 inline-flex text-sm font-medium text-secondary-11 cursor-pointer z-[1] hover:text-secondary-12 transition-color text-nowrap data-[selected]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8"
+    INDICATOR = "absolute top-1/2 left-0 -z-1 h-7 w-(--active-tab-width) -translate-y-1/2 translate-x-(--active-tab-left) rounded-ui-sm bg-secondary-1 shadow-small transition-all duration-200 ease-in-out"
     PANEL = "flex flex-col gap-2 p-2"
 
 class TabsBaseComponent(BaseUIComponent):
