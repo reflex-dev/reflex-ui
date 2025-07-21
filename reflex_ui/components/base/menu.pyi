@@ -846,6 +846,7 @@ class HighLevelMenu(MenuRoot):
     def create(
         cls,
         *children,
+        trigger: Component | Var[Component | None] | None = None,
         items: Var[list[str | tuple[str, EventHandler]]]
         | list[str | tuple[str, EventHandler]]
         | None = None,
@@ -905,6 +906,7 @@ class HighLevelMenu(MenuRoot):
 
         Args:
             *children: Additional children to include in the menu.
+            trigger: The trigger component to use for the menu
             items: The list of items to display in the menu dropdown - can be strings or tuples of (label, on_click_handler)
             placeholder: The placeholder text to display when no item is selected
             size: The size of the menu. Defaults to "md".
@@ -957,6 +959,7 @@ class Menu(ComponentNamespace):
     @staticmethod
     def __call__(
         *children,
+        trigger: Component | Var[Component | None] | None = None,
         items: Var[list[str | tuple[str, EventHandler]]]
         | list[str | tuple[str, EventHandler]]
         | None = None,
@@ -1016,6 +1019,7 @@ class Menu(ComponentNamespace):
 
         Args:
             *children: Additional children to include in the menu.
+            trigger: The trigger component to use for the menu
             items: The list of items to display in the menu dropdown - can be strings or tuples of (label, on_click_handler)
             placeholder: The placeholder text to display when no item is selected
             size: The size of the menu. Defaults to "md".
