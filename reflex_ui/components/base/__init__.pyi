@@ -24,6 +24,7 @@ from .skeleton import skeleton
 from .slider import slider
 from .switch import switch
 from .tabs import tabs
+from .textarea import textarea
 from .theme_switcher import theme_switcher
 from .toggle import toggle
 from .toggle_group import toggle_group
@@ -54,6 +55,7 @@ __all__ = [
     "slider",
     "switch",
     "tabs",
+    "textarea",
     "theme_switcher",
     "toggle",
     "toggle_group",

@@ -24,6 +24,7 @@ from .components.base.skeleton import skeleton
 from .components.base.slider import slider
 from .components.base.switch import switch
 from .components.base.tabs import tabs
+from .components.base.textarea import textarea
 from .components.base.theme_switcher import theme_switcher
 from .components.base.toggle import toggle
 from .components.base.toggle_group import toggle_group
@@ -52,6 +53,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.slider": ["slider"],
     "components.base.switch": ["switch"],
     "components.base.tabs": ["tabs"],
+    "components.base.textarea": ["textarea"],
     "components.base.theme_switcher": ["theme_switcher"],
     "components.base.toggle_group": ["toggle_group"],
     "components.base.toggle": ["toggle"],
@@ -92,6 +94,7 @@ __all__ = [
     "spinner",
     "switch",
     "tabs",
+    "textarea",
     "theme_switcher",
     "toggle",
     "toggle_group",
