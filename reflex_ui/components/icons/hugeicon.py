@@ -10,7 +10,7 @@ from reflex_ui.components.component import CoreComponent
 class HugeIcon(CoreComponent):
     """A HugeIcon component."""
 
-    library = "@hugeicons/react@^1.0.5"
+    library = "@hugeicons/react@1.0.5"
 
     tag = "HugeiconsIcon"
 
@@ -50,7 +50,11 @@ class HugeIcon(CoreComponent):
                 props[prop] = Var(
                     icon_name,
                     _var_data=VarData(
-                        imports={"@hugeicons/core-free-icons": ImportVar(tag=icon_name)}
+                        imports={
+                            "@hugeicons/core-free-icons@1.0.14": ImportVar(
+                                tag=icon_name
+                            )
+                        }
                     ),
                 )
         stroke_width = props.pop("stroke_width", 2)
