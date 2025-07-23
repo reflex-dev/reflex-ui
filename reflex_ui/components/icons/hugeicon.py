@@ -51,7 +51,7 @@ class HugeIcon(CoreComponent):
                     icon_name,
                     _var_data=VarData(
                         imports={
-                            "@hugeicons/core-free-icons@1.0.14": ImportVar(
+                            "@hugeicons/core-free-icons@1.0.16": ImportVar(
                                 tag=icon_name
                             )
                         }

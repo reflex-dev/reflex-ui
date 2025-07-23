@@ -75,3 +75,6 @@ reportIncompatibleMethodOverride = false
 reportMissingImports = false
 reportInconsistentOverload = false
 exclude = ["**/alembic/*", "demo/*", "reflex_ui/**/*.pyi"]
+
+[tool.uv]
+required-version = ">=0.7.0"
