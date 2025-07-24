@@ -5,8 +5,8 @@ from typing import Literal
 from reflex.components.react_router.dom import ReactRouterLink, To
 from reflex.vars.base import Var
 
-from reflex_ui.components.component import CoreComponent
 from reflex_ui.components.icons.hugeicon import hi
+from reflex_ui.utils.twmerge import cn
 
 LiteralLinkVariant = Literal["primary", "secondary"]
 LiteralLinkSize = Literal["xs", "sm", "md", "lg", "xl"]
@@ -16,6 +16,7 @@ class ClassNames:
     """Class names for the link component."""
 
     ROOT = "font-medium underline-offset-2 hover:underline w-fit group/link relative"
+    ICON = "absolute top-1/2 -translate-y-1/2 right-[-1.25rem] group-hover/link:opacity-100 text-secondary-9 opacity-0"
 
 
 LINK_VARIANTS: dict[str, dict[str, str]] = {
@@ -33,7 +34,7 @@ LINK_VARIANTS: dict[str, dict[str, str]] = {
 }
 
 
-class Link(ReactRouterLink, CoreComponent):
+class Link(ReactRouterLink):
     """Link component."""
 
     # The size of the link. Defaults to "sm".
@@ -55,23 +56,28 @@ class Link(ReactRouterLink, CoreComponent):
         cls.validate_size(size)
         variant = props.pop("variant", "secondary")
         cls.validate_variant(variant)
+        render_component = props.pop("render_", None)
         show_icon = props.pop("show_icon", False)
+        link_class_name = props.get("class_name", "")
 
-        # Apply default styling
-        cls.set_class_name(
-            f"{ClassNames.ROOT} {LINK_VARIANTS['size'][size]} {LINK_VARIANTS['variant'][variant]}",
-            props,
-        )
-
-        children = list(children)
-        if show_icon:
-            children.append(
-                hi(
-                    "LinkSquare02Icon",
-                    class_name="absolute top-1/2 -translate-y-1/2 right-[-1.25rem] group-hover/link:opacity-100 text-secondary-9 opacity-0",
-                ),
+        # Get the class name and children from the render component
+        if render_component:
+            children = list(getattr(render_component, "children", []))
+            class_name = cn(
+                getattr(render_component, "class_name", ""), link_class_name
+            )
+        else:
+            children = list(children)
+            size_class = LINK_VARIANTS["size"][size]
+            variant_class = LINK_VARIANTS["variant"][variant]
+            class_name = cn(
+                f"{ClassNames.ROOT} {size_class} {variant_class}", link_class_name
             )
 
+        if show_icon:
+            children.append(hi("LinkSquare02Icon", class_name=ClassNames.ICON))
+
+        props["class_name"] = class_name
         return super().create(*children, **props)
 
     @staticmethod
@@ -93,12 +99,7 @@ class Link(ReactRouterLink, CoreComponent):
             raise ValueError(message)
 
     def _exclude_props(self) -> list[str]:
-        return [
-            *super()._exclude_props(),
-            "size",
-            "variant",
-            "show_icon",
-        ]
+        return [*super()._exclude_props(), "size", "variant", "show_icon", "render_"]
 
 
 link = Link.create

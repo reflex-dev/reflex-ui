@@ -11,17 +11,16 @@ from reflex.components.react_router.dom import ReactRouterLink, To
 from reflex.event import EventType, PointerEventInfo
 from reflex.vars.base import Var
 
-from reflex_ui.components.component import CoreComponent
-
 LiteralLinkVariant = Literal["primary", "secondary"]
 LiteralLinkSize = Literal["xs", "sm", "md", "lg", "xl"]
 
 class ClassNames:
     ROOT = "font-medium underline-offset-2 hover:underline w-fit group/link relative"
+    ICON = "absolute top-1/2 -translate-y-1/2 right-[-1.25rem] group-hover/link:opacity-100 text-secondary-9 opacity-0"
 
 LINK_VARIANTS: dict[str, dict[str, str]]
 
-class Link(ReactRouterLink, CoreComponent):
+class Link(ReactRouterLink):
     @classmethod
     def create(
         cls,
@@ -254,7 +253,6 @@ class Link(ReactRouterLink, CoreComponent):
         spell_check: Var[bool] | bool | None = None,
         tab_index: Var[int] | int | None = None,
         title: Var[str] | str | None = None,
-        unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
         | Var[Mapping[str, Any]]
