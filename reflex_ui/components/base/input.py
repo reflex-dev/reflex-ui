@@ -164,12 +164,13 @@ class HighLevelInput(InputBaseComponent):
         """Create the clear button component."""
         return Button.create(
             hi("CancelCircleIcon"),
-            type="reset",
+            type="button",
             on_click=[
                 set_value(id, ""),
                 set_focus(id).stop_propagation,
                 *clear_events,
             ],
+            tab_index=-1,
             class_name="opacity-100 peer-placeholder-shown:opacity-0 hover:text-secondary-12 transition-colors peer-placeholder-shown:pointer-events-none peer-disabled:pointer-events-none peer-disabled:opacity-0 h-full",
         )
 

@@ -1131,7 +1131,7 @@
 	}
 
 	* {
-		@apply border-secondary-6 outline-primary-6 font-sans;
+		@apply border-secondary-6 outline-primary-6;
 	}
 
 	body {

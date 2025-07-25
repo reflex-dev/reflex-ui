@@ -596,6 +596,7 @@ class HighLevelMenu(MenuRoot):
                         disabled=props.get("disabled", False),
                         on_click=on_click_handler,
                         size=size,
+                        type="button",
                     ),
                     key=label,
                     **item_props,
@@ -607,6 +608,7 @@ class HighLevelMenu(MenuRoot):
                     class_name=ClassNames.ITEM,
                     disabled=props.get("disabled", False),
                     size=size,
+                    type="button",
                 ),
                 key=item,
                 **item_props,
@@ -629,6 +631,7 @@ class HighLevelMenu(MenuRoot):
                         class_name=ClassNames.TRIGGER,
                         disabled=props.get("disabled", False),
                         size=size,
+                        type="button",
                     )
                 ),
             ),
