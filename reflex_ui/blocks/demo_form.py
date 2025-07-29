@@ -79,7 +79,7 @@ def input_field(
     """
     return rx.el.div(
         rx.el.label(
-            label,
+            label + (" *" if required else ""),
             class_name="block text-sm font-medium text-secondary-12",
         ),
         ui.input(
@@ -352,13 +352,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         """
         return rx.el.form(
             rx.el.div(
-                input_field("First name *", "John", "first_name", "text", True),
-                input_field("Last name *", "Smith", "last_name", "text", True),
+                input_field("First name", "John", "first_name", "text", True),
+                input_field("Last name", "Smith", "last_name", "text", True),
                 class_name="grid grid-cols-2 gap-4",
             ),
-            input_field("Email *", "john@example.com", "email", "email", True),
+            input_field("Email", "john@example.com", "email", "email", True),
             rx.el.div(
-                input_field("Job title *", "CTO", "job_title", "text", True),
+                input_field("Job title", "CTO", "job_title", "text", True),
                 input_field(
                     "Company name *", "Pynecone, Inc.", "company_name", "text", True
                 ),
@@ -369,7 +369,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 "https://linkedin.com/in/your-profile",
                 "linkedin_profile_url",
                 "text",
-                False,
+                True,
             ),
             input_field(
                 "Phone number (optional)",
@@ -386,13 +386,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             ),
             rx.el.div(
                 select_field(
-                    "Number of employees? *",
+                    "Number of employees?",
                     "number_of_employees",
                     ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
                     "500+",
                 ),
                 select_field(
-                    "How did you hear about us? *",
+                    "How did you hear about us?",
                     "how_did_you_hear_about_us",
                     [
                         "Google Search",
