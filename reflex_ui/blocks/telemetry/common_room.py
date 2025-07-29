@@ -21,11 +21,11 @@ COMMON_ROOM_SCRIPT_TEMPLATE: str = """
         [],
         ['page', 'identify', 'form', 'track'].reduce(function (acc, method) {{
             acc[method] = function () {{
-                signals.push([method, arguments]);
-                return signals;
+                acc.push([method, arguments]);
+                return acc;
             }};
             return acc;
-        }}, {{}})
+        }}, [])
     );
     document.head.appendChild(script);
 }})();
