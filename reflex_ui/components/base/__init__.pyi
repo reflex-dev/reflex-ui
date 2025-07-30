@@ -10,6 +10,7 @@ from .badge import badge
 from .button import button
 from .card import card
 from .checkbox import checkbox
+from .collapsible import collapsible
 from .dialog import dialog
 from .gradient_profile import gradient_profile
 from .input import input
@@ -41,6 +42,7 @@ __all__ = [
     "button",
     "card",
     "checkbox",
+    "collapsible",
     "dialog",
     "gradient_profile",
     "input",
