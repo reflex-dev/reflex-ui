@@ -10,6 +10,7 @@ from .components.base.badge import badge
 from .components.base.button import button
 from .components.base.card import card
 from .components.base.checkbox import checkbox
+from .components.base.collapsible import collapsible
 from .components.base.dialog import dialog
 from .components.base.gradient_profile import gradient_profile
 from .components.base.input import input
@@ -39,6 +40,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.button": ["button"],
     "components.base.card": ["card"],
     "components.base.checkbox": ["checkbox"],
+    "components.base.collapsible": ["collapsible"],
     "components.base.dialog": ["dialog"],
     "components.base.gradient_profile": ["gradient_profile"],
     "components.base.input": ["input"],
@@ -76,6 +78,7 @@ __all__ = [
     "card",
     "checkbox",
     "cn",
+    "collapsible",
     "components",
     "dialog",
     "gradient_profile",
