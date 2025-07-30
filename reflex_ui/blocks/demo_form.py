@@ -17,11 +17,11 @@ from reflex.utils.console import log
 import reflex_ui as ui
 
 CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflexdemo"
+    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro"
 )
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://cal.com/team/reflex/reflex-team-enterprise-follow-up-call",
+    "https://cal.com/team/reflex/reflex-intro",
 )
 SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
 POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
@@ -360,7 +360,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             rx.el.div(
                 input_field("Job title", "CTO", "job_title", "text", True),
                 input_field(
-                    "Company name *", "Pynecone, Inc.", "company_name", "text", True
+                    "Company name", "Pynecone, Inc.", "company_name", "text", True
                 ),
                 class_name="grid grid-cols-2 gap-4",
             ),
@@ -369,10 +369,10 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 "https://linkedin.com/in/your-profile",
                 "linkedin_profile_url",
                 "text",
-                True,
+                False,
             ),
             input_field(
-                "Phone number (optional)",
+                "Phone number",
                 "+1 (555) 123-4567",
                 "phone_number",
                 "tel",
