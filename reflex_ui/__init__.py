@@ -3,6 +3,7 @@
 from reflex.utils import lazy_loader
 
 _REFLEX_UI_MAPPING = {
+    "components.base.accordion": ["accordion"],
     "components.base.avatar": ["avatar"],
     "components.base.badge": ["badge"],
     "components.base.button": ["button"],

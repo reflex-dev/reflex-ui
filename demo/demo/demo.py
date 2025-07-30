@@ -12,6 +12,11 @@ class State(rx.State):
 def index() -> rx.Component:
     # Welcome Page (Index)
     return rx.el.div(
+        ui.accordion(
+            trigger=rx.text("What is Base UI?"),
+            content=rx.text("Base UI is a library of headless UI components and hooks."),
+            class_name="max-w-md",
+        ),
         ui.tooltip(
             ui.button(
                 ui.icon("SmileIcon"),
