@@ -85,8 +85,8 @@ class AccordionRoot(AccordionBaseComponent):
     def create(
         cls,
         *children,
-        default_value: Var[list[str]] | list[str] | None = None,
-        value: Var[list[str]] | list[str] | None = None,
+        default_value: Var[list[Any]] | list[Any] | None = None,
+        value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
         open_multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
@@ -295,8 +295,8 @@ class HighLevelAccordion(AccordionRoot):
         items: Var[list[dict[str, Component | str]]]
         | list[dict[str, Component | str]]
         | list[dict[str, Component | str]] = None,
-        default_value: Var[list[str]] | list[str] | None = None,
-        value: Var[list[str]] | list[str] | None = None,
+        default_value: Var[list[Any]] | list[Any] | None = None,
+        value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
         open_multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
@@ -378,8 +378,8 @@ class Accordion(ComponentNamespace):
         items: Var[list[dict[str, Component | str]]]
         | list[dict[str, Component | str]]
         | list[dict[str, Component | str]] = None,
-        default_value: Var[list[str]] | list[str] | None = None,
-        value: Var[list[str]] | list[str] | None = None,
+        default_value: Var[list[Any]] | list[Any] | None = None,
+        value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
         open_multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,

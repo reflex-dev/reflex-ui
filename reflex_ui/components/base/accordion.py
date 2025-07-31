@@ -1,6 +1,6 @@
 """Custom Accordion component."""
 
-from typing import Literal
+from typing import Any, Literal
 
 from reflex.components.component import Component, ComponentNamespace
 from reflex.components.core.foreach import foreach
@@ -47,10 +47,10 @@ class AccordionRoot(AccordionBaseComponent):
     tag = "Accordion.Root"
 
     # The uncontrolled value of the item(s) that should be initially expanded. To render a controlled accordion, use the `value` prop instead.
-    default_value: Var[list[str]]
+    default_value: Var[list[Any]]
 
     # The controlled value of the item(s) that should be expanded. To render an uncontrolled accordion, use the `default_value` prop instead.
-    value: Var[list[str]]
+    value: Var[list[Any]]
 
     # Event handler called when an accordion item is expanded or collapsed. Provides the new value as an argument.
     on_value_change: EventHandler[passthrough_event_spec(list[str])]
