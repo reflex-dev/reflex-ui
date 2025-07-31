@@ -24,7 +24,7 @@ BUTTON_VARIANTS = {
         "destructive": "bg-destructive-9 hover:bg-destructive-10 text-white",
         "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
-        "ghost": "hover:bg-secondary-3 text-secondary-12",
+        "ghost": "hover:bg-secondary-3 text-secondary-11",
         "link": "text-secondary-12 underline-offset-4 hover:underline",
         "dark": "bg-secondary-12 text-secondary-1 hover:bg-secondary-12/80",
     },
