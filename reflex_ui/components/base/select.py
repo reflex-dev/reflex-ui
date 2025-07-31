@@ -84,17 +84,20 @@ class SelectRoot(SelectBaseComponent):
 
     # Determines if the select enters a modal state when open.
     # - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.
-    # - False: user interaction with the rest of the document is allowed.
-    modal: Var[bool] = Var.create(True)
+    # - False: user interaction with the rest of the document is allowed. Defaults to True.
+    modal: Var[bool]
 
-    # Whether the component should ignore user interaction
-    disabled: Var[bool] = Var.create(False)
+    # Whether multiple items can be selected. Defaults to False.
+    multiple: Var[bool]
 
-    # Whether the user should be unable to choose a different option from the select menu
-    read_only: Var[bool] = Var.create(False)
+    # Whether the component should ignore user interaction. Defaults to False.
+    disabled: Var[bool]
 
-    # Whether the user must choose a value before submitting a form
-    required: Var[bool] = Var.create(False)
+    # Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+    read_only: Var[bool]
+
+    # Whether the user must choose a value before submitting a form. Defaults to False.
+    required: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
@@ -108,8 +111,8 @@ class SelectTrigger(SelectBaseComponent):
 
     tag = "Select.Trigger"
 
-    # Whether the component should ignore user interaction
-    disabled: Var[bool] = Var.create(False)
+    # Whether the component should ignore user interaction. Defaults to False.
+    disabled: Var[bool]
 
     # The render prop
     render_: Var[Component]

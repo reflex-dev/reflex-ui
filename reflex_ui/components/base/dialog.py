@@ -106,6 +106,9 @@ class DialogBackdrop(DialogBaseComponent):
 
     tag = "Dialog.Backdrop"
 
+    # Whether the backdrop is forced to render even when nested. Defaults to False.
+    force_render: Var[bool]
+
     # The render prop
     render_: Var[Component]
 
