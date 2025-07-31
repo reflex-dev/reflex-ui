@@ -251,14 +251,14 @@ class HighLevelTooltip(TooltipRoot):
     @classmethod
     def create(
         cls,
-        trigger_component: Component,
+        trigger: Component,
         content: str | Component | None = None,
         **props,
     ) -> BaseUIComponent:
         """Create a high level tooltip component.
 
         Args:
-            trigger_component: The component that triggers the tooltip.
+            trigger: The component that triggers the tooltip.
             content: The content to display in the tooltip.
             **props: Additional properties to apply to the tooltip component.
 
@@ -283,7 +283,7 @@ class HighLevelTooltip(TooltipRoot):
 
         return TooltipRoot.create(
             TooltipTrigger.create(
-                render_=trigger_component,
+                render_=trigger,
             ),
             TooltipPortal.create(
                 TooltipPositioner.create(

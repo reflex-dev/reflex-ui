@@ -5,6 +5,7 @@
 
 from reflex_ui import _REFLEX_UI_MAPPING
 
+from .accordion import accordion
 from .avatar import avatar
 from .badge import badge
 from .button import button
@@ -37,6 +38,7 @@ _SUBMOD_ATTRS = {
 }
 
 __all__ = [
+    "accordion",
     "avatar",
     "badge",
     "button",

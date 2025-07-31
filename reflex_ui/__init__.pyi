@@ -5,6 +5,7 @@
 
 from . import components, utils
 from .components import base
+from .components.base.accordion import accordion
 from .components.base.avatar import avatar
 from .components.base.badge import badge
 from .components.base.button import button
@@ -35,6 +36,7 @@ from .components.icons.others import spinner
 from .utils.twmerge import cn
 
 _REFLEX_UI_MAPPING = {
+    "components.base.accordion": ["accordion"],
     "components.base.avatar": ["avatar"],
     "components.base.badge": ["badge"],
     "components.base.button": ["button"],
@@ -71,6 +73,7 @@ _SUBMOD_ATTRS = {
 }
 
 __all__ = [
+    "accordion",
     "avatar",
     "badge",
     "base",

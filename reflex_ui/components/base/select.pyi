@@ -101,6 +101,7 @@ class SelectRoot(SelectBaseComponent):
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
@@ -824,6 +825,7 @@ class HighLevelSelect(SelectRoot):
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
@@ -875,10 +877,11 @@ class HighLevelSelect(SelectRoot):
             open: Whether the select menu is currently open
             on_open_change: Event handler called when the select menu is opened or closed
             on_open_change_complete: Event handler called after any animations complete when the select menu is opened or closed
-            modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.
-            disabled: Whether the component should ignore user interaction
-            read_only: Whether the user should be unable to choose a different option from the select menu
-            required: Whether the user must choose a value before submitting a form
+            modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed. Defaults to True.
+            multiple: Whether multiple items can be selected. Defaults to False.
+            disabled: Whether the component should ignore user interaction. Defaults to False.
+            read_only: Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+            required: Whether the user must choose a value before submitting a form. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -926,6 +929,7 @@ class Select(ComponentNamespace):
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
@@ -977,10 +981,11 @@ class Select(ComponentNamespace):
             open: Whether the select menu is currently open
             on_open_change: Event handler called when the select menu is opened or closed
             on_open_change_complete: Event handler called after any animations complete when the select menu is opened or closed
-            modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.
-            disabled: Whether the component should ignore user interaction
-            read_only: Whether the user should be unable to choose a different option from the select menu
-            required: Whether the user must choose a value before submitting a form
+            modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed. Defaults to True.
+            multiple: Whether multiple items can be selected. Defaults to False.
+            disabled: Whether the component should ignore user interaction. Defaults to False.
+            read_only: Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+            required: Whether the user must choose a value before submitting a form. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

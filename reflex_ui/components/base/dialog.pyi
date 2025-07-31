@@ -229,6 +229,7 @@ class DialogBackdrop(DialogBaseComponent):
     def create(
         cls,
         *children,
+        force_render: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
