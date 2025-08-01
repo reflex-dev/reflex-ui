@@ -11,6 +11,7 @@ _REFLEX_UI_MAPPING = {
     "components.base.checkbox": ["checkbox"],
     "components.base.collapsible": ["collapsible"],
     "components.base.dialog": ["dialog"],
+    "components.base.drawer": ["drawer"],
     "components.base.gradient_profile": ["gradient_profile"],
     "components.base.input": ["input"],
     "components.base.link": ["link"],
