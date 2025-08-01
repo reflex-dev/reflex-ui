@@ -13,6 +13,7 @@ from .card import card
 from .checkbox import checkbox
 from .collapsible import collapsible
 from .dialog import dialog
+from .drawer import drawer
 from .gradient_profile import gradient_profile
 from .input import input
 from .link import link
@@ -46,6 +47,7 @@ __all__ = [
     "checkbox",
     "collapsible",
     "dialog",
+    "drawer",
     "gradient_profile",
     "input",
     "link",
