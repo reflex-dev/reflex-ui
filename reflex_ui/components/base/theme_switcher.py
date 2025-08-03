@@ -24,7 +24,6 @@ def theme_switcher_item(mode: LiteralColorMode, icon: str) -> Component:
     )
 
 
-@memo
 def theme_switcher(class_name: str = "") -> Component:
     """Theme switcher component."""
     return Div.create(
@@ -36,3 +35,9 @@ def theme_switcher(class_name: str = "") -> Component:
             class_name,
         ),
     )
+
+
+@memo
+def memoized_theme_switcher(class_name: str = "") -> Component:
+    """Memoized theme switcher component."""
+    return theme_switcher(class_name=class_name)
