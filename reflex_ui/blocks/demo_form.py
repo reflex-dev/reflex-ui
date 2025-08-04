@@ -92,7 +92,7 @@ def input_field(
             required=required,
             class_name="w-full",
         ),
-        class_name="flex flex-col gap-2",
+        class_name="flex flex-col gap-1.5",
     )
 
 
@@ -115,7 +115,7 @@ def text_area_field(
         ui.textarea(
             placeholder=placeholder, name=name, required=required, class_name="w-full"
         ),
-        class_name="flex flex-col gap-2",
+        class_name="flex flex-col gap-1.5",
     )
 
 
@@ -137,7 +137,10 @@ def select_field(
         A Reflex component containing the labeled select field
     """
     return rx.el.div(
-        rx.el.label(label, class_name="block text-sm font-medium text-secondary-12"),
+        rx.el.label(
+            label + (" *" if required else ""),
+            class_name="block text-sm font-medium text-secondary-12",
+        ),
         ui.select(
             default_value="Select",
             name=name,
@@ -145,7 +148,7 @@ def select_field(
             required=required,
             class_name="w-full",
         ),
-        class_name="flex flex-col gap-2",
+        class_name="flex flex-col gap-1.5",
     )
 
 
