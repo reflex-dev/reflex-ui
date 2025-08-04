@@ -12,9 +12,12 @@ from typing import Any
 
 import httpx
 import reflex as rx
+from reflex.experimental.client_state import ClientStateVar
 from reflex.utils.console import log
 
 import reflex_ui as ui
+
+demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 
 CAL_REQUEST_DEMO_URL = os.getenv(
     "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro"
@@ -222,6 +225,7 @@ class DemoForm(rx.ComponentState):
                 "Please enter a valid company email",
                 position="top-center",
             )
+            yield demo_form_error_message.push("Please enter a valid company email")
             return
         # Check if the has selected a number of employees
         if not check_if_number_of_employees_is_valid(
@@ -231,6 +235,7 @@ class DemoForm(rx.ComponentState):
                 "Please select a number of employees",
                 position="top-center",
             )
+            yield demo_form_error_message.push("Please select a number of employees")
             return
 
         # Check if the has entered a referral source
@@ -240,6 +245,9 @@ class DemoForm(rx.ComponentState):
             yield rx.toast.error(
                 "Please select how did you hear about us",
                 position="top-center",
+            )
+            yield demo_form_error_message.push(
+                "Please select how did you hear about us"
             )
             return
         # Send to PostHog and Slack for all submissions
@@ -428,6 +436,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                     ],
                 ),
                 class_name="grid grid-cols-2 gap-4",
+            ),
+            rx.cond(
+                demo_form_error_message.value,
+                rx.el.span(
+                    demo_form_error_message.value,
+                    class_name="text-destructive-10 text-sm font-medium",
+                ),
             ),
             ui.button("Submit", type="submit", class_name="w-full"),
             on_submit=cls.on_submit,
