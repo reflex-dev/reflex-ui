@@ -120,7 +120,6 @@ def select_field(
     label: str,
     name: str,
     items: list[str],
-    default: str,
     required: bool = False,
 ) -> rx.Component:
     """Create a labeled select field component.
@@ -129,7 +128,6 @@ def select_field(
         label: The label text to display above the select
         name: The name attribute for the select field
         items: List of options to display in the select
-        default: The default selected value
         required: Whether the field is required
 
     Returns:
@@ -138,10 +136,9 @@ def select_field(
     return rx.el.div(
         rx.el.label(label, class_name="block text-sm font-medium text-secondary-12"),
         ui.select(
-            placeholder=label,
+            default_value="Select",
             name=name,
             items=items,
-            default_value=default,
             required=required,
             class_name="w-full",
         ),
@@ -196,6 +193,16 @@ def check_if_company_email(email: str) -> bool:
     return domain not in personal_domains and ".edu" not in domain
 
 
+def check_if_number_of_employees_is_valid(number_of_employees: str) -> bool:
+    """Check if the number of employees is valid."""
+    return number_of_employees.strip() != "Select"
+
+
+def check_if_referral_source_is_valid(referral_source: str) -> bool:
+    """Check if the referral source is valid."""
+    return referral_source.strip() != "Select"
+
+
 class DemoForm(rx.ComponentState):
     """Component state for handling demo form submissions and integrations."""
 
@@ -216,6 +223,25 @@ class DemoForm(rx.ComponentState):
                 position="top-center",
             )
             return
+        # Check if the has selected a number of employees
+        if not check_if_number_of_employees_is_valid(
+            form_data.get("number_of_employees", "")
+        ):
+            yield rx.toast.error(
+                "Please select a number of employees",
+                position="top-center",
+            )
+            return
+
+        # Check if the has entered a referral source
+        if not check_if_referral_source_is_valid(
+            form_data.get("how_did_you_hear_about_us", "")
+        ):
+            yield rx.toast.error(
+                "Please select how did you hear about us",
+                position="top-center",
+            )
+            return
         # Send to PostHog and Slack for all submissions
         await self.send_demo_event(form_data)
 
@@ -229,7 +255,6 @@ class DemoForm(rx.ComponentState):
             )
             yield rx.redirect(CAL_REQUEST_DEMO_URL)
             return
-
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
@@ -389,7 +414,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                     "Number of employees?",
                     "number_of_employees",
                     ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
-                    "500+",
                 ),
                 select_field(
                     "How did you hear about us?",
@@ -402,7 +426,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                         "Conference",
                         "Other",
                     ],
-                    "Google Search",
                 ),
                 class_name="grid grid-cols-2 gap-4",
             ),
