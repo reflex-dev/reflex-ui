@@ -392,7 +392,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 input_field("Last name", "Smith", "last_name", "text", True),
                 class_name="grid grid-cols-2 gap-4",
             ),
-            input_field("Email", "john@example.com", "email", "email", True),
+            input_field("Business Email", "john@company.com", "email", "email", True),
             rx.el.div(
                 input_field("Job title", "CTO", "job_title", "text", True),
                 input_field(
