@@ -3,7 +3,6 @@
 import reflex as rx
 
 import reflex_ui as ui
-from reflex_ui.blocks.demo_form import demo_form
 
 
 class State(rx.State):
@@ -66,17 +65,6 @@ def index() -> rx.Component:
     )
 
 
-def demo_form_page() -> rx.Component:
-    return rx.el.div(
-        rx.el.h1("Demo Form", class_name="text-2xl font-bold mb-6"),
-        demo_form(class_name="max-w-md mx-auto"),
-        ui.theme_switcher(class_name="absolute top-4 right-4"),
-        class_name=ui.cn(
-            "flex flex-col items-center justify-center min-h-screen p-6", "bg-secondary-1"
-        ),
-    )
-
-
 app = rx.App(
     stylesheets=["css/globals.css"],
     head_components=[
@@ -100,4 +88,3 @@ app = rx.App(
     ],
 )
 app.add_page(index)
-app.add_page(demo_form_page, route="/demo-form")
