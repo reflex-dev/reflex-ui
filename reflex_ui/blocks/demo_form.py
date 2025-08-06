@@ -5,8 +5,11 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
+import asyncio
 import os
 import urllib.parse
+import uuid
+from collections.abc import Sequence
 from dataclasses import asdict, dataclass
 from typing import Any
 
@@ -18,7 +21,10 @@ from reflex.utils.console import log
 import reflex_ui as ui
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
+is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 
+COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
+COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
     "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro"
 )
@@ -253,6 +259,7 @@ class DemoForm(rx.ComponentState):
                 "Please select how did you hear about us"
             )
             return
+        yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
         await self.send_demo_event(form_data)
 
@@ -285,6 +292,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         query_string = urllib.parse.urlencode(params)
         cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
 
+        yield is_sending_demo_form.push(False)
         yield rx.redirect(cal_url_with_params)
 
     async def send_demo_event(self, form_data: dict[str, Any]):
@@ -312,13 +320,12 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             phone_number=form_data.get("phone_number", ""),
         )
 
-        # Send to PostHog
-        await self.send_data_to_posthog(demo_event)
-
-        try:
-            await self.send_data_to_slack(demo_event)
-        except Exception as e:
-            log(f"Failed to send to Slack: {e}")
+        # Send data to PostHog, Common Room, and Slack
+        await asyncio.gather(
+            self.send_data_to_posthog(demo_event),
+            self.send_data_to_common_room(demo_event),
+            self.send_data_to_slack(demo_event),
+        )
 
     async def send_data_to_posthog(self, event_instance: PosthogEvent):
         """Send data to PostHog using class introspection.
@@ -342,6 +349,41 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 response.raise_for_status()
         except Exception:
             log("Error sending data to PostHog")
+
+    async def send_data_to_common_room(self, event_instance: DemoEvent):
+        """Update CommonRoom with user login information."""
+        tags: Sequence[str] = [
+            "Requested Demo",
+        ]
+
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    f"https://api.commonroom.io/community/v1/source/{COMMONROOM_DESTINATION_ID}/activity",
+                    headers={
+                        "Content-Type": "application/json",
+                        "Authorization": f"Bearer {COMMONROOM_API_TOKEN}",
+                    },
+                    json={
+                        "id": "requested_demo",
+                        "activityType": "requested_demo",
+                        "user": {
+                            "id": str(uuid.uuid4()),
+                            "email": event_instance.company_email,
+                        },
+                        "tags": [
+                            {
+                                "type": "name",
+                                "name": tag,
+                            }
+                            for tag in tags
+                        ],
+                    },
+                )
+        except Exception as ex:
+            log(
+                f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
+            )
 
     async def send_data_to_slack(self, event_instance: DemoEvent):
         """Send demo form data to Slack webhook.
@@ -447,7 +489,12 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                     class_name="text-destructive-10 text-sm font-medium",
                 ),
             ),
-            ui.button("Submit", type="submit", class_name="w-full"),
+            ui.button(
+                "Submit",
+                type="submit",
+                class_name="w-full",
+                loading=is_sending_demo_form.value,
+            ),
             on_submit=cls.on_submit,
             class_name=ui.cn(
                 "@container flex flex-col gap-6 p-6",
