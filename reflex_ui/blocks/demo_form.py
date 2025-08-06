@@ -438,7 +438,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                         "Other",
                     ],
                 ),
-                class_name="grid grid-cols-2 gap-4",
+                class_name="grid @max-md:grid-cols-1 grid-cols-2 gap-4",
             ),
             rx.cond(
                 demo_form_error_message.value,
@@ -450,7 +450,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             ui.button("Submit", type="submit", class_name="w-full"),
             on_submit=cls.on_submit,
             class_name=ui.cn(
-                "flex flex-col gap-6 p-6",
+                "@container flex flex-col gap-6 p-6",
                 props.pop("class_name", ""),
             ),
             **props,
