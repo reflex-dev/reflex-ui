@@ -26,7 +26,7 @@ is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
 COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro"
+    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
@@ -58,13 +58,11 @@ class DemoEvent(PosthogEvent):
     first_name: str
     last_name: str
     company_email: str
-    linkedin_url: str
     job_title: str
     company_name: str
     num_employees: str
     internal_tools: str
     referral_source: str
-    phone_number: str = ""
 
 
 def input_field(
@@ -281,7 +279,6 @@ class DemoForm(rx.ComponentState):
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
-LinkedIn URL: {form_data.get("linkedin_profile_url", "")}
 Job Title: {form_data.get("job_title", "")}
 Company Name: {form_data.get("company_name", "")}
 Number of Employees: {form_data.get("number_of_employees", "")}
@@ -316,13 +313,11 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             first_name=first_name,
             last_name=last_name,
             company_email=form_data.get("email", ""),
-            linkedin_url=form_data.get("linkedin_profile_url", ""),
             job_title=form_data.get("job_title", ""),
             company_name=form_data.get("company_name", ""),
             num_employees=form_data.get("number_of_employees", ""),
             internal_tools=form_data.get("internal_tools", ""),
             referral_source=form_data.get("how_did_you_hear_about_us", ""),
-            phone_number=form_data.get("phone_number", ""),
         )
 
         # Send data to PostHog, Common Room, and Slack
@@ -400,13 +395,11 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             "lookingToBuild": event_instance.internal_tools,
             "businessEmail": event_instance.company_email,
             "howDidYouHear": event_instance.referral_source,
-            "linkedinUrl": event_instance.linkedin_url,
             "jobTitle": event_instance.job_title,
             "numEmployees": event_instance.num_employees,
             "companyName": event_instance.company_name,
             "firstName": event_instance.first_name,
             "lastName": event_instance.last_name,
-            "phoneNumber": event_instance.phone_number,
         }
         try:
             async with httpx.AsyncClient() as client:
@@ -446,20 +439,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                     "Company name", "Pynecone, Inc.", "company_name", "text", True
                 ),
                 class_name="grid grid-cols-2 gap-4",
-            ),
-            input_field(
-                "Linkedin Profile URL",
-                "https://linkedin.com/in/your-profile",
-                "linkedin_profile_url",
-                "text",
-                False,
-            ),
-            input_field(
-                "Phone number",
-                "+1 (555) 123-4567",
-                "phone_number",
-                "tel",
-                False,
             ),
             text_area_field(
                 "What are you looking to build? *",
