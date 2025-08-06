@@ -96,6 +96,7 @@ def input_field(
             name=name,
             type=type,
             required=required,
+            max_length=255,
             class_name="w-full",
         ),
         class_name="flex flex-col gap-1.5",
@@ -119,7 +120,11 @@ def text_area_field(
     return rx.el.div(
         rx.el.label(label, class_name="block text-sm font-medium text-secondary-12"),
         ui.textarea(
-            placeholder=placeholder, name=name, required=required, class_name="w-full"
+            placeholder=placeholder,
+            name=name,
+            required=required,
+            class_name="w-full",
+            max_length=800,
         ),
         class_name="flex flex-col gap-1.5",
     )
