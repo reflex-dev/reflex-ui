@@ -268,6 +268,7 @@ class Dialog(ComponentNamespace):
     title = staticmethod(DialogTitle.create)
     description = staticmethod(DialogDescription.create)
     close = staticmethod(DialogClose.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelDialog.create)
 
 

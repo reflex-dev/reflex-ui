@@ -188,6 +188,7 @@ class Input(ComponentNamespace):
     """Namespace for Input components."""
 
     root = staticmethod(InputRoot.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelInput.create)
 
 

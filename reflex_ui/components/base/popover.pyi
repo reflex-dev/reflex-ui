@@ -595,6 +595,7 @@ class Popover(ComponentNamespace):
     title = staticmethod(PopoverTitle.create)
     description = staticmethod(PopoverDescription.create)
     close = staticmethod(PopoverClose.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

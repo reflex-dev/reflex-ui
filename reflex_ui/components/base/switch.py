@@ -111,6 +111,7 @@ class Switch(ComponentNamespace):
 
     root = staticmethod(SwitchRoot.create)
     thumb = staticmethod(SwitchThumb.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelSwitch.create)
 
 

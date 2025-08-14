@@ -290,6 +290,7 @@ class Accordion(ComponentNamespace):
     header = staticmethod(AccordionHeader.create)
     trigger = staticmethod(AccordionTrigger.create)
     panel = staticmethod(AccordionPanel.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelAccordion.create)
 
 

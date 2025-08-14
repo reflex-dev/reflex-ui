@@ -492,6 +492,7 @@ class Drawer(ComponentNamespace):
     title = staticmethod(DrawerTitle.create)
     description = staticmethod(DrawerDescription.create)
     handle = staticmethod(DrawerHandle.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

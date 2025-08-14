@@ -1775,6 +1775,7 @@ class Card(ComponentNamespace):
     description = staticmethod(CardDescription.create)
     content = staticmethod(CardContent.create)
     footer = staticmethod(CardFooter.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

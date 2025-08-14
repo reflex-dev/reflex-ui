@@ -441,6 +441,7 @@ class HighLevelInput(InputBaseComponent):
 
 class Input(ComponentNamespace):
     root = staticmethod(InputRoot.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

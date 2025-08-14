@@ -276,6 +276,7 @@ class Tabs(ComponentNamespace):
     tab = staticmethod(TabsTab.create)
     panel = staticmethod(TabsPanel.create)
     indicator = staticmethod(TabsIndicator.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

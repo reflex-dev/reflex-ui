@@ -123,6 +123,7 @@ class Avatar(ComponentNamespace):
     root = staticmethod(AvatarRoot.create)
     image = staticmethod(AvatarImage.create)
     fallback = staticmethod(AvatarFallback.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelAvatar.create)
 
 

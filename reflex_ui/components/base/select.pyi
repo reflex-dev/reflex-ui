@@ -891,6 +891,7 @@ class Select(ComponentNamespace):
     group = staticmethod(SelectGroup.create)
     group_label = staticmethod(SelectGroupLabel.create)
     separator = staticmethod(SelectSeparator.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

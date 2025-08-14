@@ -134,6 +134,7 @@ class Collapsible(ComponentNamespace):
     root = staticmethod(CollapsibleRoot.create)
     trigger = staticmethod(CollapsibleTrigger.create)
     panel = staticmethod(CollapsiblePanel.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelCollapsible.create)
 
 

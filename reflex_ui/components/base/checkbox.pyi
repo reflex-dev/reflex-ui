@@ -240,6 +240,7 @@ class CheckboxNamespace(ComponentNamespace):
     root = staticmethod(CheckboxRoot.create)
     indicator = staticmethod(CheckboxIndicator.create)
     high_level = staticmethod(HighLevelCheckbox.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

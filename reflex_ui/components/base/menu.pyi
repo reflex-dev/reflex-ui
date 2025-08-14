@@ -934,6 +934,7 @@ class Menu(ComponentNamespace):
     checkbox_item_indicator = staticmethod(MenuCheckboxItemIndicator.create)
     submenu_root = staticmethod(MenuSubMenuRoot.create)
     submenu_trigger = staticmethod(MenuSubMenuTrigger.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

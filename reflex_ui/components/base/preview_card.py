@@ -274,6 +274,7 @@ class PreviewCard(ComponentNamespace):
     positioner = staticmethod(PreviewCardPositioner.create)
     popup = staticmethod(PreviewCardPopup.create)
     arrow = staticmethod(PreviewCardArrow.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelPreviewCard.create)
 
 

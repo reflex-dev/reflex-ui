@@ -618,5 +618,6 @@ class NavigationMenu(ComponentNamespace):
     viewport = staticmethod(NavigationMenuViewport.create)
     arrow = staticmethod(NavigationMenuArrow.create)
     backdrop = staticmethod(NavigationMenuBackdrop.create)
+    class_names = ClassNames
 
 navigation_menu = NavigationMenu()

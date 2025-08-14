@@ -456,6 +456,7 @@ class Slider(ComponentNamespace):
     track = staticmethod(SliderTrack.create)
     indicator = staticmethod(SliderIndicator.create)
     thumb = staticmethod(SliderThumb.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

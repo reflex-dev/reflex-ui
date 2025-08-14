@@ -370,6 +370,7 @@ class ScrollArea(ComponentNamespace):
     scrollbar = staticmethod(ScrollAreaScrollbar.create)
     thumb = staticmethod(ScrollAreaThumb.create)
     corner = staticmethod(ScrollAreaCorner.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

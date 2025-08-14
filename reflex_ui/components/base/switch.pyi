@@ -227,6 +227,7 @@ class HighLevelSwitch(SwitchRoot):
 class Switch(ComponentNamespace):
     root = staticmethod(SwitchRoot.create)
     thumb = staticmethod(SwitchThumb.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(

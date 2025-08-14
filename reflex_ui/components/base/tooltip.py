@@ -309,6 +309,7 @@ class Tooltip(ComponentNamespace):
     positioner = staticmethod(TooltipPositioner.create)
     popup = staticmethod(TooltipPopup.create)
     arrow = staticmethod(TooltipArrow.create)
+    class_names = ClassNames
     __call__ = staticmethod(HighLevelTooltip.create)
 
 

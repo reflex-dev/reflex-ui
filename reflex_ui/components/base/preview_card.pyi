@@ -460,6 +460,7 @@ class PreviewCard(ComponentNamespace):
     positioner = staticmethod(PreviewCardPositioner.create)
     popup = staticmethod(PreviewCardPopup.create)
     arrow = staticmethod(PreviewCardArrow.create)
+    class_names = ClassNames
 
     @staticmethod
     def __call__(
