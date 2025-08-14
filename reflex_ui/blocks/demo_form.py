@@ -269,13 +269,6 @@ class DemoForm(rx.ComponentState):
         yield rx.call_script(
             f"try {{ ko.identify('{form_data.get('email', '')}'); }} catch(e) {{ console.warn('Koala identify failed:', e); }}"
         )
-        if is_small_company(form_data.get("number_of_employees", "")):
-            yield rx.toast.success(
-                "Thanks for your interest in Reflex! We'll be in touch soon.",
-                position="top-center",
-            )
-            yield rx.redirect(CAL_REQUEST_DEMO_URL)
-            return
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
@@ -284,7 +277,6 @@ Company Name: {form_data.get("company_name", "")}
 Number of Employees: {form_data.get("number_of_employees", "")}
 Internal Tools to Build: {form_data.get("internal_tools", "")}
 How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
-
         params = {
             "email": form_data.get("email", ""),
             "name": f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}",
@@ -292,6 +284,10 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         }
 
         query_string = urllib.parse.urlencode(params)
+        if is_small_company(form_data.get("number_of_employees", "")):
+            yield rx.redirect(f"{CAL_REQUEST_DEMO_URL}?{query_string}")
+            return
+
         cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
 
         yield is_sending_demo_form.push(False)
