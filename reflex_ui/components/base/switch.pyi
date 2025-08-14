@@ -34,7 +34,6 @@ class SwitchBaseComponent(BaseUIComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -64,7 +63,6 @@ class SwitchBaseComponent(BaseUIComponent):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: The props of the component.
 
@@ -96,7 +94,6 @@ class SwitchRoot(SwitchBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_checked_change: EventType[()] | EventType[bool] | None = None,
@@ -135,7 +132,6 @@ class SwitchThumb(SwitchBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -181,7 +177,6 @@ class HighLevelSwitch(SwitchRoot):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_checked_change: EventType[()] | EventType[bool] | None = None,
@@ -222,7 +217,6 @@ class HighLevelSwitch(SwitchRoot):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: Additional properties to apply to the switch component.
 
@@ -256,7 +250,6 @@ class Switch(ComponentNamespace):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_checked_change: EventType[()] | EventType[bool] | None = None,
@@ -297,7 +290,6 @@ class Switch(ComponentNamespace):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: Additional properties to apply to the switch component.
 

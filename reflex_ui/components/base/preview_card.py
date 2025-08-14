@@ -241,7 +241,7 @@ class HighLevelPreviewCard(PreviewCardRoot):
         class_name = props.pop("class_name", "")
 
         return PreviewCardRoot.create(
-            PreviewCardTrigger.create(render_=trigger) if trigger else None,
+            PreviewCardTrigger.create(render_=trigger) if trigger is not None else None,
             PreviewCardPortal.create(
                 PreviewCardPositioner.create(
                     PreviewCardPopup.create(

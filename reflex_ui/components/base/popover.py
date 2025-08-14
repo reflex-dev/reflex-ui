@@ -316,12 +316,16 @@ class HighLevelPopover(PopoverRoot):
         class_name = props.pop("class_name", "")
 
         return PopoverRoot.create(
-            PopoverTrigger.create(render_=trigger) if trigger else None,
+            PopoverTrigger.create(render_=trigger) if trigger is not None else None,
             PopoverPortal.create(
                 PopoverPositioner.create(
                     PopoverPopup.create(
-                        PopoverTitle.create(title) if title else None,
-                        PopoverDescription.create(description) if description else None,
+                        PopoverTitle.create(title) if title is not None else None,
+                        (
+                            PopoverDescription.create(description)
+                            if description is not None
+                            else None
+                        ),
                         content,
                         *children,
                         class_name=cn(ClassNames.POPUP, class_name),

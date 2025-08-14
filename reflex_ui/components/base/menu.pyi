@@ -68,7 +68,6 @@ class MenuBaseComponent(BaseUIComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -98,7 +97,6 @@ class MenuBaseComponent(BaseUIComponent):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: The props of the component.
 
@@ -133,7 +131,6 @@ class MenuRoot(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -178,7 +175,6 @@ class MenuTrigger(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -217,7 +213,6 @@ class MenuPortal(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -275,7 +270,6 @@ class MenuPositioner(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -314,7 +308,6 @@ class MenuPopup(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -352,7 +345,6 @@ class MenuArrow(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -394,7 +386,6 @@ class MenuItem(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -443,7 +434,6 @@ class MenuSubMenuRoot(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -488,7 +478,6 @@ class MenuSubMenuTrigger(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -526,7 +515,6 @@ class MenuGroup(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -564,7 +552,6 @@ class MenuGroupLabel(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -605,7 +592,6 @@ class MenuRadioGroup(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -652,7 +638,6 @@ class MenuRadioItem(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -691,7 +676,6 @@ class MenuRadioItemIndicator(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -735,7 +719,6 @@ class MenuCheckboxItem(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_checked_change: EventType[()]
@@ -778,7 +761,6 @@ class MenuCheckboxItemIndicator(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -819,7 +801,6 @@ class MenuSeparator(MenuBaseComponent):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -877,7 +858,6 @@ class HighLevelMenu(MenuRoot):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -929,7 +909,6 @@ class HighLevelMenu(MenuRoot):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: Additional properties to apply to the menu component.
 
@@ -990,7 +969,6 @@ class Menu(ComponentNamespace):
         id: Any | None = None,
         ref: Var | None = None,
         class_name: Any | None = None,
-        autofocus: bool | None = None,
         custom_attrs: dict[str, Var | Any] | None = None,
         on_blur: EventType[()] | None = None,
         on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
@@ -1042,7 +1020,6 @@ class Menu(ComponentNamespace):
             id: The id for the component.
             ref: The Var to pass as the ref to the component.
             class_name: The class name for the component.
-            autofocus: Whether the component should take the focus once the page is loaded
             custom_attrs: custom attribute
             **props: Additional properties to apply to the menu component.
 

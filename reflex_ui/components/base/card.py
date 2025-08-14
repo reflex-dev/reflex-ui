@@ -108,14 +108,18 @@ class HighLevelCard(CardComponent):
         return CardRoot.create(
             (
                 CardHeader.create(
-                    CardTitle.create(title) if title else None,
-                    CardDescription.create(description) if description else None,
+                    CardTitle.create(title) if title is not None else None,
+                    (
+                        CardDescription.create(description)
+                        if description is not None
+                        else None
+                    ),
                 )
                 if title or description
                 else None
             ),
-            CardContent.create(content) if content else None,
-            CardFooter.create(footer) if footer else None,
+            CardContent.create(content) if content is not None else None,
+            CardFooter.create(footer) if footer is not None else None,
             *children,
             **props,
         )

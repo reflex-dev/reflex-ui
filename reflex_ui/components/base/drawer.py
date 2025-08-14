@@ -229,18 +229,22 @@ class HighLevelDrawer(DrawerRoot):
     @classmethod
     def create(cls, *children, **props) -> Component:
         """Create the high level drawer component."""
-        trigger = props.get("trigger")
-        content = props.get("content")
-        title = props.get("title")
-        description = props.get("description")
+        trigger = props.pop("trigger", None)
+        content = props.pop("content", None)
+        title = props.pop("title", None)
+        description = props.pop("description", None)
 
         return super().create(
-            DrawerTrigger.create(render_=trigger) if trigger else None,
+            DrawerTrigger.create(render_=trigger) if trigger is not None else None,
             DrawerPortal.create(
                 DrawerOverlay.create(),
                 DrawerContent.create(
-                    DrawerTitle.create(title) if title else None,
-                    DrawerDescription.create(description) if description else None,
+                    DrawerTitle.create(title) if title is not None else None,
+                    (
+                        DrawerDescription.create(description)
+                        if description is not None
+                        else None
+                    ),
                     content,
                     *children,
                 ),

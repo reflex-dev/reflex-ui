@@ -212,13 +212,13 @@ class HighLevelDialog(DialogRoot):
         class_name = props.pop("class_name", "")
 
         return DialogRoot.create(
-            DialogTrigger.create(render_=trigger) if trigger else None,
+            DialogTrigger.create(render_=trigger) if trigger is not None else None,
             DialogPortal.create(
                 DialogBackdrop.create(),
                 DialogPopup.create(
                     Div.create(
                         Div.create(
-                            DialogTitle.create(title) if title else None,
+                            DialogTitle.create(title) if title is not None else None,
                             DialogClose.create(
                                 render_=button(
                                     hi("Cancel01Icon"),
@@ -229,7 +229,11 @@ class HighLevelDialog(DialogRoot):
                             ),
                             class_name="flex flex-row justify-between items-baseline gap-1",
                         ),
-                        DialogDescription.create(description) if description else None,
+                        (
+                            DialogDescription.create(description)
+                            if description is not None
+                            else None
+                        ),
                         class_name=ClassNames.HEADER,
                     ),
                     Div.create(
