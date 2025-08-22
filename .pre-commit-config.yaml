@@ -28,7 +28,7 @@ repos:
   #       entry: python3 scripts/make_pyi.py
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.403
+    rev: v1.1.404
     hooks:
       - id: pyright
         files: ^reflex_ui/

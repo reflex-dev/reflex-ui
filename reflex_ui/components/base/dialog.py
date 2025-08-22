@@ -17,7 +17,7 @@ class ClassNames:
     """Class names for dialog components."""
 
     BACKDROP = "fixed inset-0 bg-black opacity-40 transition-all duration-150 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 dark:opacity-80"
-    POPUP = "fixed top-1/2 left-1/2 -mt-8 w-[31rem] max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 rounded-ui-xl border border-secondary-a4 bg-secondary-1 shadow-large transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
+    POPUP = "fixed top-1/2 left-1/2 -mt-8 w-[32rem] max-w-[calc(100vw-3rem)] -translate-x-1/2 -translate-y-1/2 rounded-ui-xl border border-secondary-a4 bg-secondary-1 shadow-large transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
     TITLE = "text-2xl font-semibold text-secondary-12"
     DESCRIPTION = "text-sm text-secondary-11 font-[450]"
     HEADER = "flex flex-col gap-2 px-6 pt-6 pb-4"
