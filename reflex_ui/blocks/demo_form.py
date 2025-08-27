@@ -26,7 +26,7 @@ is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
 COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://app.lemcal.com/@jhtevis/30-minutes"
+    "CAL_REQUEST_DEMO_URL", "https://app.lemcal.com/@jhtevis/30-minutes?back=1"
 )
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
