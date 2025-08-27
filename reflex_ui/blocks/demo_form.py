@@ -285,10 +285,10 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
         query_string = urllib.parse.urlencode(params)
         if is_small_company(form_data.get("number_of_employees", "")):
-            yield rx.redirect(f"{CAL_REQUEST_DEMO_URL}?{query_string}")
+            yield rx.redirect(f"{CAL_REQUEST_DEMO_URL}&{query_string}")
             return
 
-        cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
+        cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}&{query_string}"
 
         yield is_sending_demo_form.push(False)
         yield rx.redirect(cal_url_with_params)
