@@ -1,10 +1,10 @@
 """Lemcal booking integration for Reflex applications."""
 
-import reflex as rx
 from typing import Any
 
-def get_lemcal_script() -> rx.Component: ...
+import reflex as rx
 
+def get_lemcal_script() -> rx.Component: ...
 def lemcal_button(
     child: rx.Component | None = ...,
     label: str = ...,
@@ -13,7 +13,6 @@ def lemcal_button(
     meeting_type: str = ...,
     **props: Any,
 ) -> rx.Component: ...
-
 def lemcal_calendar(
     user_id: str = ...,
     meeting_type: str = ...,
