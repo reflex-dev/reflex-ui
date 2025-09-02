@@ -39,6 +39,7 @@ _SUBMOD_ATTRS = {
     "components.icons.hugeicon": ["hi", "icon"],
     "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
+    "blocks.lemcal": ["get_lemcal_script", "lemcal_button", "lemcal_calendar"],
 }
 
 getattr, __dir__, __all__ = lazy_loader.attach(

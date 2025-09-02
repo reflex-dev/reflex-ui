@@ -3,6 +3,7 @@
 import reflex as rx
 
 import reflex_ui as ui
+from reflex_ui.blocks.lemcal import get_lemcal_script, lemcal_button, lemcal_calendar
 
 
 class State(rx.State):
@@ -58,6 +59,12 @@ def index() -> rx.Component:
             on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
             on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
         ),
+        rx.el.h3("Lemcal Integration Demo", class_name="text-lg font-semibold mt-8 mb-4"),
+        lemcal_button(
+            ui.button("Book a Demo", variant="outline"),
+            class_name="mb-4",
+        ),
+        lemcal_calendar(class_name="w-full max-w-md h-96 border rounded-lg"),
         ui.theme_switcher(class_name="absolute top-4 right-4"),
         class_name=ui.cn(
             "flex flex-col gap-6 items-center justify-center h-screen", "bg-secondary-1"
@@ -85,6 +92,7 @@ app = rx.App(
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
             rel="stylesheet",
         ),
+        get_lemcal_script(),
     ],
 )
 app.add_page(index)
