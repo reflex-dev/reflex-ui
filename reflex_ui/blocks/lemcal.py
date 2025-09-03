@@ -54,7 +54,7 @@ def lemcal_dialog(trigger: rx.Component, **props) -> rx.Component:
                         ),
                     ),
                     lemcal_booking_calendar(),
-                    class_name="relative isolate overflow-hidden",
+                    class_name="relative isolate overflow-hidde -m-px",
                 ),
                 class_name="h-[calc(100dvh-4rem)] w-auto mt-1 overflow-hidden",
             ),
