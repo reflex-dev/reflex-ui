@@ -10,7 +10,7 @@ def lemcal_booking_calendar():
     """Return the Lemcal booking calendar."""
     return rx.fragment(
         rx.el.div(
-            class_name="lemcal-embed-booking-calendar h-[calc(100dvh-4rem)] overflow-y-auto w-auto",
+            class_name="lemcal-embed-booking-calendar h-[calc(100dvh-4rem)] overflow-y-auto w-auto max-h-fit",
             custom_attrs={
                 "data-user": "usr_8tiwtJ8nEJaFj2qH9",
                 "data-meeting-type": "met_EHtPvmZoKE4SFk4kZ",
@@ -56,7 +56,7 @@ def lemcal_dialog(trigger: rx.Component, **props) -> rx.Component:
                     lemcal_booking_calendar(),
                     class_name="relative isolate overflow-hidde -m-px",
                 ),
-                class_name="h-[calc(100dvh-4rem)] w-auto mt-1 overflow-hidden",
+                class_name="h-fit w-auto mt-1 overflow-hidden",
             ),
         ),
         class_name=class_name,
