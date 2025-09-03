@@ -53,7 +53,7 @@ class PopoverRoot(PopoverBaseComponent):
     open: Var[bool]
 
     # Event handler called when the popover is opened or closed
-    on_open_change: EventHandler[passthrough_event_spec(bool, dict, str)]
+    on_open_change: EventHandler[passthrough_event_spec(bool, dict)]
 
     # Event handler called after any animations complete when the popover is opened or closed.
     on_open_change_complete: EventHandler[passthrough_event_spec(bool)]

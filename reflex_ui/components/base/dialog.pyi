@@ -115,7 +115,6 @@ class DialogRoot(DialogBaseComponent):
         on_open_change: EventType[()]
         | EventType[bool]
         | EventType[bool, dict]
-        | EventType[bool, dict, str]
         | None = None,
         on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,
@@ -450,7 +449,6 @@ class HighLevelDialog(DialogRoot):
         on_open_change: EventType[()]
         | EventType[bool]
         | EventType[bool, dict]
-        | EventType[bool, dict, str]
         | None = None,
         on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,
@@ -512,7 +510,6 @@ class Dialog(ComponentNamespace):
         on_open_change: EventType[()]
         | EventType[bool]
         | EventType[bool, dict]
-        | EventType[bool, dict, str]
         | None = None,
         on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,

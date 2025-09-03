@@ -49,7 +49,7 @@ class DialogRoot(DialogBaseComponent):
     open: Var[bool]
 
     # Event handler called when the dialog is opened or closed
-    on_open_change: EventHandler[passthrough_event_spec(bool, dict, str)]
+    on_open_change: EventHandler[passthrough_event_spec(bool, dict)]
 
     # Determines whether the dialog should close on outside clicks. Defaults to True.
     dismissible: Var[bool]
