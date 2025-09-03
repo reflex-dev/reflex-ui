@@ -13,7 +13,7 @@ from reflex.vars.base import Var
 from reflex_ui.components.component import CoreComponent
 
 PACKAGE_NAME = "@base-ui-components/react"
-PACKAGE_VERSION = "1.0.0-beta.2"
+PACKAGE_VERSION = "1.0.0-beta.3"
 
 class BaseUIComponent(CoreComponent):
     @classmethod
