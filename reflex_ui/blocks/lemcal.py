@@ -4,6 +4,8 @@ import reflex as rx
 
 import reflex_ui as ui
 
+LEMCAL_DEMO_URL = "https://app.lemcal.com/@alek/reflex-demo-call"
+
 
 @rx.memo
 def lemcal_booking_calendar():
