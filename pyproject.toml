@@ -20,7 +20,7 @@ bump = true
 metadata = false
 
 [dependency-groups]
-dev = ["pyright==1.1.404", "pre-commit"]
+dev = ["pyright==1.1.405", "pre-commit"]
 
 [tool.codespell]
 skip = "*.pyi, uv.lock"
