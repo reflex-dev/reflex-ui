@@ -234,10 +234,12 @@ class HighLevelDialog(DialogRoot):
                             if description is not None
                             else None
                         ),
+                        data_slot="dialog-header",
                         class_name=ClassNames.HEADER,
                     ),
                     Div.create(
                         content,
+                        data_slot="dialog-content",
                         class_name=ClassNames.CONTENT,
                     ),
                     *children,
