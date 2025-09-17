@@ -42,7 +42,7 @@ def lemcal_dialog(trigger: rx.Component, **props) -> rx.Component:
     """Return a Lemcal dialog container element."""
     class_name = ui.cn("w-auto", props.pop("class_name", ""))
     return ui.dialog.root(
-        ui.dialog.trigger(trigger),
+        ui.dialog.trigger(render_=trigger),
         ui.dialog.portal(
             ui.dialog.backdrop(),
             ui.dialog.popup(
