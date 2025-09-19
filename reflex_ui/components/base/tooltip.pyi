@@ -262,7 +262,10 @@ class TooltipPositioner(TooltipBaseComponent):
         | Var[Literal["absolute", "fixed"]]
         | None = None,
         track_anchor: Var[bool] | bool | None = None,
-        collision_avoidance: Var[str] | str | None = None,
+        collision_avoidance: Var[dict[str, str] | str]
+        | dict[str, str]
+        | str
+        | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]

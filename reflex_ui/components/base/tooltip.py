@@ -169,7 +169,7 @@ class TooltipPositioner(TooltipBaseComponent):
     track_anchor: Var[bool]
 
     # Determines how to handle collisions when positioning the popup.
-    collision_avoidance: Var[str]
+    collision_avoidance: Var[str | dict[str, str]]
 
     # Render prop for the positioner
     render_: Var[Component]
