@@ -94,15 +94,21 @@ class SelectRoot(SelectBaseComponent):
         cls,
         *children,
         name: Var[str] | str | None = None,
-        default_value: Var[str] | str | None = None,
-        value: Var[str] | str | None = None,
+        default_value: Any | Var[Any] | None = None,
+        value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
+        items: Any | Var[Any] | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Any | Var[Any] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -799,15 +805,20 @@ class HighLevelSelect(SelectRoot):
         | Var[Literal["lg", "md", "sm", "xl", "xs"]]
         | None = None,
         name: Var[str] | str | None = None,
-        default_value: Var[str] | str | None = None,
-        value: Var[str] | str | None = None,
+        default_value: Any | Var[Any] | None = None,
+        value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Any | Var[Any] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -844,22 +855,27 @@ class HighLevelSelect(SelectRoot):
 
         Args:
             *children: Additional children to include in the select.
-            items: The list of items to display in the select dropdown
+            items: Data structure of the items rendered in the select popup.  When specified, `<Select.Value>` renders the label of the selected item instead of the raw value.
             placeholder: The placeholder text to display when no item is selected
             size: The size of the select component. Defaults to "md".
             name: Identifies the field when a form is submitted.
             default_value: The uncontrolled value of the select when it's initially rendered.  To render a controlled select, use the `value` prop instead.
             value: The value of the select
             on_value_change: Callback fired when the value of the select changes. Use when controlled.
-            default_open: Whether the select menu is initially open.  To render a controlled select menu, use the `open` prop instead.
-            open: Whether the select menu is currently open
-            on_open_change: Event handler called when the select menu is opened or closed
-            on_open_change_complete: Event handler called after any animations complete when the select menu is opened or closed
+            default_open: Whether the select popup is initially open.  To render a controlled select popup, use the `open` prop instead.
+            open: Whether the select popup is currently open
+            on_open_change: Event handler called when the select popup is opened or closed
+            actions_ref: A ref to imperative actions.  When specified, the select will not be unmounted when closed.  Instead, the `unmount` function must be called to unmount the select manually.  Useful when the select's animation is controlled by an external library.
+            is_item_equal_to_value: Custom comparison logic used to determine if a select item value matches the current selected value.  Useful when item values are objects without matching referentially.  Defaults to `Object.is` comparison.
+            item_to_string_label: When the item values are objects, this function converts the object value to a string representation for display in the trigger.  If the shape of the object is `{ value, label }`, the label will be used automatically without needing to specify this prop.
+            item_to_string_value: When the item values are objects, this function converts the object value to a string representation for form submission.  If the shape of the object is `{ value, label }`, the value will be used automatically without needing to specify this prop.
             modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed. Defaults to True.
             multiple: Whether multiple items can be selected. Defaults to False.
+            on_open_change_complete: Event handler called after any animations complete when the select popup is opened or closed
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            read_only: Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+            read_only: Whether the user should be unable to choose a different option from the select popup. Defaults to False.
             required: Whether the user must choose a value before submitting a form. Defaults to False.
+            input_ref: A ref to access the hidden input element.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -902,15 +918,20 @@ class Select(ComponentNamespace):
         | Var[Literal["lg", "md", "sm", "xl", "xs"]]
         | None = None,
         name: Var[str] | str | None = None,
-        default_value: Var[str] | str | None = None,
-        value: Var[str] | str | None = None,
+        default_value: Any | Var[Any] | None = None,
+        value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Any | Var[Any] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -947,22 +968,27 @@ class Select(ComponentNamespace):
 
         Args:
             *children: Additional children to include in the select.
-            items: The list of items to display in the select dropdown
+            items: Data structure of the items rendered in the select popup.  When specified, `<Select.Value>` renders the label of the selected item instead of the raw value.
             placeholder: The placeholder text to display when no item is selected
             size: The size of the select component. Defaults to "md".
             name: Identifies the field when a form is submitted.
             default_value: The uncontrolled value of the select when it's initially rendered.  To render a controlled select, use the `value` prop instead.
             value: The value of the select
             on_value_change: Callback fired when the value of the select changes. Use when controlled.
-            default_open: Whether the select menu is initially open.  To render a controlled select menu, use the `open` prop instead.
-            open: Whether the select menu is currently open
-            on_open_change: Event handler called when the select menu is opened or closed
-            on_open_change_complete: Event handler called after any animations complete when the select menu is opened or closed
+            default_open: Whether the select popup is initially open.  To render a controlled select popup, use the `open` prop instead.
+            open: Whether the select popup is currently open
+            on_open_change: Event handler called when the select popup is opened or closed
+            actions_ref: A ref to imperative actions.  When specified, the select will not be unmounted when closed.  Instead, the `unmount` function must be called to unmount the select manually.  Useful when the select's animation is controlled by an external library.
+            is_item_equal_to_value: Custom comparison logic used to determine if a select item value matches the current selected value.  Useful when item values are objects without matching referentially.  Defaults to `Object.is` comparison.
+            item_to_string_label: When the item values are objects, this function converts the object value to a string representation for display in the trigger.  If the shape of the object is `{ value, label }`, the label will be used automatically without needing to specify this prop.
+            item_to_string_value: When the item values are objects, this function converts the object value to a string representation for form submission.  If the shape of the object is `{ value, label }`, the value will be used automatically without needing to specify this prop.
             modal: Determines if the select enters a modal state when open.  - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed. Defaults to True.
             multiple: Whether multiple items can be selected. Defaults to False.
+            on_open_change_complete: Event handler called after any animations complete when the select popup is opened or closed
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            read_only: Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+            read_only: Whether the user should be unable to choose a different option from the select popup. Defaults to False.
             required: Whether the user must choose a value before submitting a form. Defaults to False.
+            input_ref: A ref to access the hidden input element.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

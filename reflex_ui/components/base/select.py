@@ -61,26 +61,46 @@ class SelectRoot(SelectBaseComponent):
 
     # The uncontrolled value of the select when it's initially rendered.
     # To render a controlled select, use the `value` prop instead.
-    default_value: Var[str]
+    default_value: Var[Any]
 
     # The value of the select
-    value: Var[str]
+    value: Var[Any]
 
     # Callback fired when the value of the select changes. Use when controlled.
     on_value_change: EventHandler[passthrough_event_spec(str)]
 
-    # Whether the select menu is initially open.
-    # To render a controlled select menu, use the `open` prop instead.
+    # Whether the select popup is initially open.
+    # To render a controlled select popup, use the `open` prop instead.
     default_open: Var[bool]
 
-    # Whether the select menu is currently open
+    # Whether the select popup is currently open
     open: Var[bool]
 
-    # Event handler called when the select menu is opened or closed
+    # Event handler called when the select popup is opened or closed
     on_open_change: EventHandler[passthrough_event_spec(bool)]
 
-    # Event handler called after any animations complete when the select menu is opened or closed
-    on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+    # A ref to imperative actions.
+    # When specified, the select will not be unmounted when closed.
+    # Instead, the `unmount` function must be called to unmount the select manually.
+    # Useful when the select's animation is controlled by an external library.
+    actions_ref: Var[str]
+
+    # Custom comparison logic used to determine if a select item value matches the current selected value.
+    # Useful when item values are objects without matching referentially.
+    # Defaults to `Object.is` comparison.
+    is_item_equal_to_value: Var[Any]
+
+    # When the item values are objects, this function converts the object value to a string representation for display in the trigger.
+    # If the shape of the object is `{ value, label }`, the label will be used automatically without needing to specify this prop.
+    item_to_string_label: Var[Any]
+
+    # When the item values are objects, this function converts the object value to a string representation for form submission.
+    # If the shape of the object is `{ value, label }`, the value will be used automatically without needing to specify this prop.
+    item_to_string_value: Var[Any]
+
+    # Data structure of the items rendered in the select popup.
+    # When specified, `<Select.Value>` renders the label of the selected item instead of the raw value.
+    items: Var[Any]
 
     # Determines if the select enters a modal state when open.
     # - True: user interaction is limited to the select: document page scroll is locked and pointer interactions on outside elements are disabled.
@@ -90,14 +110,20 @@ class SelectRoot(SelectBaseComponent):
     # Whether multiple items can be selected. Defaults to False.
     multiple: Var[bool]
 
+    # Event handler called after any animations complete when the select popup is opened or closed
+    on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
-    # Whether the user should be unable to choose a different option from the select menu. Defaults to False.
+    # Whether the user should be unable to choose a different option from the select popup. Defaults to False.
     read_only: Var[bool]
 
     # Whether the user must choose a value before submitting a form. Defaults to False.
     required: Var[bool]
+
+    # A ref to access the hidden input element.
+    input_ref: Var[Any]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
