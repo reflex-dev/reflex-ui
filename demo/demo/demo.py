@@ -3,65 +3,65 @@
 import reflex as rx
 
 import reflex_ui as ui
-
+from .simple_icon import simple_icon_demo
 
 class State(rx.State):
     seed: int = 0
 
 
 def index() -> rx.Component:
-    # Welcome Page (Index)
     return rx.el.div(
-        ui.tooltip(
-            ui.button(
-                ui.icon("SmileIcon"),
-                "Click me",
-                on_click=rx.toast.success(
-                    "You are cool :)",
-                    position="top-center",
+        # Left: Column of UI components
+        rx.el.div(
+            ui.tooltip(
+                ui.button(
+                    ui.icon("SmileIcon"),
+                    "Click me",
+                    on_click=rx.toast.success(
+                        "You are cool :)",
+                        position="top-center",
+                    ),
                 ),
+                content="Seriously, click me",
             ),
-            content="Seriously, click me",
+            ui.checkbox(
+                label="Click me",
+                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+            ),
+            ui.slider(
+                value=State.seed,
+                on_value_change=State.set_seed,
+                on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
+                class_name="max-w-xs",
+            ),
+            ui.gradient_profile(
+                seed=State.seed,
+                class_name="size-10",
+            ),
+            ui.switch(
+                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+            ),
+            ui.select(
+                items=[f"Item {i}" for i in range(1, 11)],
+                name="select",
+                default_value="Select an item",
+                on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
+                on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
+            ),
+            class_name="flex flex-col gap-y-6 justify-center items-center",
         ),
-        ui.checkbox(
-            label="Click me",
-            on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+
+        # Right: Icon demo
+        rx.el.div(
+            simple_icon_demo(),
+            class_name="flex justify-center items-center",
         ),
-        ui.slider(
-            value=State.seed,
-            on_value_change=State.set_seed,
-            on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
-            class_name="max-w-xs",
-        ),
-        ui.gradient_profile(
-            seed=State.seed,
-            class_name="size-10",
-        ),
-        ui.switch(
-            on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
-        ),
-        ui.select(
-            items=[
-                "Item 1",
-                "Item 2",
-                "Item 3",
-                "Item 4",
-                "Item 5",
-                "Item 6",
-                "Item 7",
-                "Item 8",
-                "Item 9",
-                "Item 10",
-            ],
-            name="select",
-            default_value="Select an item",
-            on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
-            on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
-        ),
+
+        # Theme switcher (floating top-right)
         ui.theme_switcher(class_name="absolute top-4 right-4"),
-        class_name=ui.cn(
-            "flex flex-col gap-6 items-center justify-center h-screen", "bg-secondary-1"
-        ),
+
+        # Parent container: center everything horizontally & vertically
+        class_name="flex flex-row gap-16 justify-center items-center h-screen bg-secondary-1 relative",
     )
 
 

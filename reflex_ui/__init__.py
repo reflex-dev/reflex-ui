@@ -38,6 +38,7 @@ _SUBMOD_ATTRS = {
     **_REFLEX_UI_MAPPING,
     "components": ["base"],
     "components.icons.hugeicon": ["hi", "icon"],
+    "components.icons.simple_icon": ["simple_icon"],
     "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
 }
