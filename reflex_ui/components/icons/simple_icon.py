@@ -1,3 +1,5 @@
+"""Simple Icon component wrapper for @icons-pack/react-simple-icons."""
+
 import reflex as rx
 from reflex.utils.imports import ImportVar
 
@@ -35,5 +37,6 @@ class SimpleIcon(rx.Component):
                 is_default=False,
             )
         }
+
 
 simple_icon = SimpleIcon.create
