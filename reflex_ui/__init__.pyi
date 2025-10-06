@@ -35,6 +35,7 @@ from .components.base.toggle_group import toggle_group
 from .components.base.tooltip import tooltip
 from .components.icons.hugeicon import hi, icon
 from .components.icons.others import spinner
+from .components.icons.simple_icon import simple_icon
 from .utils.twmerge import cn
 
 _REFLEX_UI_MAPPING = {
@@ -72,6 +73,7 @@ _SUBMOD_ATTRS = {
     **_REFLEX_UI_MAPPING,
     "components": ["base"],
     "components.icons.hugeicon": ["hi", "icon"],
+    "components.icons.simple_icon": ["simple_icon"],
     "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
 }
@@ -101,6 +103,7 @@ __all__ = [
     "preview_card",
     "scroll_area",
     "select",
+    "simple_icon",
     "skeleton",
     "slider",
     "spinner",

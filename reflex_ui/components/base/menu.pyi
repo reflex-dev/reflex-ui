@@ -610,8 +610,8 @@ class MenuRadioGroup(MenuBaseComponent):
         on_scroll_end: EventType[()] | None = None,
         on_unmount: EventType[()] | None = None,
         on_value_change: EventType[()]
-        | EventType[str | int]
-        | EventType[str | int, dict]
+        | EventType[int | str]
+        | EventType[int | str, dict]
         | None = None,
         **props,
     ) -> MenuRadioGroup:
