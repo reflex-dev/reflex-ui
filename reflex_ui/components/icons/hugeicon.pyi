@@ -71,7 +71,6 @@ class HugeIcon(CoreComponent):
 
         Returns:
             The created component.
-
         """
 
 hi = icon = HugeIcon.create
