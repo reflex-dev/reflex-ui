@@ -3,15 +3,18 @@
 import reflex as rx
 
 import reflex_ui as ui
-from .simple_icon import simple_icon_demo
+
 
 class State(rx.State):
     seed: int = 0
 
+    @rx.event
+    def set_seed(self, seed: int):
+        self.seed = seed
+
 
 def index() -> rx.Component:
     return rx.el.div(
-        # Left: Column of UI components
         rx.el.div(
             ui.tooltip(
                 ui.button(
@@ -41,6 +44,9 @@ def index() -> rx.Component:
             ui.switch(
                 on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
             ),
+            ui.textarea(
+                value="Hello, world!",
+            ),
             ui.select(
                 items=[f"Item {i}" for i in range(1, 11)],
                 name="select",
@@ -50,17 +56,7 @@ def index() -> rx.Component:
             ),
             class_name="flex flex-col gap-y-6 justify-center items-center",
         ),
-
-        # Right: Icon demo
-        rx.el.div(
-            simple_icon_demo(),
-            class_name="flex justify-center items-center",
-        ),
-
-        # Theme switcher (floating top-right)
         ui.theme_switcher(class_name="absolute top-4 right-4"),
-
-        # Parent container: center everything horizontally & vertically
         class_name="flex flex-row gap-16 justify-center items-center h-screen bg-secondary-1 relative",
     )
 
@@ -75,7 +71,7 @@ app = rx.App(
         rx.el.link(
             rel="preconnect",
             href="https://fonts.gstatic.com",
-            crossorigin="",
+            cros_sorigin="",
         ),
         rx.el.link(
             href="https://fonts.googleapis.com/css2?family=Instrument+Sans:wght@400..700&display=swap",

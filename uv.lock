@@ -672,7 +672,7 @@ requires-dist = [{ name = "reflex", specifier = ">=0.8.0" }]
 [package.metadata.requires-dev]
 dev = [
     { name = "pre-commit" },
-    { name = "pyright", specifier = "==1.1.405" },
+    { name = "pyright" },
 ]
 
 [[package]]
