@@ -44,9 +44,6 @@ def index() -> rx.Component:
             ui.switch(
                 on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
             ),
-            ui.textarea(
-                value="Hello, world!",
-            ),
             ui.select(
                 items=[f"Item {i}" for i in range(1, 11)],
                 name="select",
