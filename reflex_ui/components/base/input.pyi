@@ -97,8 +97,9 @@ class InputRoot(InputBaseComponent, ReflexInput):
         alt: Var[str] | str | None = None,
         auto_complete: Var[str] | str | None = None,
         auto_focus: Var[bool] | bool | None = None,
-        capture: Literal["environment", "user", False, True]
-        | Var[Literal["environment", "user", False, True]]
+        capture: Literal["environment", "user"]
+        | Var[Literal["environment", "user"] | bool]
+        | bool
         | None = None,
         checked: Var[bool] | bool | None = None,
         default_checked: Var[bool] | bool | None = None,
@@ -182,8 +183,9 @@ class InputRoot(InputBaseComponent, ReflexInput):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,

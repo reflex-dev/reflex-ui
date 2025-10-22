@@ -50,6 +50,8 @@ class SimpleIcon(rx.Component):
 
         Args:
             icon_name: The icon component name (e.g., "SiReact", "SiGithub", "SiPython")
+            color: The color of the icon
+            size: The size of the icon
             style: The style of the component.
             key: A unique key for the component.
             id: The id for the component.

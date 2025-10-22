@@ -59,7 +59,7 @@ class AccordionRoot(AccordionBaseComponent):
     hidden_until_found: Var[bool]
 
     # Whether multiple items can be open at the same time. Defaults to True.
-    open_multiple: Var[bool]
+    multiple: Var[bool]
 
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]

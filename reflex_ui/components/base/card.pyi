@@ -33,8 +33,9 @@ class CardComponent(Div, CoreComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -278,8 +279,9 @@ class CardRoot(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -492,8 +494,9 @@ class CardHeader(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -706,8 +709,9 @@ class CardTitle(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -920,8 +924,9 @@ class CardDescription(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -1134,8 +1139,9 @@ class CardContent(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -1348,8 +1354,9 @@ class CardFooter(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -1566,8 +1573,9 @@ class HighLevelCard(CardComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,
@@ -1790,8 +1798,9 @@ class Card(ComponentNamespace):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,

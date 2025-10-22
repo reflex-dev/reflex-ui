@@ -123,8 +123,9 @@ class Badge(Span, CoreComponent):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,

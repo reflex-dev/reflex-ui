@@ -7,11 +7,14 @@ from reflex.utils.imports import ImportVar
 class SimpleIcon(rx.Component):
     """Simple Icon component wrapper for @icons-pack/react-simple-icons."""
 
-    library = "@icons-pack/react-simple-icons"
+    library = "@icons-pack/react-simple-icons@13.8.0"
 
     tag = "SiReact"
 
+    # The color of the icon
     color: rx.Var[str]
+
+    # The size of the icon
     size: rx.Var[int | str]
 
     @classmethod
