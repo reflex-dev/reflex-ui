@@ -86,7 +86,7 @@ class AccordionRoot(AccordionBaseComponent):
         default_value: Var[list[Any]] | list[Any] | None = None,
         value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
-        open_multiple: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         loop: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
@@ -291,7 +291,7 @@ class HighLevelAccordion(AccordionRoot):
         default_value: Var[list[Any]] | list[Any] | None = None,
         value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
-        open_multiple: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         loop: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
@@ -337,7 +337,7 @@ class HighLevelAccordion(AccordionRoot):
             value: The controlled value of the item(s) that should be expanded. To render an uncontrolled accordion, use the `default_value` prop instead.
             on_value_change: Event handler called when an accordion item is expanded or collapsed. Provides the new value as an argument.
             hidden_until_found: Allows the browser's built-in page search to find and expand the panel contents. Overrides the `keep_mounted` prop and uses `hidden="until-found"` to hide the element without removing it from the DOM. Defaults to False.
-            open_multiple: Whether multiple items can be open at the same time. Defaults to True.
+            multiple: Whether multiple items can be open at the same time. Defaults to True.
             disabled: Whether the component should ignore user interaction. Defaults to False.
             loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the accordion. Controls whether roving focus uses left/right or up/down arrow keys. Defaults to 'vertical'.
@@ -373,7 +373,7 @@ class Accordion(ComponentNamespace):
         default_value: Var[list[Any]] | list[Any] | None = None,
         value: Var[list[Any]] | list[Any] | None = None,
         hidden_until_found: Var[bool] | bool | None = None,
-        open_multiple: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         loop: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
@@ -419,7 +419,7 @@ class Accordion(ComponentNamespace):
             value: The controlled value of the item(s) that should be expanded. To render an uncontrolled accordion, use the `default_value` prop instead.
             on_value_change: Event handler called when an accordion item is expanded or collapsed. Provides the new value as an argument.
             hidden_until_found: Allows the browser's built-in page search to find and expand the panel contents. Overrides the `keep_mounted` prop and uses `hidden="until-found"` to hide the element without removing it from the DOM. Defaults to False.
-            open_multiple: Whether multiple items can be open at the same time. Defaults to True.
+            multiple: Whether multiple items can be open at the same time. Defaults to True.
             disabled: Whether the component should ignore user interaction. Defaults to False.
             loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the accordion. Controls whether roving focus uses left/right or up/down arrow keys. Defaults to 'vertical'.

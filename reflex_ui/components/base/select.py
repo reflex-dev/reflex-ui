@@ -254,6 +254,21 @@ class SelectPopup(SelectBaseComponent):
         return super().create(*children, **props)
 
 
+class SelectList(SelectBaseComponent):
+    """A list component that wraps select items. Renders a <div> element."""
+
+    tag = "Select.List"
+
+    # The render prop
+    render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the select list component."""
+        props["data-slot"] = "select-list"
+        return super().create(*children, **props)
+
+
 class SelectItem(SelectBaseComponent):
     """An individual option in the select menu."""
 
@@ -576,6 +591,7 @@ class Select(ComponentNamespace):
     portal = staticmethod(SelectPortal.create)
     positioner = staticmethod(SelectPositioner.create)
     popup = staticmethod(SelectPopup.create)
+    list = staticmethod(SelectList.create)
     arrow = staticmethod(SelectArrow.create)
     scroll_up_arrow = staticmethod(SelectScrollUpArrow.create)
     scroll_down_arrow = staticmethod(SelectScrollDownArrow.create)
