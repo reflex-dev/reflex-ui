@@ -90,12 +90,6 @@ class HighLevelAvatar(AvatarRoot):
     # The image source URL
     src: Var[str]
 
-    # Callback when loading status changes
-    on_loading_status_change: EventHandler[passthrough_event_spec(str)]
-
-    # How long to wait before showing the fallback. Specified in milliseconds
-    delay: Var[int]
-
     # Image props
     _image_props = {"src", "on_loading_status_change", "render_"}
 

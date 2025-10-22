@@ -13,6 +13,7 @@ from .card import card
 from .checkbox import checkbox
 from .collapsible import collapsible
 from .combobox import combobox
+from .context_menu import context_menu
 from .dialog import dialog
 from .drawer import drawer
 from .gradient_profile import gradient_profile

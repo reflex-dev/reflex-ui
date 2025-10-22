@@ -29,7 +29,7 @@ class ClassNames:
 class DrawerBaseComponent(CoreComponent):
     """Base component for drawer components."""
 
-    library = "vaul-base@0.0.5"
+    library = "vaul-base@0.0.6"
 
 
 class DrawerRoot(DrawerBaseComponent):

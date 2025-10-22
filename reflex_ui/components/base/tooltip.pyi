@@ -20,7 +20,7 @@ LiteralTrackCursorAxis = Literal["none", "bottom", "x", "y"]
 
 class ClassNames:
     TRIGGER = "inline-flex items-center justify-center"
-    POPUP = "z-50 rounded-ui-sm bg-secondary-12 px-2.5 py-1.5 text-balance text-sm font-medium text-secondary-1 shadow-small transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
+    POPUP = "rounded-ui-sm bg-secondary-12 px-2.5 py-1.5 text-balance text-sm font-medium text-secondary-1 shadow-small transition-all duration-150 data-[ending-style]:scale-90 data-[ending-style]:opacity-0 data-[starting-style]:scale-90 data-[starting-style]:opacity-0"
     ARROW = "data-[side=bottom]:top-[-7.5px] data-[side=left]:right-[-12.5px] data-[side=left]:rotate-90 data-[side=right]:left-[-12.5px] data-[side=right]:-rotate-90 data-[side=top]:bottom-[-7.5px] data-[side=top]:rotate-180"
 
 class TooltipBaseComponent(BaseUIComponent):
@@ -262,7 +262,10 @@ class TooltipPositioner(TooltipBaseComponent):
         | Var[Literal["absolute", "fixed"]]
         | None = None,
         track_anchor: Var[bool] | bool | None = None,
-        collision_avoidance: Var[str] | str | None = None,
+        collision_avoidance: Var[dict[str, str] | str]
+        | dict[str, str]
+        | str
+        | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]

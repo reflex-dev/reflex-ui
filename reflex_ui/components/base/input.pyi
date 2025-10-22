@@ -31,7 +31,7 @@ DEFAULT_INPUT_ATTRS = {
 
 class ClassNames:
     INPUT = "outline-none bg-transparent text-secondary-12 placeholder:text-secondary-9 text-sm leading-normal peer disabled:text-secondary-8 disabled:placeholder:text-secondary-8 w-full data-[disabled]:pointer-events-none font-medium"
-    DIV = "flex flex-row items-center focus-within:shadow-[0px_0px_0px_2px_var(--primary-4)] focus-within:border-primary-a6 not-data-[invalid]:focus-within:hover:border-primary-a6 bg-secondary-1 shrink-0 border border-secondary-a4 hover:border-secondary-a6 transition-all text-secondary-9 [&_svg]:pointer-events-none has-data-[disabled]:border-secondary-4 has-data-[disabled]:bg-secondary-3 has-data-[disabled]:text-secondary-8 has-data-[disabled]:cursor-not-allowed cursor-text has-data-[invalid]:border-destructive-10 has-data-[invalid]:focus-within:border-destructive-a11 has-data-[invalid]:focus-within:shadow-[0px_0px_0px_2px_var(--destructive-4)] has-data-[invalid]:hover:border-destructive-a11"
+    DIV = "flex flex-row items-center focus-within:shadow-[0px_0px_0px_2px_var(--primary-4)] focus-within:border-primary-a6 not-data-[invalid]:focus-within:hover:border-primary-a6 bg-secondary-1 shrink-0 border border-secondary-a4 hover:border-secondary-a6 transition-[color,box-shadow] text-secondary-9 [&_svg]:pointer-events-none has-data-[disabled]:border-secondary-4 has-data-[disabled]:bg-secondary-3 has-data-[disabled]:text-secondary-8 has-data-[disabled]:cursor-not-allowed cursor-text has-data-[invalid]:border-destructive-10 has-data-[invalid]:focus-within:border-destructive-a11 has-data-[invalid]:focus-within:shadow-[0px_0px_0px_2px_var(--destructive-4)] has-data-[invalid]:hover:border-destructive-a11"
 
 class InputBaseComponent(BaseUIComponent):
     @property
@@ -97,8 +97,9 @@ class InputRoot(InputBaseComponent, ReflexInput):
         alt: Var[str] | str | None = None,
         auto_complete: Var[str] | str | None = None,
         auto_focus: Var[bool] | bool | None = None,
-        capture: Literal["environment", "user", False, True]
-        | Var[Literal["environment", "user", False, True]]
+        capture: Literal["environment", "user"]
+        | Var[Literal["environment", "user"] | bool]
+        | bool
         | None = None,
         checked: Var[bool] | bool | None = None,
         default_checked: Var[bool] | bool | None = None,
@@ -182,8 +183,9 @@ class InputRoot(InputBaseComponent, ReflexInput):
         ]
         | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
         | None = None,
-        content_editable: Literal["inherit", "plaintext-only", False, True]
-        | Var[Literal["inherit", "plaintext-only", False, True]]
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
         | None = None,
         context_menu: Var[str] | str | None = None,
         dir: Var[str] | str | None = None,

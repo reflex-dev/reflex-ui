@@ -13,6 +13,7 @@ from .components.base.card import card
 from .components.base.checkbox import checkbox
 from .components.base.collapsible import collapsible
 from .components.base.combobox import combobox
+from .components.base.context_menu import context_menu
 from .components.base.dialog import dialog
 from .components.base.drawer import drawer
 from .components.base.gradient_profile import gradient_profile
@@ -35,6 +36,7 @@ from .components.base.toggle_group import toggle_group
 from .components.base.tooltip import tooltip
 from .components.icons.hugeicon import hi, icon
 from .components.icons.others import spinner
+from .components.icons.simple_icon import simple_icon
 from .utils.twmerge import cn
 
 _REFLEX_UI_MAPPING = {
@@ -72,6 +74,7 @@ _SUBMOD_ATTRS = {
     **_REFLEX_UI_MAPPING,
     "components": ["base"],
     "components.icons.hugeicon": ["hi", "icon"],
+    "components.icons.simple_icon": ["simple_icon"],
     "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
 }
@@ -88,6 +91,7 @@ __all__ = [
     "collapsible",
     "combobox",
     "components",
+    "context_menu",
     "dialog",
     "drawer",
     "gradient_profile",
@@ -101,6 +105,7 @@ __all__ = [
     "preview_card",
     "scroll_area",
     "select",
+    "simple_icon",
     "skeleton",
     "slider",
     "spinner",

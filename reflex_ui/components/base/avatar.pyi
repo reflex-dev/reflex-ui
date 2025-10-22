@@ -191,7 +191,6 @@ class HighLevelAvatar(AvatarRoot):
         cls,
         *children,
         src: Var[str] | str | None = None,
-        delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -209,7 +208,6 @@ class HighLevelAvatar(AvatarRoot):
         on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_focus: EventType[()] | None = None,
-        on_loading_status_change: EventType[()] | EventType[str] | None = None,
         on_mount: EventType[()] | None = None,
         on_mouse_down: EventType[()] | None = None,
         on_mouse_enter: EventType[()] | None = None,
@@ -235,7 +233,6 @@ class Avatar(ComponentNamespace):
     def __call__(
         *children,
         src: Var[str] | str | None = None,
-        delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -253,7 +250,6 @@ class Avatar(ComponentNamespace):
         on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_focus: EventType[()] | None = None,
-        on_loading_status_change: EventType[()] | EventType[str] | None = None,
         on_mount: EventType[()] | None = None,
         on_mouse_down: EventType[()] | None = None,
         on_mouse_enter: EventType[()] | None = None,
