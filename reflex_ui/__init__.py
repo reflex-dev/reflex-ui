@@ -42,6 +42,7 @@ _SUBMOD_ATTRS = {
     "components.icons.simple_icon": ["simple_icon"],
     "components.icons.others": ["spinner"],
     "utils.twmerge": ["cn"],
+    "utils.iterable_list": ["iterable_list"],
 }
 
 getattr, __dir__, __all__ = lazy_loader.attach(

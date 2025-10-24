@@ -97,11 +97,26 @@ class ComboboxRoot(ComboboxBaseComponent):
         value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        auto_highlight: Var[bool] | bool | None = None,
+        default_input_value: Var[str] | str | None = None,
+        filter: Any | Var[Any] | None = None,
+        grid: Var[bool] | bool | None = None,
+        input_value: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
+        items: Any | Var[Any] | None = None,
+        limit: Var[int] | int | None = None,
+        locale: Var[str] | str | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
+        open_on_input_click: Var[bool] | bool | None = None,
+        virtualized: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -118,6 +133,8 @@ class ComboboxRoot(ComboboxBaseComponent):
         on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_focus: EventType[()] | None = None,
+        on_input_value_change: EventType[()] | EventType[str] | None = None,
+        on_item_highlighted: EventType[()] | EventType[dict] | None = None,
         on_mount: EventType[()] | None = None,
         on_mouse_down: EventType[()] | None = None,
         on_mouse_enter: EventType[()] | None = None,
@@ -127,6 +144,7 @@ class ComboboxRoot(ComboboxBaseComponent):
         on_mouse_over: EventType[()] | None = None,
         on_mouse_up: EventType[()] | None = None,
         on_open_change: EventType[()] | EventType[bool] | None = None,
+        on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,
         on_scroll_end: EventType[()] | None = None,
         on_unmount: EventType[()] | None = None,
@@ -140,6 +158,7 @@ class ComboboxInput(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        disabled: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -177,6 +196,9 @@ class ComboboxClear(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        native_button: Var[bool] | bool | None = None,
+        disabled: Var[bool] | bool | None = None,
+        keep_mounted: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -207,29 +229,14 @@ class ComboboxClear(ComboboxBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> ComboboxClear:
-        """Create the component.
-
-        Args:
-            *children: The children of the component.
-            render_: The render prop
-            unstyled: Whether the component should be unstyled
-            style: The style of the component.
-            key: A unique key for the component.
-            id: The id for the component.
-            ref: The Var to pass as the ref to the component.
-            class_name: The class name for the component.
-            custom_attrs: custom attribute
-            **props: The props of the component.
-
-        Returns:
-            The component.
-        """
+        """Create the combobox clear component."""
 
 class ComboboxTrigger(ComboboxBaseComponent):
     @classmethod
     def create(
         cls,
         *children,
+        native_button: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
@@ -359,6 +366,7 @@ class ComboboxPortal(ComboboxBaseComponent):
         cls,
         *children,
         container: Var[str] | str | None = None,
+        keep_mounted: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -388,23 +396,7 @@ class ComboboxPortal(ComboboxBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> ComboboxPortal:
-        """Create the component.
-
-        Args:
-            *children: The children of the component.
-            container: A parent element to render the portal element into.
-            unstyled: Whether the component should be unstyled
-            style: The style of the component.
-            key: A unique key for the component.
-            id: The id for the component.
-            ref: The Var to pass as the ref to the component.
-            class_name: The class name for the component.
-            custom_attrs: custom attribute
-            **props: The props of the component.
-
-        Returns:
-            The component.
-        """
+        """Create the combobox portal component."""
 
 class ComboboxIcon(ComboboxBaseComponent):
     @classmethod
@@ -448,6 +440,7 @@ class ComboboxPositioner(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        collision_avoidance: Var[str] | str | None = None,
         align: Literal["center", "end", "start"]
         | Var[Literal["center", "end", "start"]]
         | None = None,
@@ -455,15 +448,16 @@ class ComboboxPositioner(ComboboxBaseComponent):
         side: Literal["bottom", "inline-end", "inline-start", "left", "right", "top"]
         | Var[Literal["bottom", "inline-end", "inline-start", "left", "right", "top"]]
         | None = None,
+        side_offset: Var[int] | int | None = None,
         arrow_padding: Var[int] | int | None = None,
+        anchor: Var[str] | str | None = None,
+        collision_boundary: Var[str] | str | None = None,
         collision_padding: Var[int | list[int]] | int | list[int] | None = None,
         sticky: Var[bool] | bool | None = None,
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
         track_anchor: Var[bool] | bool | None = None,
-        side_offset: Var[int] | int | None = None,
-        collision_avoidance: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -501,6 +495,8 @@ class ComboboxPopup(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        initial_focus: Any | Var[Any] | None = None,
+        final_focus: Any | Var[Any] | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -644,8 +640,9 @@ class ComboboxItem(ComboboxBaseComponent):
     def create(
         cls,
         *children,
-        label: Var[str] | str | None = None,
         value: Any | Var[Any] | None = None,
+        index: Var[int] | int | None = None,
+        native_button: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
@@ -799,6 +796,7 @@ class ComboboxGroup(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        items: Any | Var[Any] | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -1069,6 +1067,7 @@ class ComboboxChipRemove(ComboboxBaseComponent):
     def create(
         cls,
         *children,
+        native_button: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -1099,23 +1098,7 @@ class ComboboxChipRemove(ComboboxBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> ComboboxChipRemove:
-        """Create the component.
-
-        Args:
-            *children: The children of the component.
-            render_: The render prop
-            unstyled: Whether the component should be unstyled
-            style: The style of the component.
-            key: A unique key for the component.
-            id: The id for the component.
-            ref: The Var to pass as the ref to the component.
-            class_name: The class name for the component.
-            custom_attrs: custom attribute
-            **props: The props of the component.
-
-        Returns:
-            The component.
-        """
+        """Create the combobox chip remove component."""
 
 class ComboboxRow(ComboboxBaseComponent):
     @classmethod
@@ -1228,19 +1211,33 @@ class HighLevelCombobox(ComboboxRoot):
         *children,
         items: Var[list[str]] | list[str] | None = None,
         placeholder: Var[str] | str | None = None,
-        size: Literal["lg", "md", "sm", "xl", "xs"]
-        | Var[Literal["lg", "md", "sm", "xl", "xs"]]
-        | None = None,
+        label: Var[str] | str | None = None,
+        empty_message: Var[str] | str | None = None,
+        input_id: Var[str] | str | None = None,
         name: Var[str] | str | None = None,
         default_value: Any | Var[Any] | None = None,
         value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        auto_highlight: Var[bool] | bool | None = None,
+        default_input_value: Var[str] | str | None = None,
+        filter: Any | Var[Any] | None = None,
+        grid: Var[bool] | bool | None = None,
+        input_value: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
+        limit: Var[int] | int | None = None,
+        locale: Var[str] | str | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
+        open_on_input_click: Var[bool] | bool | None = None,
+        virtualized: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -1257,6 +1254,8 @@ class HighLevelCombobox(ComboboxRoot):
         on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_focus: EventType[()] | None = None,
+        on_input_value_change: EventType[()] | EventType[str] | None = None,
+        on_item_highlighted: EventType[()] | EventType[dict] | None = None,
         on_mount: EventType[()] | None = None,
         on_mouse_down: EventType[()] | None = None,
         on_mouse_enter: EventType[()] | None = None,
@@ -1266,6 +1265,7 @@ class HighLevelCombobox(ComboboxRoot):
         on_mouse_over: EventType[()] | None = None,
         on_mouse_up: EventType[()] | None = None,
         on_open_change: EventType[()] | EventType[bool] | None = None,
+        on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,
         on_scroll_end: EventType[()] | None = None,
         on_unmount: EventType[()] | None = None,
@@ -1307,19 +1307,33 @@ class Combobox(ComponentNamespace):
         *children,
         items: Var[list[str]] | list[str] | None = None,
         placeholder: Var[str] | str | None = None,
-        size: Literal["lg", "md", "sm", "xl", "xs"]
-        | Var[Literal["lg", "md", "sm", "xl", "xs"]]
-        | None = None,
+        label: Var[str] | str | None = None,
+        empty_message: Var[str] | str | None = None,
+        input_id: Var[str] | str | None = None,
         name: Var[str] | str | None = None,
         default_value: Any | Var[Any] | None = None,
         value: Any | Var[Any] | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
+        actions_ref: Var[str] | str | None = None,
+        auto_highlight: Var[bool] | bool | None = None,
+        default_input_value: Var[str] | str | None = None,
+        filter: Any | Var[Any] | None = None,
+        grid: Var[bool] | bool | None = None,
+        input_value: Var[str] | str | None = None,
+        is_item_equal_to_value: Any | Var[Any] | None = None,
+        item_to_string_label: Any | Var[Any] | None = None,
+        item_to_string_value: Any | Var[Any] | None = None,
+        limit: Var[int] | int | None = None,
+        locale: Var[str] | str | None = None,
         modal: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
+        open_on_input_click: Var[bool] | bool | None = None,
+        virtualized: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
+        input_ref: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -1336,6 +1350,8 @@ class Combobox(ComponentNamespace):
         on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
         on_focus: EventType[()] | None = None,
+        on_input_value_change: EventType[()] | EventType[str] | None = None,
+        on_item_highlighted: EventType[()] | EventType[dict] | None = None,
         on_mount: EventType[()] | None = None,
         on_mouse_down: EventType[()] | None = None,
         on_mouse_enter: EventType[()] | None = None,
@@ -1345,6 +1361,7 @@ class Combobox(ComponentNamespace):
         on_mouse_over: EventType[()] | None = None,
         on_mouse_up: EventType[()] | None = None,
         on_open_change: EventType[()] | EventType[bool] | None = None,
+        on_open_change_complete: EventType[()] | EventType[bool] | None = None,
         on_scroll: EventType[()] | None = None,
         on_scroll_end: EventType[()] | None = None,
         on_unmount: EventType[()] | None = None,

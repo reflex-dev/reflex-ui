@@ -3,16 +3,12 @@
 from typing import Any, Literal
 
 from reflex.components.component import Component, ComponentNamespace
-from reflex.components.core.foreach import foreach
 from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
 from reflex.vars.base import Var
 
-from reflex_ui.components.base.button import button
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 from reflex_ui.components.icons.hugeicon import hi
-from reflex_ui.components.icons.others import select_arrow
-from reflex_ui.utils.twmerge import cn
 
 LiteralComboboxSize = Literal["xs", "sm", "md", "lg", "xl"]
 LiteralAlign = Literal["start", "center", "end"]
@@ -99,11 +95,62 @@ class ComboboxRoot(ComboboxBaseComponent):
     # Event handler called when the popup is opened or closed.
     on_open_change: EventHandler[passthrough_event_spec(bool)]
 
-    # Determines if the combobox enters a modal state when open. Defaults to True.
+    # A ref to imperative actions. When specified, the combobox will not be unmounted when closed.
+    actions_ref: Var[str]
+
+    # Whether to automatically highlight the first item while filtering. Defaults to False.
+    auto_highlight: Var[bool]
+
+    # The uncontrolled input value when initially rendered. To render a controlled input, use the inputValue prop instead.
+    default_input_value: Var[str]
+
+    # Filter function used to match items vs input query.
+    filter: Var[Any]
+
+    # Whether list items are presented in a grid layout. Defaults to False.
+    grid: Var[bool]
+
+    # The input value of the combobox. Use when controlled.
+    input_value: Var[str]
+
+    # Custom comparison logic used to determine if a combobox item value matches the current selected value.
+    is_item_equal_to_value: Var[Any]
+
+    # When the item values are objects, this function converts the object value to a string representation for display in the input.
+    item_to_string_label: Var[Any]
+
+    # When the item values are objects, this function converts the object value to a string representation for form submission.
+    item_to_string_value: Var[Any]
+
+    # The items to be displayed in the list. Can be either a flat array of items or an array of groups with items.
+    items: Var[Any]
+
+    # The maximum number of items to display in the list. Defaults to -1 (unlimited).
+    limit: Var[int]
+
+    # The locale to use for string comparison. Defaults to the user's runtime locale.
+    locale: Var[str]
+
+    # Determines if the combobox enters a modal state when open. Defaults to False.
     modal: Var[bool]
 
     # Whether multiple items can be selected. Defaults to False.
     multiple: Var[bool]
+
+    # Callback fired when the input value of the combobox changes.
+    on_input_value_change: EventHandler[passthrough_event_spec(str)]
+
+    # Callback fired when the user navigates the list and highlights an item.
+    on_item_highlighted: EventHandler[passthrough_event_spec(dict)]
+
+    # Event handler called after any animations complete when the popup is opened or closed.
+    on_open_change_complete: EventHandler[passthrough_event_spec(bool)]
+
+    # Whether the popup opens when clicking the input. Defaults to True.
+    open_on_input_click: Var[bool]
+
+    # Whether the items are being externally virtualized. Defaults to False.
+    virtualized: Var[bool]
 
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
@@ -113,6 +160,9 @@ class ComboboxRoot(ComboboxBaseComponent):
 
     # Whether the user must choose a value before submitting a form. Defaults to False.
     required: Var[bool]
+
+    # A ref to the hidden input element.
+    input_ref: Var[str]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
@@ -125,6 +175,9 @@ class ComboboxInput(ComboboxBaseComponent):
     """The editable input that filters items."""
 
     tag = "Combobox.Input"
+
+    # Whether the component should ignore user interaction. Defaults to False.
+    disabled: Var[bool]
 
     # The render prop
     render_: Var[Component]
@@ -142,14 +195,32 @@ class ComboboxClear(ComboboxBaseComponent):
 
     tag = "Combobox.Clear"
 
+    # Whether the component renders a native <button> element when replacing it via the render prop. Defaults to True.
+    native_button: Var[bool]
+
+    # Whether the component should ignore user interaction. Defaults to False.
+    disabled: Var[bool]
+
+    # Whether the component should remain mounted in the DOM when not visible. Defaults to False.
+    keep_mounted: Var[bool]
+
     # The render prop
     render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the combobox clear component."""
+        props["data-slot"] = "combobox-clear"
+        return super().create(*children, **props)
 
 
 class ComboboxTrigger(ComboboxBaseComponent):
     """A button that opens the combobox popup."""
 
     tag = "Combobox.Trigger"
+
+    # Whether the component renders a native <button> element when replacing it via the render prop. Defaults to True.
+    native_button: Var[bool]
 
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
@@ -198,6 +269,15 @@ class ComboboxPortal(ComboboxBaseComponent):
     # A parent element to render the portal element into.
     container: Var[str]
 
+    # Whether to keep the portal mounted in the DOM while the popup is hidden. Defaults to False.
+    keep_mounted: Var[bool]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the combobox portal component."""
+        props["data-slot"] = "combobox-portal"
+        return super().create(*children, **props)
+
 
 class ComboboxIcon(ComboboxBaseComponent):
     """An icon that indicates the trigger opens a popup."""
@@ -220,17 +300,29 @@ class ComboboxPositioner(ComboboxBaseComponent):
 
     tag = "Combobox.Positioner"
 
+    # Determines how to handle collisions when positioning the popup.
+    collision_avoidance: Var[str]
+
     # How to align the popup relative to the specified side. Defaults to "center".
     align: Var[LiteralAlign]
 
     # Additional offset along the alignment axis in pixels. Defaults to 0.
     align_offset: Var[int]
 
-    # Which side of the anchor element to align the popup against.
+    # Which side of the anchor element to align the popup against. Defaults to "bottom".
     side: Var[LiteralSide]
 
-    # Minimum distance to maintain between the arrow and the edges of the popup.
+    # Distance between the anchor and the popup in pixels. Defaults to 0.
+    side_offset: Var[int]
+
+    # Minimum distance to maintain between the arrow and the edges of the popup. Defaults to 5.
     arrow_padding: Var[int]
+
+    # An element to position the popup against. By default, the popup will be positioned against the trigger.
+    anchor: Var[str]
+
+    # An element or a rectangle that delimits the area that the popup is confined to. Defaults to "clipping-ancestors".
+    collision_boundary: Var[str]
 
     # Additional space to maintain from the edge of the collision boundary. Defaults to 5.
     collision_padding: Var[int | list[int]]
@@ -243,12 +335,6 @@ class ComboboxPositioner(ComboboxBaseComponent):
 
     # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
     track_anchor: Var[bool]
-
-    # Distance between the anchor and the popup in pixels. Defaults to 0.
-    side_offset: Var[int]
-
-    # Determines how to handle collisions when positioning the popup.
-    collision_avoidance: Var[str]
 
     # The render prop
     render_: Var[Component]
@@ -266,6 +352,12 @@ class ComboboxPopup(ComboboxBaseComponent):
     """A container for the combobox items."""
 
     tag = "Combobox.Popup"
+
+    # Determines the element to focus when the popup is opened.
+    initial_focus: Var[Any]
+
+    # Determines the element to focus when the popup is closed.
+    final_focus: Var[Any]
 
     # The render prop
     render_: Var[Component]
@@ -287,6 +379,33 @@ class ComboboxList(ComboboxBaseComponent):
     render_: Var[Component]
 
 
+class ComboboxListWithFunctionChild(ComboboxBaseComponent):
+    """Special list component that renders items using function child pattern for filtering.
+
+    This component wraps Combobox.List and automatically generates the function child
+    that Base UI needs to properly filter items.
+    """
+
+    tag = "Combobox.List"
+
+    def _get_custom_code(self) -> str | None:
+        """Generate custom JSX for function child pattern."""
+        # Return the opening of the function child
+        return "{(item_rx_state_) => ("
+
+    def render(self):
+        """Render with function child wrapper."""
+        rendered = super().render()
+
+        # Wrap children in function child pattern
+        if self.children:
+            # Add function wrapper opening
+            rendered["function_child_start"] = "{(item_rx_state_) => ("
+            rendered["function_child_end"] = ")}"
+
+        return rendered
+
+
 class ComboboxEmpty(ComboboxBaseComponent):
     """Renders its children only when the list is empty."""
 
@@ -301,13 +420,16 @@ class ComboboxItem(ComboboxBaseComponent):
 
     tag = "Combobox.Item"
 
-    # Overrides the text label to use on the trigger when this item is selected and when matched during keyboard text navigation.
-    label: Var[str]
-
     # A unique value that identifies this combobox item.
     value: Var[Any]
 
-    # Whether the component should ignore user interaction.
+    # The index of the item in the list. Improves performance when specified.
+    index: Var[int]
+
+    # Whether the component renders a native <button> element when replacing it via the render prop. Defaults to False.
+    native_button: Var[bool]
+
+    # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
     # The render prop
@@ -379,6 +501,9 @@ class ComboboxGroup(ComboboxBaseComponent):
     """Groups related items with the corresponding label."""
 
     tag = "Combobox.Group"
+
+    # Items to be rendered within this group. When provided, child Collection components will use these items.
+    items: Var[Any]
 
     # The render prop
     render_: Var[Component]
@@ -455,8 +580,17 @@ class ComboboxChipRemove(ComboboxBaseComponent):
 
     tag = "Combobox.ChipRemove"
 
+    # Whether the component renders a native <button> element when replacing it via the render prop. Defaults to True.
+    native_button: Var[bool]
+
     # The render prop
     render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the combobox chip remove component."""
+        props["data-slot"] = "combobox-chip-remove"
+        return super().create(*children, **props)
 
 
 class ComboboxRow(ComboboxBaseComponent):
@@ -483,31 +617,45 @@ class HighLevelCombobox(ComboboxRoot):
     # The placeholder text to display when no item is selected
     placeholder: Var[str]
 
-    # The size of the combobox component. Defaults to "md".
-    size: Var[LiteralComboboxSize]
+    # The label text to display above the input
+    label: Var[str]
+
+    # The message to display when no items are found
+    empty_message: Var[str]
+
+    # The ID for the input element
+    input_id: Var[str]
 
     # Props for different component parts
-    _trigger_props = {"placeholder", "size"}
+    _high_level_props = {"placeholder", "label", "empty_message", "input_id"}
     _items_props = {"items"}
     _positioner_props = {
+        "collision_avoidance",
         "align",
         "align_offset",
         "side",
+        "side_offset",
         "arrow_padding",
+        "anchor",
+        "collision_boundary",
         "collision_padding",
         "sticky",
         "position_method",
         "track_anchor",
-        "side_offset",
-        "collision_avoidance",
     }
-    _portal_props = {"container"}
+    _portal_props = {"container", "keep_mounted"}
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create a combobox component."""
+        from reflex import box
+
+        from reflex_ui.utils.iterable_list import function_child
+
         # Extract props for different parts
-        trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
+        high_level_props = {
+            k: props.pop(k) for k in cls._high_level_props & props.keys()
+        }
         items_props = {k: props.pop(k) for k in cls._items_props & props.keys()}
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
@@ -515,82 +663,86 @@ class HighLevelCombobox(ComboboxRoot):
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
 
         # Get extracted values with defaults
-        size = trigger_props.get("size", "md")
         items = items_props.get("items", [])
+        placeholder = high_level_props.get("placeholder", "e.g. Apple")
+        label = high_level_props.get("label", "Choose a fruit")
+        empty_message = high_level_props.get("empty_message", "No fruits found.")
+        input_id = high_level_props.get("input_id", "combobox-input")
 
-        # Create the items children
-        if isinstance(items, Var):
-            items_children = foreach(
-                items,
-                lambda item: ComboboxItem.create(
-                    render_=button(
-                        ComboboxItemText.create(item),
-                        ComboboxItemIndicator.create(
-                            hi(
-                                "Tick02Icon",
-                                class_name="size-4",
-                            ),
-                        ),
-                        variant="ghost",
-                        size=size,
-                        type="button",
-                        class_name=ClassNames.ITEM,
-                        disabled=props.get("disabled", False),
-                    ),
-                    value=item,
-                    key=item,
+        # Build the item renderer function
+        def render_item(item):
+            return ComboboxItem.create(
+                ComboboxItemIndicator.create(
+                    class_name="col-start-1",
                 ),
+                box(
+                    item,
+                    class_name="col-start-2",
+                ),
+                value=item,
+                key=item,
+                class_name="grid cursor-default grid-cols-[0.75rem_1fr] items-center gap-2 py-2 pr-8 pl-4 text-base leading-4 outline-none select-none data-[highlighted]:relative data-[highlighted]:z-0 data-[highlighted]:text-gray-50 data-[highlighted]:before:absolute data-[highlighted]:before:inset-x-2 data-[highlighted]:before:inset-y-0 data-[highlighted]:before:z-[-1] data-[highlighted]:before:rounded-sm data-[highlighted]:before:bg-gray-900",
             )
-        else:
-            items_children = [
-                ComboboxItem.create(
-                    render_=button(
-                        ComboboxItemText.create(item),
-                        ComboboxItemIndicator.create(
-                            hi(
-                                "Tick02Icon",
-                                class_name="size-4",
-                            ),
-                        ),
-                        variant="ghost",
-                        size=size,
-                        type="button",
-                        class_name=ClassNames.ITEM,
-                    ),
-                    value=item,
-                    key=item,
-                )
-                for item in items
-            ]
+
+        # Create items list and combobox list
+        # Use function_child to create a function that Base UI calls for each filtered item
+        list_content = function_child(render_item)
+        combobox_list = ComboboxList.create(list_content)
 
         return ComboboxRoot.create(
-            ComboboxTrigger.create(
-                render_=button(
-                    ComboboxValue.create(),
-                    select_arrow(class_name="size-4 text-secondary-9"),
-                    variant="outline",
-                    size=size,
-                    type="button",
-                    class_name=ClassNames.TRIGGER,
-                    disabled=props.get("disabled", False),
+            box(
+                box(
+                    label,
+                    html_for=input_id,
+                    element="label",
                 ),
+                ComboboxInput.create(
+                    placeholder=placeholder,
+                    id=input_id,
+                    class_name="h-10 w-64 rounded-md font-normal border border-gray-200 pl-3.5 text-base text-gray-900 bg-[canvas] focus:outline-2 focus:-outline-offset-1 focus:outline-blue-800",
+                ),
+                box(
+                    ComboboxClear.create(
+                        hi("Cancel01Icon", class_name="size-4"),
+                        class_name="flex h-10 w-6 items-center justify-center rounded bg-transparent p-0",
+                        aria_label="Clear selection",
+                    ),
+                    ComboboxTrigger.create(
+                        hi("ArrowDown01Icon", class_name="size-4"),
+                        class_name="flex h-10 w-6 items-center justify-center rounded bg-transparent p-0",
+                        aria_label="Open popup",
+                    ),
+                    class_name="absolute right-2 bottom-0 flex h-10 items-center justify-center text-gray-600",
+                ),
+                class_name="relative flex flex-col gap-1 text-sm leading-5 font-medium text-gray-900",
             ),
             ComboboxPortal.create(
                 ComboboxPositioner.create(
                     ComboboxPopup.create(
-                        ComboboxList.create(items_children),
-                        class_name=cn(
-                            ClassNames.POPUP,
-                            f"rounded-[calc(var(--radius-ui-{size})+0.25rem)]",
+                        ComboboxEmpty.create(
+                            empty_message,
+                            class_name="px-4 py-2 text-[0.925rem] leading-4 text-gray-600 empty:m-0 empty:p-0",
                         ),
+                        combobox_list,
+                        class_name="w-[var(--anchor-width)] max-h-[min(var(--available-height),23rem)] max-w-[var(--available-width)] origin-[var(--transform-origin)] overflow-y-auto scroll-pt-2 scroll-pb-2 overscroll-contain rounded-md bg-[canvas] py-2 text-gray-900 shadow-lg shadow-gray-200 outline-1 outline-gray-200 transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:scale-95 data-[starting-style]:opacity-0 dark:shadow-none dark:-outline-offset-1 dark:outline-gray-300",
                     ),
-                    **positioner_props,
+                    side_offset=4,
+                    class_name="outline-none",
                 ),
                 **portal_props,
             ),
-            *children,
+            items=items,
             **props,
         )
+
+    def _exclude_props(self) -> list[str]:
+        return [
+            *super()._exclude_props(),
+            "placeholder",
+            "label",
+            "empty_message",
+            "input_id",
+        ]
 
 
 class Combobox(ComponentNamespace):

@@ -6,6 +6,7 @@ from reflex.utils import lazy_loader
 
 _SUBMODULES: set[str] = {
     "twmerge",
+    "iterable_list",
 }
 
 _SUBMOD_ATTRS: dict[str, list[str]] = {}
