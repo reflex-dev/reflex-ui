@@ -524,7 +524,7 @@ def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
                     demo_form(class_name="w-full max-w-md"),
                     class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
                 ),
-                class_name="h-fit w-auto mt-1 overflow-hidden w-full max-w-md",
+                class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
             ),
         ),
         class_name=class_name,
