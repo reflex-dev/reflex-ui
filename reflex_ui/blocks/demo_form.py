@@ -491,3 +491,39 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
 
 demo_form = DemoForm.create
+
+
+def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
+    """Return a demo form dialog container element.
+
+    Args:
+        trigger: The component that triggers the dialog
+        **props: Additional properties to pass to the dialog root
+
+    Returns:
+        A Reflex dialog component containing the demo form
+    """
+    class_name = ui.cn("w-auto", props.pop("class_name", ""))
+    return ui.dialog.root(
+        ui.dialog.trigger(render_=trigger),
+        ui.dialog.portal(
+            ui.dialog.backdrop(),
+            ui.dialog.popup(
+                rx.el.div(
+                    ui.dialog.close(
+                        render_=ui.button(
+                            ui.hi("Cancel01Icon"),
+                            variant="ghost",
+                            size="icon-sm",
+                            class_name="text-secondary-11 absolute top-2 right-2 z-10",
+                        ),
+                    ),
+                    demo_form(class_name="w-full max-w-md"),
+                    class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
+                ),
+                class_name="h-fit w-auto mt-1 overflow-hidden w-full max-w-md",
+            ),
+        ),
+        class_name=class_name,
+        **props,
+    )
