@@ -28,6 +28,10 @@ COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
     "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
+JH_CAL_URL = os.getenv(
+    "JH_CAL_URL", "https://cal.com/team/reflex/reflex-demo-with-jh-tevis"
+)
+INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
     "https://cal.com/team/reflex/reflex-intro",
@@ -230,10 +234,12 @@ class DemoFormStateUI(rx.State):
         if not check_if_company_email(form_data.get("email", "")):
             yield rx.set_focus("email")
             yield rx.toast.error(
-                "Please enter a valid company email",
+                "Please enter a valid company email - gmails, aol, me, etc are not allowed",
                 position="top-center",
             )
-            yield demo_form_error_message.push("Please enter a valid company email")
+            yield demo_form_error_message.push(
+                "Please enter a valid company email - gmails, aol, me, etc are not allowed"
+            )
             return
         # Check if the has selected a number of employees
         if not check_if_default_value_is_selected(
@@ -286,12 +292,20 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         }
 
         query_string = urllib.parse.urlencode(params)
+        technical_level = form_data.get("technical_level", "")
+
+        # Route based on company size and technical level
         if is_small_company(form_data.get("number_of_employees", "")):
-            yield rx.redirect(f"{CAL_REQUEST_DEMO_URL}?{query_string}")
-            return
+            # Small companies (≤10 employees) always go to JH_CAL_URL
+            cal_url = JH_CAL_URL
+        else:
+            # Large companies (>10 employees)
+            if technical_level == "Non-technical":
+                cal_url = JH_CAL_URL
+            else:  # Neutral or Technical
+                cal_url = INTRO_CAL_URL
 
-        cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
-
+        cal_url_with_params = f"{cal_url}?{query_string}"
         yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
 
     @rx.event(background=True)
