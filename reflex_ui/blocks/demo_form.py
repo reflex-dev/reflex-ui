@@ -292,8 +292,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
         cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
 
-        yield is_sending_demo_form.push(False)
-        yield rx.redirect(cal_url_with_params)
+        yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
 
     async def send_demo_event(self, form_data: dict[str, Any]):
         """Create and send demo event to PostHog and Slack.
