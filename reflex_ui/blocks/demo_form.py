@@ -476,7 +476,7 @@ def demo_form(**props) -> rx.Component:
                     "Other",
                 ],
             ),
-            class_name="grid @max-md:grid-cols-1 grid-cols-2 gap-4",
+            class_name="grid grid-cols-1 md:grid-cols-2 gap-4",
         ),
         select_field(
             "How technical are you?",
