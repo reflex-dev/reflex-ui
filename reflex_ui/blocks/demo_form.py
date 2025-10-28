@@ -5,7 +5,6 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
-import asyncio
 import os
 import urllib.parse
 import uuid
@@ -214,8 +213,8 @@ def check_if_default_value_is_selected(value: str) -> bool:
     return value.strip() != "Select"
 
 
-class DemoForm(rx.ComponentState):
-    """Component state for handling demo form submissions and integrations."""
+class DemoFormStateUI(rx.State):
+    """State for handling demo form submissions and integrations."""
 
     @rx.event(background=True)
     async def on_submit(self, form_data: dict[str, Any]):
@@ -268,7 +267,7 @@ class DemoForm(rx.ComponentState):
             return
         yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
-        await self.send_demo_event(form_data)
+        yield DemoFormStateUI.send_demo_event(form_data)
 
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
@@ -294,6 +293,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
         yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
 
+    @rx.event(background=True)
     async def send_demo_event(self, form_data: dict[str, Any]):
         """Create and send demo event to PostHog and Slack.
 
@@ -319,12 +319,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         )
 
         # Send data to PostHog, Common Room, and Slack
-        await asyncio.gather(
-            self.send_data_to_posthog(demo_event),
-            self.send_data_to_common_room(demo_event),
-            self.send_data_to_slack(demo_event),
-        )
+        yield [
+            DemoFormStateUI.send_data_to_posthog(demo_event),
+            DemoFormStateUI.send_data_to_common_room(demo_event),
+            DemoFormStateUI.send_data_to_slack(demo_event),
+        ]
 
+    @rx.event(background=True)
     async def send_data_to_posthog(self, event_instance: PosthogEvent):
         """Send data to PostHog using class introspection.
 
@@ -348,6 +349,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         except Exception:
             log("Error sending data to PostHog")
 
+    @rx.event(background=True)
     async def send_data_to_common_room(self, event_instance: DemoEvent):
         """Update CommonRoom with user login information."""
         tags: Sequence[str] = [
@@ -383,6 +385,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
             )
 
+    @rx.event(background=True)
     async def send_data_to_slack(self, event_instance: DemoEvent):
         """Send demo form data to Slack webhook.
 
@@ -410,89 +413,84 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         except Exception as e:
             log(f"Error sending data to Slack webhook: {e}")
 
-    @classmethod
-    def get_component(cls, **props):
-        """Create and return the demo form component.
 
-        Builds a complete form with all required fields, validation,
-        and styling. The form includes personal info, company details,
-        and preferences.
+def demo_form(**props) -> rx.Component:
+    """Create and return the demo form component.
 
-        Args:
-            **props: Additional properties to pass to the form component
+    Builds a complete form with all required fields, validation,
+    and styling. The form includes personal info, company details,
+    and preferences.
 
-        Returns:
-            A Reflex form component with all demo form fields
-        """
-        return rx.el.form(
-            rx.el.div(
-                input_field("First name", "John", "first_name", "text", True),
-                input_field("Last name", "Smith", "last_name", "text", True),
-                class_name="grid grid-cols-2 gap-4",
-            ),
-            input_field("Business Email", "john@company.com", "email", "email", True),
-            rx.el.div(
-                input_field("Job title", "CTO", "job_title", "text", True),
-                input_field(
-                    "Company name", "Pynecone, Inc.", "company_name", "text", True
-                ),
-                class_name="grid grid-cols-2 gap-4",
-            ),
-            text_area_field(
-                "What are you looking to build? *",
-                "Please list any apps, requirements, or data sources you plan on using",
-                "internal_tools",
-                True,
-            ),
-            rx.el.div(
-                select_field(
-                    "Number of employees?",
-                    "number_of_employees",
-                    ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
-                ),
-                select_field(
-                    "How did you hear about us?",
-                    "how_did_you_hear_about_us",
-                    [
-                        "Google Search",
-                        "Social Media",
-                        "Word of Mouth",
-                        "Blog",
-                        "Conference",
-                        "Other",
-                    ],
-                ),
-                class_name="grid grid-cols-2 gap-4",
+    Args:
+        **props: Additional properties to pass to the form component
+
+    Returns:
+        A Reflex form component with all demo form fields
+    """
+    return rx.el.form(
+        rx.el.div(
+            input_field("First name", "John", "first_name", "text", True),
+            input_field("Last name", "Smith", "last_name", "text", True),
+            class_name="grid grid-cols-2 gap-4",
+        ),
+        input_field("Business Email", "john@company.com", "email", "email", True),
+        rx.el.div(
+            input_field("Job title", "CTO", "job_title", "text", True),
+            input_field("Company name", "Pynecone, Inc.", "company_name", "text", True),
+            class_name="grid grid-cols-2 gap-4",
+        ),
+        text_area_field(
+            "What are you looking to build? *",
+            "Please list any apps, requirements, or data sources you plan on using",
+            "internal_tools",
+            True,
+        ),
+        rx.el.div(
+            select_field(
+                "Number of employees?",
+                "number_of_employees",
+                ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
             ),
             select_field(
-                "How technical are you?",
-                "technical_level",
-                ["Non-technical", "Neutral", "Technical"],
-                True,
+                "How did you hear about us?",
+                "how_did_you_hear_about_us",
+                [
+                    "Google Search",
+                    "Social Media",
+                    "Word of Mouth",
+                    "Blog",
+                    "Conference",
+                    "Other",
+                ],
             ),
-            rx.cond(
+            class_name="grid grid-cols-2 gap-4",
+        ),
+        select_field(
+            "How technical are you?",
+            "technical_level",
+            ["Non-technical", "Neutral", "Technical"],
+            True,
+        ),
+        rx.cond(
+            demo_form_error_message.value,
+            rx.el.span(
                 demo_form_error_message.value,
-                rx.el.span(
-                    demo_form_error_message.value,
-                    class_name="text-destructive-10 text-sm font-medium",
-                ),
+                class_name="text-destructive-10 text-sm font-medium",
             ),
-            ui.button(
-                "Submit",
-                type="submit",
-                class_name="w-full",
-                loading=is_sending_demo_form.value,
-            ),
-            on_submit=cls.on_submit,
-            class_name=ui.cn(
-                "@container flex flex-col gap-6 p-6",
-                props.pop("class_name", ""),
-            ),
-            **props,
-        )
-
-
-demo_form = DemoForm.create
+        ),
+        ui.button(
+            "Submit",
+            type="submit",
+            class_name="w-full",
+            loading=is_sending_demo_form.value,
+        ),
+        on_submit=DemoFormStateUI.on_submit,
+        class_name=ui.cn(
+            "@container flex flex-col gap-6 p-6",
+            props.pop("class_name", ""),
+        ),
+        **props,
+    )
 
 
 def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
