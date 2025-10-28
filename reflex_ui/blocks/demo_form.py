@@ -153,7 +153,7 @@ def select_field(
     return rx.el.div(
         rx.el.label(
             label + (" *" if required else ""),
-            class_name="block text-sm font-medium text-secondary-12",
+            class_name="block text-xs lg:text-sm font-medium text-secondary-12 truncate min-w-0",
         ),
         ui.select(
             default_value="Select",
@@ -162,7 +162,7 @@ def select_field(
             required=required,
             class_name="w-full",
         ),
-        class_name="flex flex-col gap-1.5",
+        class_name="flex flex-col gap-1.5 min-w-0",
     )
 
 
@@ -476,7 +476,7 @@ def demo_form(**props) -> rx.Component:
                     "Other",
                 ],
             ),
-            class_name="grid grid-cols-2 gap-4",
+            class_name="grid @max-md:grid-cols-1 grid-cols-2 gap-4",
         ),
         select_field(
             "How technical are you?",
@@ -488,7 +488,7 @@ def demo_form(**props) -> rx.Component:
             demo_form_error_message.value,
             rx.el.span(
                 demo_form_error_message.value,
-                class_name="text-destructive-10 text-sm font-medium",
+                class_name="text-destructive-10 text-sm font-medium px-2 py-1 rounded-md bg-destructive-3 border border-destructive-4",
             ),
         ),
         ui.button(
@@ -499,7 +499,7 @@ def demo_form(**props) -> rx.Component:
         ),
         on_submit=DemoFormStateUI.on_submit,
         class_name=ui.cn(
-            "@container flex flex-col gap-6 p-6",
+            "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
         ),
         **props,
