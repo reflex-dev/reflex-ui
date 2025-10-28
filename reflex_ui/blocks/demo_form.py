@@ -5,6 +5,7 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
+import asyncio
 import os
 import urllib.parse
 import uuid
@@ -319,13 +320,12 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         )
 
         # Send data to PostHog, Common Room, and Slack
-        yield [
-            DemoFormStateUI.send_data_to_posthog(demo_event),
-            DemoFormStateUI.send_data_to_common_room(demo_event),
-            DemoFormStateUI.send_data_to_slack(demo_event),
-        ]
+        await asyncio.gather(
+            self.send_data_to_posthog(demo_event),
+            self.send_data_to_common_room(demo_event),
+            self.send_data_to_slack(demo_event),
+        )
 
-    @rx.event(background=True)
     async def send_data_to_posthog(self, event_instance: PosthogEvent):
         """Send data to PostHog using class introspection.
 
@@ -349,7 +349,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         except Exception:
             log("Error sending data to PostHog")
 
-    @rx.event(background=True)
     async def send_data_to_common_room(self, event_instance: DemoEvent):
         """Update CommonRoom with user login information."""
         tags: Sequence[str] = [
@@ -385,7 +384,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                 f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
             )
 
-    @rx.event(background=True)
     async def send_data_to_slack(self, event_instance: DemoEvent):
         """Send demo form data to Slack webhook.
 
@@ -393,6 +391,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             event_instance: An instance of DemoEvent with form data.
         """
         slack_payload = {
+            "technicalLevel": event_instance.technical_level,
             "lookingToBuild": event_instance.internal_tools,
             "businessEmail": event_instance.company_email,
             "howDidYouHear": event_instance.referral_source,
