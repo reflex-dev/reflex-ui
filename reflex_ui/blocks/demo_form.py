@@ -26,11 +26,11 @@ is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
 COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://app.lemcal.com/@jhtevis/30-minutes?back=1"
+    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://app.lemcal.com/@alek/reflex-demo?back=1",
+    "https://cal.com/team/reflex/reflex-intro",
 )
 SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
 POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
@@ -62,6 +62,7 @@ class DemoEvent(PosthogEvent):
     company_name: str
     num_employees: str
     internal_tools: str
+    technical_level: str
     referral_source: str
 
 
@@ -266,9 +267,6 @@ class DemoForm(rx.ComponentState):
         # Send to PostHog and Slack for all submissions
         await self.send_demo_event(form_data)
 
-        yield rx.call_script(
-            f"try {{ ko.identify('{form_data.get('email', '')}'); }} catch(e) {{ console.warn('Koala identify failed:', e); }}"
-        )
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
@@ -276,6 +274,7 @@ Job Title: {form_data.get("job_title", "")}
 Company Name: {form_data.get("company_name", "")}
 Number of Employees: {form_data.get("number_of_employees", "")}
 Internal Tools to Build: {form_data.get("internal_tools", "")}
+Technical Level: {form_data.get("technical_level", "")}
 How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         params = {
             "email": form_data.get("email", ""),
@@ -313,6 +312,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             company_name=form_data.get("company_name", ""),
             num_employees=form_data.get("number_of_employees", ""),
             internal_tools=form_data.get("internal_tools", ""),
+            technical_level=form_data.get("technical_level", ""),
             referral_source=form_data.get("how_did_you_hear_about_us", ""),
         )
 
@@ -460,7 +460,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
                         "Other",
                     ],
                 ),
-                class_name="grid @max-md:grid-cols-1 grid-cols-2 gap-4",
+                class_name="grid grid-cols-2 gap-4",
+            ),
+            select_field(
+                "How technical are you?",
+                "technical_level",
+                ["Non-technical", "Neutral", "Technical"],
+                True,
             ),
             rx.cond(
                 demo_form_error_message.value,
@@ -485,3 +491,39 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
 
 demo_form = DemoForm.create
+
+
+def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
+    """Return a demo form dialog container element.
+
+    Args:
+        trigger: The component that triggers the dialog
+        **props: Additional properties to pass to the dialog root
+
+    Returns:
+        A Reflex dialog component containing the demo form
+    """
+    class_name = ui.cn("w-auto", props.pop("class_name", ""))
+    return ui.dialog.root(
+        ui.dialog.trigger(render_=trigger),
+        ui.dialog.portal(
+            ui.dialog.backdrop(),
+            ui.dialog.popup(
+                rx.el.div(
+                    ui.dialog.close(
+                        render_=ui.button(
+                            ui.hi("Cancel01Icon"),
+                            variant="ghost",
+                            size="icon-sm",
+                            class_name="text-secondary-11 absolute top-2 right-2 z-10",
+                        ),
+                    ),
+                    demo_form(class_name="w-full max-w-md"),
+                    class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
+                ),
+                class_name="h-fit w-auto mt-1 overflow-hidden w-full max-w-md",
+            ),
+        ),
+        class_name=class_name,
+        **props,
+    )
