@@ -209,14 +209,9 @@ def check_if_company_email(email: str) -> bool:
     return domain not in personal_domains and ".edu" not in domain
 
 
-def check_if_number_of_employees_is_valid(number_of_employees: str) -> bool:
-    """Check if the number of employees is valid."""
-    return number_of_employees.strip() != "Select"
-
-
-def check_if_referral_source_is_valid(referral_source: str) -> bool:
-    """Check if the referral source is valid."""
-    return referral_source.strip() != "Select"
+def check_if_default_value_is_selected(value: str) -> bool:
+    """Check if the default value is selected."""
+    return value.strip() != "Select"
 
 
 class DemoForm(rx.ComponentState):
@@ -241,7 +236,7 @@ class DemoForm(rx.ComponentState):
             yield demo_form_error_message.push("Please enter a valid company email")
             return
         # Check if the has selected a number of employees
-        if not check_if_number_of_employees_is_valid(
+        if not check_if_default_value_is_selected(
             form_data.get("number_of_employees", "")
         ):
             yield rx.toast.error(
@@ -250,9 +245,8 @@ class DemoForm(rx.ComponentState):
             )
             yield demo_form_error_message.push("Please select a number of employees")
             return
-
         # Check if the has entered a referral source
-        if not check_if_referral_source_is_valid(
+        if not check_if_default_value_is_selected(
             form_data.get("how_did_you_hear_about_us", "")
         ):
             yield rx.toast.error(
@@ -262,6 +256,15 @@ class DemoForm(rx.ComponentState):
             yield demo_form_error_message.push(
                 "Please select how did you hear about us"
             )
+            return
+        # Check if the has entered a technical level
+        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
+            yield rx.set_focus("technical_level")
+            yield rx.toast.error(
+                "Please select a technical level",
+                position="top-center",
+            )
+            yield demo_form_error_message.push("Please select a technical level")
             return
         yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
