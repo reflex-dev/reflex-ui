@@ -153,6 +153,8 @@
 	--warning-a10: var(--amber-a10);
 	--warning-a11: var(--amber-a11);
 	--warning-a12: var(--amber-a12);
+	/* Contrast */
+	--primary-contrast: #ffffff;
 	/* Radius */
 	--radius: 0.5rem;
 	/* Font */
@@ -211,6 +213,8 @@
 	--color-secondary-a10: var(--secondary-a10);
 	--color-secondary-a11: var(--secondary-a11);
 	--color-secondary-a12: var(--secondary-a12);
+	/* Contrast */
+	--color-primary-contrast: var(--primary-contrast, #ffffff);
 	/* Info */
 	--color-info-1: var(--info-1);
 	--color-info-2: var(--info-2);

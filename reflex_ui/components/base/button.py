@@ -20,8 +20,8 @@ DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap 
 
 BUTTON_VARIANTS = {
     "variant": {
-        "primary": "bg-primary-9 text-white hover:bg-primary-10",
-        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-white",
+        "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
+        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast",
         "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
         "ghost": "hover:bg-secondary-3 text-secondary-11",
