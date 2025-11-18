@@ -275,6 +275,10 @@ class DemoFormStateUI(rx.State):
         yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
         yield DemoFormStateUI.send_demo_event(form_data)
+        # Send data to Google Ads conversion tracking
+        yield rx.call_script(
+            f"gtag_report_conversion()"
+        )
 
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}

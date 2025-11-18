@@ -34,3 +34,21 @@ def get_google_analytics_trackers(
         rx.script(src=GTAG_SCRIPT_URL_TEMPLATE.format(tracking_id=tracking_id)),
         rx.script(GTAG_SCRIPT_TEMPLATE.format(tracking_id=tracking_id)),
     ]
+
+def gtag_report_conversion(conversion_id_and_label: str) -> rx.Component:
+    """Generate a script component to report a conversion to Google Ads.
+
+    Args:
+        conversion_id_and_label: The conversion label for the Google Ads conversion.
+
+    Returns:
+        rx.Component: Script component to report the conversion.
+    """
+
+    return rx.script("""function gtag_report_conversion() {
+        gtag('event', 'conversion', {
+            'send_to': '{conversion_id_and_label}',
+            'event_callback': callback
+        });
+        return false;
+        }""".format(conversion_id_and_label=conversion_id_and_label))
