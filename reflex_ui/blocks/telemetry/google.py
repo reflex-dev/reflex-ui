@@ -45,10 +45,15 @@ def gtag_report_conversion(conversion_id_and_label: str) -> rx.Component:
         rx.Component: Script component to report the conversion.
     """
 
-    return rx.script("""function gtag_report_conversion() {
-        gtag('event', 'conversion', {
-            'send_to': '{conversion_id_and_label}',
-            'event_callback': callback
-        });
-        return false;
-        }""".format(conversion_id_and_label=conversion_id_and_label))
+    return rx.script(
+        f"""function gtag_report_conversion() {{
+            var callback = function () {{
+                console.log('Conversion recorded!');
+            }};
+            gtag('event', 'conversion', {{
+                'send_to': '{conversion_id_and_label}',
+                'event_callback': callback
+            }});
+            return false;
+        }}"""
+    )
