@@ -44,7 +44,6 @@ def gtag_report_conversion(conversion_id_and_label: str) -> rx.Component:
     Returns:
         rx.Component: Script component to report the conversion.
     """
-
     return rx.script(
         f"""function gtag_report_conversion() {{
             var callback = function () {{
