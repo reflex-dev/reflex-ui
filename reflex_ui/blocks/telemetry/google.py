@@ -35,6 +35,7 @@ def get_google_analytics_trackers(
         rx.script(GTAG_SCRIPT_TEMPLATE.format(tracking_id=tracking_id)),
     ]
 
+
 def gtag_report_conversion(conversion_id_and_label: str) -> rx.Component:
     """Generate a script component to report a conversion to Google Ads.
 
