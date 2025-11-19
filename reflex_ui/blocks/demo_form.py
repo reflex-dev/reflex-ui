@@ -277,7 +277,7 @@ class DemoFormStateUI(rx.State):
         yield DemoFormStateUI.send_demo_event(form_data)
         # Send data to Google Ads conversion tracking
         yield rx.call_script(
-            f"gtag_report_conversion()"
+            "gtag_report_conversion()"
         )
 
         notes_content = f"""
