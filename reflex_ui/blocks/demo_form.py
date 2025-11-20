@@ -126,7 +126,7 @@ def text_area_field(
             placeholder=placeholder,
             name=name,
             required=required,
-            class_name="w-full",
+            class_name="w-full min-h-14",
             max_length=800,
         ),
         class_name="flex flex-col gap-1.5",
@@ -525,13 +525,20 @@ def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
             ui.dialog.backdrop(),
             ui.dialog.popup(
                 rx.el.div(
-                    ui.dialog.close(
-                        render_=ui.button(
-                            ui.hi("Cancel01Icon"),
-                            variant="ghost",
-                            size="icon-sm",
-                            class_name="text-secondary-11 absolute top-2 right-2 z-10",
+                    rx.el.div(
+                        rx.el.h1(
+                            "Book a Demo",
+                            class_name="text-xl font-bold text-secondary-12",
                         ),
+                        ui.dialog.close(
+                            render_=ui.button(
+                                ui.hi("Cancel01Icon"),
+                                variant="ghost",
+                                size="icon-sm",
+                                class_name="text-secondary-11",
+                            ),
+                        ),
+                        class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
                     ),
                     demo_form(class_name="w-full max-w-md"),
                     class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
