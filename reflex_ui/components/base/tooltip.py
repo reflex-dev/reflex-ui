@@ -65,13 +65,14 @@ class TooltipRoot(TooltipBaseComponent):
     # How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
     close_delay: Var[int]
 
-    # Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
+    # Whether the tooltip contents can be hovered without closing the tooltip. Defaults to False.
     hoverable: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip root component."""
         props["data-slot"] = "tooltip"
+        props.setdefault("hoverable", False)
         return super().create(*children, **props)
 
 

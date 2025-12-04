@@ -434,7 +434,7 @@ class HighLevelTooltip(TooltipRoot):
             disabled: Whether the tooltip is disabled. Defaults to False.
             delay: How long to wait before opening the tooltip. Specified in milliseconds. Defaults to 600.
             close_delay: How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
-            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
+            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -519,7 +519,7 @@ class Tooltip(ComponentNamespace):
             disabled: Whether the tooltip is disabled. Defaults to False.
             delay: How long to wait before opening the tooltip. Specified in milliseconds. Defaults to 600.
             close_delay: How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
-            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
+            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
