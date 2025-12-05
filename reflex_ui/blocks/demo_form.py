@@ -22,15 +22,14 @@ import reflex_ui as ui
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
+demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
 
 COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
 COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
     "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
-JH_CAL_URL = os.getenv(
-    "JH_CAL_URL", "https://cal.com/team/reflex/reflex-demo-with-jh-tevis"
-)
+JH_CAL_URL = os.getenv("JH_CAL_URL", "https://cal.com/team/reflex/demo-with-reflex")
 INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
@@ -167,8 +166,8 @@ def select_field(
 
 
 def is_small_company(num_employees: str) -> bool:
-    """Check if company has 10 or fewer employees."""
-    return num_employees in ["1", "2-5", "6-10"]
+    """Check if company up to 5 employees."""
+    return num_employees in ["1", "2-5"]
 
 
 def check_if_company_email(email: str) -> bool:
@@ -298,10 +297,10 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
 
         # Route based on company size and technical level
         if is_small_company(form_data.get("number_of_employees", "")):
-            # Small companies (≤10 employees) always go to JH_CAL_URL
+            # Small companies (up to 5 employees) always go to JH_CAL_URL
             cal_url = JH_CAL_URL
         else:
-            # Large companies (>10 employees)
+            # Large companies (more than 5 employees)
             if technical_level == "Non-technical":
                 cal_url = JH_CAL_URL
             else:  # Neutral or Technical
@@ -508,7 +507,7 @@ def demo_form(**props) -> rx.Component:
     )
 
 
-def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
+def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
     """Return a demo form dialog container element.
 
     Args:
@@ -546,6 +545,8 @@ def demo_form_dialog(trigger: rx.Component, **props) -> rx.Component:
                 class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
             ),
         ),
+        open=demo_form_open_cs.value,
+        on_open_change=demo_form_open_cs.set_value,
         class_name=class_name,
         **props,
     )
