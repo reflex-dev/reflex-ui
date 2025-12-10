@@ -100,10 +100,10 @@ class HighLevelCard(CardComponent):
     @classmethod
     def create(cls, *children, **props):
         """Create the card component."""
-        title = props.pop("title", "")
-        description = props.pop("description", "")
-        content = props.pop("content", "")
-        footer = props.pop("footer", "")
+        title = props.pop("title", None)
+        description = props.pop("description", None)
+        content = props.pop("content", None)
+        footer = props.pop("footer", None)
 
         return CardRoot.create(
             (
