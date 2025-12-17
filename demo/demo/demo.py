@@ -5,6 +5,7 @@ import reflex as rx
 import reflex_ui as ui
 from reflex_ui.blocks.demo_form import demo_form_dialog
 from reflex_ui.blocks.telemetry.unify import get_unify_trackers
+from reflex_ui.blocks.calcom import calcom_popup_embed
 
 
 class State(rx.State):
@@ -34,6 +35,9 @@ def index() -> rx.Component:
 
 app = rx.App(
     stylesheets=["css/globals.css"],
+    extra_app_wraps={
+        (55, "Calcom Popup Embed"): lambda _: calcom_popup_embed(),
+    },
     head_components=[
         rx.el.link(
             rel="preconnect",

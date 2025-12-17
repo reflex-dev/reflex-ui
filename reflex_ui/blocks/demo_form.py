@@ -6,8 +6,8 @@ This module provides a multi-step demo form that:
 - Step 3: Collects company details and schedules demo
 """
 
+import json
 import os
-import urllib.parse
 from typing import Any
 
 import httpx
@@ -15,6 +15,11 @@ import reflex as rx
 from reflex.utils.console import log
 
 import reflex_ui as ui
+from reflex_ui.blocks.calcom import (
+    get_cal_attrs,
+    DEFAULT_CAL_NAMESPACE,
+    DEFAULT_CAL_LINK,
+)
 from reflex_ui.blocks.telemetry.unify import unify_identify_js
 
 # Environment variables for Cal.com URLs
@@ -73,7 +78,7 @@ def check_if_company_email(email: str) -> bool:
 def get_employee_count(num_employees: str) -> int:
     """Convert employee count string to a numeric value for comparison.
 
-        Args:
+    Args:
         num_employees: String like "1-5", "6-15", "16-50", etc.
 
     Returns:
@@ -120,9 +125,17 @@ class DemoFormState(rx.State):
     # Booking complete flag (shows thank you after calendar submission)
     booking_complete: bool = False
 
-    # Cal.com prefill data (stored as JSON string for use in script)
-    cal_prefill_json: str = "{}"
-    cal_prefill_query: str = ""
+    @rx.var
+    def cal_prefill_json(self) -> str:
+        """Get the Cal.com config including layout and prefill data."""
+        return json.dumps(
+            {
+                "theme": "dark",
+                "layout": "month_view",
+                "name": f"{self.first_name} {self.last_name}",
+                "email": self.email,
+            }
+        )
 
     @rx.var
     def progress_percentage(self) -> int:
@@ -165,8 +178,6 @@ class DemoFormState(rx.State):
         self.sent_to_unify = False
         self.show_calendar = False
         self.booking_complete = False
-        self.cal_prefill_json = "{}"
-        self.cal_prefill_query = ""
 
     @rx.event
     def on_booking_complete(self):
@@ -210,6 +221,7 @@ class DemoFormState(rx.State):
 
         # Company email -> proceed to step 2
         self.current_step = 2
+        return None
 
     @rx.event
     def submit_step_2(self, form_data: dict[str, Any]):
@@ -236,17 +248,18 @@ class DemoFormState(rx.State):
                         person_attributes={"status": "Demo Requested"},
                     )
                 ),
-                DemoFormState.send_unify_notification(f"Small company ({self.num_employees} employees)"),
+                DemoFormState.send_unify_notification(
+                    f"Small company ({self.num_employees} employees)"
+                ),
             ]
 
         # Larger company -> proceed to step 3
         self.current_step = 3
+        return None
 
     @rx.event
     def submit_step_3(self, form_data: dict[str, Any]):
         """Handle step 3 submission - collect final details and show calendar."""
-        import json
-
         self.error_message = ""
         self.is_loading = True
 
@@ -267,30 +280,15 @@ class DemoFormState(rx.State):
             self.error_message = "Please enter your job title"
             return rx.toast.error("Please enter your job title", position="top-center")
 
-        # Build prefill data for Cal.com and store in state
-        name = f"{self.first_name} {self.last_name}"
-        notes = f"Company: {self.company_name}\nJob Title: {self.job_title}\nEmployees: {self.num_employees}\nLooking to build: {self.looking_to_build or 'Not specified'}"
-        
-        # Build URL query string for Cal.com prefill
-        prefill_params = urllib.parse.urlencode({
-            "name": name,
-            "email": self.email,
-            "notes": notes,
-        })
-        self.cal_prefill_query = prefill_params
-        self.cal_prefill_json = json.dumps({
-            "name": name,
-            "email": self.email,
-            "notes": notes,
-        })
-
         self.is_loading = False
         self.show_calendar = True
 
         # Send Slack notification and close dialog
         return [
             DemoFormState.send_enterprise_notification(),
-            rx.call_script("document.querySelector('[role=dialog] button[aria-label=Close]')?.click()"),
+            rx.call_script(
+                "document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'Escape'}))"
+            ),
         ]
 
     @rx.event
@@ -304,60 +302,6 @@ class DemoFormState(rx.State):
     def go_back_from_calendar(self):
         """Go back from calendar to step 3."""
         self.show_calendar = False
-
-    @rx.event
-    def init_cal_embed(self):
-        """Initialize Cal.com embed after component mounts."""
-        import time
-        unique_ns = f"reflex-demo-{int(time.time() * 1000)}"
-        
-        init_script = f"""
-        (function initCal() {{
-            var ns = "{unique_ns}";
-            var el = document.querySelector('.cal-embed-container');
-            
-            if (!el || el.dataset.calInit === 'true') return;
-            el.dataset.calInit = 'true';
-            el.innerHTML = '';
-            
-            // Load Cal.com script if needed
-            if (!window.Cal) {{
-                var p=function(a,ar){{a.q.push(ar)}},d=document;
-                window.Cal=window.Cal||function(){{
-                    var cal=window.Cal,ar=arguments;
-                    if(!cal.loaded){{cal.ns={{}};cal.q=[];d.head.appendChild(d.createElement("script")).src="https://app.cal.com/embed/embed.js";cal.loaded=true}}
-                    if(ar[0]==="init"){{var api=function(){{p(api,arguments)}},ns=ar[1];api.q=[];if(typeof ns==="string"){{cal.ns[ns]=cal.ns[ns]||api;p(cal.ns[ns],ar);p(cal,["initNamespace",ns])}}else p(cal,ar);return}}
-                    p(cal,ar);
-                }};
-            }}
-            
-            Cal("init", ns, {{origin: "https://app.cal.com"}});
-            
-            // Wait for Cal to be ready
-            if (!window.Cal.ns || !window.Cal.ns[ns]) {{
-                el.dataset.calInit = 'false';
-                setTimeout(initCal, 100);
-                return;
-            }}
-            
-            Cal.ns[ns]("inline", {{
-                elementOrSelector: el,
-                config: {{"layout": "month_view"}},
-                calLink: "team/reflex/reflex-intro-call?{self.cal_prefill_query}"
-            }});
-            
-            // Show thank you on booking success
-            Cal.ns[ns]("on", {{
-                action: "bookingSuccessful",
-                callback: function() {{
-                    // Click hidden button to trigger Reflex event
-                    var btn = document.getElementById('booking-complete-trigger');
-                    if (btn) btn.click();
-                }}
-            }});
-        }})();
-        """
-        return rx.call_script(init_script)
 
     @rx.event(background=True)
     async def send_unify_notification(self, reason: str):
@@ -383,10 +327,16 @@ class DemoFormState(rx.State):
                     {
                         "type": "section",
                         "fields": [
-                            {"type": "mrkdwn", "text": f"*Name:*\n{self.first_name} {self.last_name}"},
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Name:*\n{self.first_name} {self.last_name}",
+                            },
                             {"type": "mrkdwn", "text": f"*Email:*\n{self.email}"},
                             {"type": "mrkdwn", "text": f"*Reason:*\n{reason}"},
-                            {"type": "mrkdwn", "text": f"*Employees:*\n{self.num_employees or 'Not provided'}"},
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Employees:*\n{self.num_employees or 'Not provided'}",
+                            },
                         ],
                     },
                 ],
@@ -422,12 +372,27 @@ class DemoFormState(rx.State):
                     {
                         "type": "section",
                         "fields": [
-                            {"type": "mrkdwn", "text": f"*Name:*\n{self.first_name} {self.last_name}"},
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Name:*\n{self.first_name} {self.last_name}",
+                            },
                             {"type": "mrkdwn", "text": f"*Email:*\n{self.email}"},
-                            {"type": "mrkdwn", "text": f"*Company:*\n{self.company_name}"},
-                            {"type": "mrkdwn", "text": f"*Job Title:*\n{self.job_title}"},
-                            {"type": "mrkdwn", "text": f"*Employees:*\n{self.num_employees}"},
-                            {"type": "mrkdwn", "text": f"*Looking to build:*\n{self.looking_to_build or 'Not specified'}"},
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Company:*\n{self.company_name}",
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Job Title:*\n{self.job_title}",
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Employees:*\n{self.num_employees}",
+                            },
+                            {
+                                "type": "mrkdwn",
+                                "text": f"*Looking to build:*\n{self.looking_to_build or 'Not specified'}",
+                            },
                         ],
                     },
                 ],
@@ -676,7 +641,15 @@ def step_3_form() -> rx.Component:
             ),
             ui.button(
                 "Book Demo",
-                type="submit",
+                type="button",
+                custom_attrs=get_cal_attrs(
+                    cal_namespace=DEFAULT_CAL_NAMESPACE,
+                    cal_link=DEFAULT_CAL_LINK,
+                    config=DemoFormState.cal_prefill_json,
+                ),
+                on_click=rx.call_script(
+                    "document.dispatchEvent(new KeyboardEvent('keydown', {'key': 'Escape'}))"
+                ),
                 loading=DemoFormState.is_loading,
                 class_name="flex-1",
             ),
@@ -792,7 +765,6 @@ def calendar_overlay() -> rx.Component:
                     ),
                 ),
                 class_name="relative bg-secondary-1 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto",
-                on_mount=DemoFormState.init_cal_embed,
             ),
             class_name="fixed inset-0 z-[100000] flex items-center justify-center p-4",
         ),
@@ -811,7 +783,7 @@ def demo_form(**props) -> rx.Component:
     """
     # Remove class_name from props to avoid conflict with conditional class_name
     props.pop("class_name", None)
-    
+
     return rx.el.div(
         rx.cond(
             DemoFormState.sent_to_unify,
