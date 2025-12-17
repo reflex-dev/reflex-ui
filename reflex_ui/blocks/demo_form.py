@@ -117,6 +117,9 @@ class DemoFormState(rx.State):
     # Show calendar flag (shows embedded Cal.com calendar)
     show_calendar: bool = False
 
+    # Booking complete flag (shows thank you after calendar submission)
+    booking_complete: bool = False
+
     # Cal.com prefill data (stored as JSON string for use in script)
     cal_prefill_json: str = "{}"
     cal_prefill_query: str = ""
@@ -161,8 +164,14 @@ class DemoFormState(rx.State):
         self.is_loading = False
         self.sent_to_unify = False
         self.show_calendar = False
+        self.booking_complete = False
         self.cal_prefill_json = "{}"
         self.cal_prefill_query = ""
+
+    @rx.event
+    def on_booking_complete(self):
+        """Handle successful calendar booking."""
+        self.booking_complete = True
 
     @rx.event
     def submit_step_1(self, form_data: dict[str, Any]):
@@ -334,14 +343,13 @@ class DemoFormState(rx.State):
                 calLink: "team/reflex/reflex-intro-call?{self.cal_prefill_query}"
             }});
             
-            // Close overlay on booking success
+            // Show thank you on booking success
             Cal.ns[ns]("on", {{
                 action: "bookingSuccessful",
                 callback: function() {{
-                    setTimeout(function() {{
-                        var btn = document.querySelector('.cal-embed-container').closest('[class*="fixed"]').querySelector('button[aria-label="Close"]');
-                        if (btn) btn.click();
-                    }}, 1500);
+                    // Click hidden button to trigger Reflex event
+                    var btn = document.getElementById('booking-complete-trigger');
+                    if (btn) btn.click();
                 }}
             }});
         }})();
@@ -715,15 +723,49 @@ def thank_you_screen() -> rx.Component:
     )
 
 
+def calendar_thank_you() -> rx.Component:
+    """Thank you screen shown after successful booking."""
+    return rx.el.div(
+        rx.el.div(
+            ui.hi("CheckmarkCircle02Icon", class_name="size-12 text-green-500"),
+            class_name="flex justify-center mb-4",
+        ),
+        rx.el.h2(
+            "You're all set!",
+            class_name="text-2xl font-bold text-secondary-12 text-center mb-2",
+        ),
+        rx.el.p(
+            "Thanks for booking a demo with Reflex. We'll see you soon!",
+            class_name="text-secondary-11 text-center mb-6",
+        ),
+        ui.button(
+            "Close",
+            on_click=DemoFormState.reset_form,
+            class_name="w-full",
+        ),
+        class_name="flex flex-col items-center justify-center p-8",
+    )
+
+
 def calendar_overlay() -> rx.Component:
     """Full-screen calendar overlay that replaces the dialog."""
     return rx.cond(
         DemoFormState.show_calendar,
         rx.el.div(
+            # Hidden button to trigger booking complete event
+            rx.el.button(
+                id="booking-complete-trigger",
+                on_click=DemoFormState.on_booking_complete,
+                class_name="hidden",
+            ),
             # Backdrop
             rx.el.div(
                 class_name="fixed inset-0 bg-black/50 backdrop-blur-sm",
-                on_click=DemoFormState.go_back_from_calendar,
+                on_click=rx.cond(
+                    DemoFormState.booking_complete,
+                    DemoFormState.reset_form,
+                    DemoFormState.go_back_from_calendar,
+                ),
             ),
             # Calendar container
             rx.el.div(
@@ -731,12 +773,20 @@ def calendar_overlay() -> rx.Component:
                     ui.hi("Cancel01Icon"),
                     variant="ghost",
                     size="icon-sm",
-                    on_click=DemoFormState.go_back_from_calendar,
+                    on_click=rx.cond(
+                        DemoFormState.booking_complete,
+                        DemoFormState.reset_form,
+                        DemoFormState.go_back_from_calendar,
+                    ),
                     class_name="text-secondary-11 absolute top-3 right-3 z-10",
                     aria_label="Close",
                 ),
-                rx.el.div(
-                    class_name="w-full min-h-[550px] overflow-auto cal-embed-container",
+                rx.cond(
+                    DemoFormState.booking_complete,
+                    calendar_thank_you(),
+                    rx.el.div(
+                        class_name="w-full min-h-[550px] overflow-auto cal-embed-container",
+                    ),
                 ),
                 class_name="relative bg-secondary-1 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto",
                 on_mount=DemoFormState.init_cal_embed,
