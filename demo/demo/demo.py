@@ -3,6 +3,8 @@
 import reflex as rx
 
 import reflex_ui as ui
+from reflex_ui.blocks.demo_form import demo_form_dialog
+from reflex_ui.blocks.telemetry.unify import get_unify_trackers
 
 
 class State(rx.State):
@@ -16,45 +18,17 @@ class State(rx.State):
 def index() -> rx.Component:
     return rx.el.div(
         rx.el.div(
-            ui.tooltip(
-                ui.button(
-                    ui.icon("SmileIcon"),
-                    "Click me",
-                    on_click=rx.toast.success(
-                        "You are cool :)",
-                        position="top-center",
-                    ),
-                ),
-                content="Seriously, click me",
+            rx.el.h1(
+                "Book a Demo Form Test",
+                class_name="text-xl sm:text-2xl font-bold text-secondary-12 px-4",
             ),
-            ui.checkbox(
-                label="Click me",
-                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+            demo_form_dialog(
+                trigger=ui.button("Open Demo Form Dialog"),
             ),
-            ui.slider(
-                value=State.seed,
-                on_value_change=State.set_seed,
-                on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
-                class_name="max-w-xs",
-            ),
-            ui.gradient_profile(
-                seed=State.seed,
-                class_name="size-10",
-            ),
-            ui.switch(
-                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
-            ),
-            ui.select(
-                items=[f"Item {i}" for i in range(1, 11)],
-                name="select",
-                default_value="Select an item",
-                on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
-                on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
-            ),
-            class_name="flex flex-col gap-y-6 justify-center items-center",
+            class_name="flex flex-col gap-y-4 sm:gap-y-6 justify-center items-center py-6 sm:py-12 w-full",
         ),
-        ui.theme_switcher(class_name="absolute top-4 right-4"),
-        class_name="flex flex-row gap-16 justify-center items-center h-screen bg-secondary-1 relative",
+        ui.theme_switcher(class_name="absolute top-4 right-4 z-10"),
+        class_name="flex flex-col justify-center items-center min-h-screen bg-secondary-1 relative",
     )
 
 
@@ -78,6 +52,8 @@ app = rx.App(
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
             rel="stylesheet",
         ),
+        # Unify tracking script
+        get_unify_trackers(),
     ],
 )
 app.add_page(index)

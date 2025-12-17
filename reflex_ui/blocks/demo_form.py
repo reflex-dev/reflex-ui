@@ -1,173 +1,32 @@
-"""Demo form component for collecting user information and scheduling enterprise calls.
+"""Multi-step demo form component for collecting user information and scheduling calls.
 
-This module provides a comprehensive demo form that validates company emails,
-sends data to PostHog and Slack, and redirects users to appropriate Cal.com links
-based on company size.
+This module provides a multi-step demo form that:
+- Step 1: Collects name and email (validates company vs personal email)
+- Step 2: Collects number of employees (routes small companies to Unify)
+- Step 3: Collects company details and schedules demo
 """
 
-import asyncio
 import os
 import urllib.parse
-import uuid
-from collections.abc import Sequence
-from dataclasses import asdict, dataclass
 from typing import Any
 
 import httpx
 import reflex as rx
-from reflex.experimental.client_state import ClientStateVar
 from reflex.utils.console import log
 
 import reflex_ui as ui
+from reflex_ui.blocks.telemetry.unify import unify_identify_js
 
-demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
-is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
-demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
-
-COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
-COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
+# Environment variables for Cal.com URLs
 CAL_REQUEST_DEMO_URL = os.getenv(
     "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
-JH_CAL_URL = os.getenv("JH_CAL_URL", "https://cal.com/team/reflex/demo-with-reflex")
-INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
-CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
-    "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://cal.com/team/reflex/reflex-intro",
-)
+
+# Slack webhook URL for notifications (set via environment variable)
 SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
-POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
 
-
-@dataclass(kw_only=True)
-class PosthogEvent:
-    """Base event structure."""
-
-    distinct_id: str
-
-    def to_dict(self) -> dict[str, Any]:
-        """Convert the event instance to a dictionary representation.
-
-        Returns:
-            A dictionary containing all the event data.
-        """
-        return asdict(self)
-
-
-@dataclass
-class DemoEvent(PosthogEvent):
-    """Event for demo booking."""
-
-    first_name: str
-    last_name: str
-    company_email: str
-    job_title: str
-    company_name: str
-    num_employees: str
-    internal_tools: str
-    technical_level: str
-    referral_source: str
-
-
-def input_field(
-    label: str,
-    placeholder: str,
-    name: str,
-    type: str = "text",
-    required: bool = False,
-) -> rx.Component:
-    """Create a labeled input field component.
-
-    Args:
-        label: The label text to display above the input
-        placeholder: Placeholder text for the input
-        name: The name attribute for the input field
-        type: The input type (text, email, tel, etc.)
-        required: Whether the field is required
-
-    Returns:
-        A Reflex component containing the labeled input field
-    """
-    return rx.el.div(
-        rx.el.label(
-            label + (" *" if required else ""),
-            class_name="block text-sm font-medium text-secondary-12",
-        ),
-        ui.input(
-            placeholder=placeholder,
-            name=name,
-            type=type,
-            required=required,
-            max_length=255,
-            class_name="w-full",
-        ),
-        class_name="flex flex-col gap-1.5",
-    )
-
-
-def text_area_field(
-    label: str, placeholder: str, name: str, required: bool = False
-) -> rx.Component:
-    """Create a labeled textarea field component.
-
-    Args:
-        label: The label text to display above the textarea
-        placeholder: Placeholder text for the textarea
-        name: The name attribute for the textarea field
-        required: Whether the field is required
-
-    Returns:
-        A Reflex component containing the labeled textarea field
-    """
-    return rx.el.div(
-        rx.el.label(label, class_name="block text-sm font-medium text-secondary-12"),
-        ui.textarea(
-            placeholder=placeholder,
-            name=name,
-            required=required,
-            class_name="w-full min-h-14",
-            max_length=800,
-        ),
-        class_name="flex flex-col gap-1.5",
-    )
-
-
-def select_field(
-    label: str,
-    name: str,
-    items: list[str],
-    required: bool = False,
-) -> rx.Component:
-    """Create a labeled select field component.
-
-    Args:
-        label: The label text to display above the select
-        name: The name attribute for the select field
-        items: List of options to display in the select
-        required: Whether the field is required
-
-    Returns:
-        A Reflex component containing the labeled select field
-    """
-    return rx.el.div(
-        rx.el.label(
-            label + (" *" if required else ""),
-            class_name="block text-xs lg:text-sm font-medium text-secondary-12 truncate min-w-0",
-        ),
-        ui.select(
-            default_value="Select",
-            name=name,
-            items=items,
-            required=required,
-            class_name="w-full",
-        ),
-        class_name="flex flex-col gap-1.5 min-w-0",
-    )
-
-
-def is_small_company(num_employees: str) -> bool:
-    """Check if company up to 5 employees."""
-    return num_employees in ["1", "2-5"]
+# Threshold for small company (≤15 employees goes to Unify)
+SMALL_COMPANY_THRESHOLD = 15
 
 
 def check_if_company_email(email: str) -> bool:
@@ -184,7 +43,6 @@ def check_if_company_email(email: str) -> bool:
 
     domain = email.split("@")[-1].lower()
 
-    # List of common personal email providers
     personal_domains = {
         "gmail.com",
         "outlook.com",
@@ -212,296 +70,726 @@ def check_if_company_email(email: str) -> bool:
     return domain not in personal_domains and ".edu" not in domain
 
 
-def check_if_default_value_is_selected(value: str) -> bool:
-    """Check if the default value is selected."""
-    return value.strip() != "Select"
+def get_employee_count(num_employees: str) -> int:
+    """Convert employee count string to a numeric value for comparison.
+
+        Args:
+        num_employees: String like "1-5", "6-15", "16-50", etc.
+
+    Returns:
+        The upper bound of the range as an integer
+    """
+    employee_map = {
+        "1-5": 5,
+        "6-15": 15,
+        "16-50": 50,
+        "51-200": 200,
+        "201-500": 500,
+        "500+": 1000,
+    }
+    return employee_map.get(num_employees, 0)
 
 
-class DemoFormStateUI(rx.State):
-    """State for handling demo form submissions and integrations."""
+class DemoFormState(rx.State):
+    """State for the multi-step demo form."""
+
+    # Current step (1, 2, or 3)
+    current_step: int = 1
+
+    # Form data stored across steps
+    first_name: str = ""
+    last_name: str = ""
+    email: str = ""
+    num_employees: str = ""
+    company_name: str = ""
+    job_title: str = ""
+    looking_to_build: str = ""
+
+    # Loading state
+    is_loading: bool = False
+
+    # Error message
+    error_message: str = ""
+
+    # Sent to Unify flag (shows thank you screen)
+    sent_to_unify: bool = False
+
+    # Show calendar flag (shows embedded Cal.com calendar)
+    show_calendar: bool = False
+
+    # Cal.com prefill data (stored as JSON string for use in script)
+    cal_prefill_json: str = "{}"
+    cal_prefill_query: str = ""
+
+    @rx.var
+    def progress_percentage(self) -> int:
+        """Calculate progress percentage based on current step."""
+        return int((self.current_step / 3) * 100)
+
+    @rx.var
+    def step_title(self) -> str:
+        """Get the title for the current step."""
+        titles = {
+            1: "Let's get started",
+            2: "Company size",
+            3: "Tell us more",
+        }
+        return titles.get(self.current_step, "")
+
+    @rx.var
+    def step_subtitle(self) -> str:
+        """Get the subtitle for the current step."""
+        subtitles = {
+            1: "Enter your details to book a demo",
+            2: "How many people work at your company?",
+            3: "Help us prepare for your demo",
+        }
+        return subtitles.get(self.current_step, "")
+
+    @rx.event
+    def reset_form(self):
+        """Reset the form to initial state."""
+        self.current_step = 1
+        self.first_name = ""
+        self.last_name = ""
+        self.email = ""
+        self.num_employees = ""
+        self.company_name = ""
+        self.job_title = ""
+        self.looking_to_build = ""
+        self.error_message = ""
+        self.is_loading = False
+        self.sent_to_unify = False
+        self.show_calendar = False
+        self.cal_prefill_json = "{}"
+        self.cal_prefill_query = ""
+
+    @rx.event
+    def submit_step_1(self, form_data: dict[str, Any]):
+        """Handle step 1 submission - validate email and proceed or send to Unify."""
+        self.error_message = ""
+        self.first_name = form_data.get("first_name", "").strip()
+        self.last_name = form_data.get("last_name", "").strip()
+        self.email = form_data.get("email", "").strip()
+
+        # Validate required fields
+        if not self.first_name:
+            self.error_message = "Please enter your first name"
+            return rx.toast.error("Please enter your first name", position="top-center")
+
+        if not self.last_name:
+            self.error_message = "Please enter your last name"
+            return rx.toast.error("Please enter your last name", position="top-center")
+
+        if not self.email:
+            self.error_message = "Please enter your email"
+            return rx.toast.error("Please enter your email", position="top-center")
+
+        # Check if personal email -> send to Unify (show thank you screen)
+        if not check_if_company_email(self.email):
+            self.sent_to_unify = True
+            # Call Unify identify on frontend and send Slack notification
+            return [
+                rx.call_script(
+                    unify_identify_js(
+                        email=self.email,
+                        person_attributes={"status": "Personal email"},
+                    )
+                ),
+                DemoFormState.send_unify_notification("Personal email detected"),
+            ]
+
+        # Company email -> proceed to step 2
+        self.current_step = 2
+
+    @rx.event
+    def submit_step_2(self, form_data: dict[str, Any]):
+        """Handle step 2 submission - check company size and proceed or send to Unify."""
+        self.error_message = ""
+        self.num_employees = form_data.get("num_employees", "")
+
+        # Validate selection
+        if not self.num_employees or self.num_employees == "Select":
+            self.error_message = "Please select the number of employees"
+            return rx.toast.error(
+                "Please select the number of employees", position="top-center"
+            )
+
+        # Check if small company (≤15) -> send to Unify (show thank you screen)
+        employee_count = get_employee_count(self.num_employees)
+        if employee_count <= SMALL_COMPANY_THRESHOLD:
+            self.sent_to_unify = True
+            # Call Unify identify on frontend and send Slack notification
+            return [
+                rx.call_script(
+                    unify_identify_js(
+                        email=self.email,
+                        person_attributes={"status": f"Small company ({self.num_employees} employees)"},
+                    )
+                ),
+                DemoFormState.send_unify_notification(f"Small company ({self.num_employees} employees)"),
+            ]
+
+        # Larger company -> proceed to step 3
+        self.current_step = 3
+
+    @rx.event
+    def submit_step_3(self, form_data: dict[str, Any]):
+        """Handle step 3 submission - collect final details and show calendar."""
+        import json
+
+        self.error_message = ""
+        self.is_loading = True
+
+        self.company_name = form_data.get("company_name", "").strip()
+        self.job_title = form_data.get("job_title", "").strip()
+        self.looking_to_build = form_data.get("looking_to_build", "").strip()
+
+        # Validate required fields
+        if not self.company_name:
+            self.is_loading = False
+            self.error_message = "Please enter your company name"
+            return rx.toast.error(
+                "Please enter your company name", position="top-center"
+            )
+
+        if not self.job_title:
+            self.is_loading = False
+            self.error_message = "Please enter your job title"
+            return rx.toast.error("Please enter your job title", position="top-center")
+
+        # Build prefill data for Cal.com and store in state
+        name = f"{self.first_name} {self.last_name}"
+        notes = f"Company: {self.company_name}\nJob Title: {self.job_title}\nEmployees: {self.num_employees}\nLooking to build: {self.looking_to_build or 'Not specified'}"
+        
+        # Build URL query string for Cal.com prefill
+        prefill_params = urllib.parse.urlencode({
+            "name": name,
+            "email": self.email,
+            "notes": notes,
+        })
+        self.cal_prefill_query = prefill_params
+        self.cal_prefill_json = json.dumps({
+            "name": name,
+            "email": self.email,
+            "notes": notes,
+        })
+
+        self.is_loading = False
+        self.show_calendar = True
+
+        # Send Slack notification
+        return DemoFormState.send_enterprise_notification()
+
+    @rx.event
+    def go_back(self):
+        """Go back to the previous step."""
+        if self.current_step > 1:
+            self.current_step -= 1
+            self.error_message = ""
+
+    @rx.event
+    def go_back_from_calendar(self):
+        """Go back from calendar to step 3."""
+        self.show_calendar = False
+        # Clear the initialized flag so calendar can be reinitialized
+        return rx.call_script("""
+            var containers = document.querySelectorAll('.cal-embed-container');
+            containers.forEach(function(el) {
+                el.dataset.calInitialized = 'false';
+                el.innerHTML = '';
+            });
+        """)
+
+    @rx.event
+    def init_cal_embed(self):
+        """Initialize Cal.com embed after component mounts."""
+        import time
+        unique_ns = f"reflex-demo-{int(time.time() * 1000)}"
+        
+        init_script = f"""
+        (function initCal() {{
+            var ns = "{unique_ns}";
+            var el = document.querySelector('[role="dialog"] .cal-embed-container') 
+                  || document.querySelector('.cal-embed-container');
+            
+            if (!el || el.dataset.calInit === 'true') return;
+            el.dataset.calInit = 'true';
+            el.innerHTML = '';
+            
+            // Load Cal.com script if needed
+            if (!window.Cal) {{
+                var p=function(a,ar){{a.q.push(ar)}},d=document;
+                window.Cal=window.Cal||function(){{
+                    var cal=window.Cal,ar=arguments;
+                    if(!cal.loaded){{cal.ns={{}};cal.q=[];d.head.appendChild(d.createElement("script")).src="https://app.cal.com/embed/embed.js";cal.loaded=true}}
+                    if(ar[0]==="init"){{var api=function(){{p(api,arguments)}},ns=ar[1];api.q=[];if(typeof ns==="string"){{cal.ns[ns]=cal.ns[ns]||api;p(cal.ns[ns],ar);p(cal,["initNamespace",ns])}}else p(cal,ar);return}}
+                    p(cal,ar);
+                }};
+            }}
+            
+            Cal("init", ns, {{origin: "https://app.cal.com"}});
+            
+            // Wait for Cal to be ready
+            if (!window.Cal.ns || !window.Cal.ns[ns]) {{
+                el.dataset.calInit = 'false';
+                setTimeout(initCal, 100);
+                return;
+            }}
+            
+            Cal.ns[ns]("inline", {{
+                elementOrSelector: el,
+                config: {{"layout": "month_view"}},
+                calLink: "team/reflex/reflex-intro-call?{self.cal_prefill_query}"
+            }});
+            
+            // Close dialog on booking success
+            Cal.ns[ns]("on", {{
+                action: "bookingSuccessful",
+                callback: function() {{
+                    setTimeout(function() {{
+                        var btn = document.querySelector('[role="dialog"] button[aria-label="Close"]');
+                        if (btn) btn.click();
+                    }}, 1500);
+                }}
+            }});
+        }})();
+        """
+        return rx.call_script(init_script)
 
     @rx.event(background=True)
-    async def on_submit(self, form_data: dict[str, Any]):
-        """Handle form submission with validation and routing logic.
-
-        Validates company email, sends data to PostHog and Slack,
-        then redirects to appropriate Cal.com link based on company size.
+    async def send_unify_notification(self, reason: str):
+        """Send Slack notification when user is sent to Unify.
 
         Args:
-            form_data: Form data dictionary containing user inputs
+            reason: The reason for sending to Unify (e.g., "Personal email", "Small company")
         """
-        if not check_if_company_email(form_data.get("email", "")):
-            yield rx.set_focus("email")
-            yield rx.toast.error(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed"
-            )
+        if not SLACK_DEMO_WEBHOOK_URL:
             return
-        # Check if the has selected a number of employees
-        if not check_if_default_value_is_selected(
-            form_data.get("number_of_employees", "")
-        ):
-            yield rx.toast.error(
-                "Please select a number of employees",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a number of employees")
-            return
-        # Check if the has entered a referral source
-        if not check_if_default_value_is_selected(
-            form_data.get("how_did_you_hear_about_us", "")
-        ):
-            yield rx.toast.error(
-                "Please select how did you hear about us",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please select how did you hear about us"
-            )
-            return
-        # Check if the has entered a technical level
-        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
-            yield rx.set_focus("technical_level")
-            yield rx.toast.error(
-                "Please select a technical level",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a technical level")
-            return
-        yield is_sending_demo_form.push(True)
-        # Send to PostHog and Slack for all submissions
-        yield DemoFormStateUI.send_demo_event(form_data)
-        # Send data to Google Ads conversion tracking
-        yield rx.call_script("gtag_report_conversion()")
 
-        notes_content = f"""
-Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
-Business Email: {form_data.get("email", "")}
-Job Title: {form_data.get("job_title", "")}
-Company Name: {form_data.get("company_name", "")}
-Number of Employees: {form_data.get("number_of_employees", "")}
-Internal Tools to Build: {form_data.get("internal_tools", "")}
-Technical Level: {form_data.get("technical_level", "")}
-How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
-        params = {
-            "email": form_data.get("email", ""),
-            "name": f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}",
-            "notes": notes_content,
-        }
-
-        query_string = urllib.parse.urlencode(params)
-        technical_level = form_data.get("technical_level", "")
-
-        # Route based on company size and technical level
-        if is_small_company(form_data.get("number_of_employees", "")):
-            # Small companies (up to 5 employees) always go to JH_CAL_URL
-            cal_url = JH_CAL_URL
-        else:
-            # Large companies (more than 5 employees)
-            if technical_level == "Non-technical":
-                cal_url = JH_CAL_URL
-            else:  # Neutral or Technical
-                cal_url = INTRO_CAL_URL
-
-        cal_url_with_params = f"{cal_url}?{query_string}"
-        yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
-
-    @rx.event(background=True)
-    async def send_demo_event(self, form_data: dict[str, Any]):
-        """Create and send demo event to PostHog and Slack.
-
-        Converts form data into a DemoEvent and sends to both analytics
-        platforms. Logs errors but doesn't raise exceptions.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        first_name = form_data.get("first_name", "")
-        last_name = form_data.get("last_name", "")
-        demo_event = DemoEvent(
-            distinct_id=f"{first_name} {last_name}",
-            first_name=first_name,
-            last_name=last_name,
-            company_email=form_data.get("email", ""),
-            job_title=form_data.get("job_title", ""),
-            company_name=form_data.get("company_name", ""),
-            num_employees=form_data.get("number_of_employees", ""),
-            internal_tools=form_data.get("internal_tools", ""),
-            technical_level=form_data.get("technical_level", ""),
-            referral_source=form_data.get("how_did_you_hear_about_us", ""),
-        )
-
-        # Send data to PostHog, Common Room, and Slack
-        await asyncio.gather(
-            self.send_data_to_posthog(demo_event),
-            self.send_data_to_common_room(demo_event),
-            self.send_data_to_slack(demo_event),
-        )
-
-    async def send_data_to_posthog(self, event_instance: PosthogEvent):
-        """Send data to PostHog using class introspection.
-
-        Args:
-            event_instance: An instance of a PosthogEvent subclass.
-
-        Raises:
-            httpx.HTTPError: When there is an error sending data to PostHog.
-        """
-        event_data = {
-            "api_key": POSTHOG_API_KEY,
-            "event": event_instance.__class__.__name__,
-            "properties": event_instance.to_dict(),
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "https://app.posthog.com/capture/", json=event_data
-                )
-                response.raise_for_status()
-        except Exception:
-            log("Error sending data to PostHog")
-
-    async def send_data_to_common_room(self, event_instance: DemoEvent):
-        """Update CommonRoom with user login information."""
-        tags: Sequence[str] = [
-            "Requested Demo",
-        ]
+        async with self:
+            slack_payload = {
+                "text": "🔄 User was sent to Unify for a sequence",
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "🔄 User Sent to Unify",
+                        },
+                    },
+                    {
+                        "type": "section",
+                        "fields": [
+                            {"type": "mrkdwn", "text": f"*Name:*\n{self.first_name} {self.last_name}"},
+                            {"type": "mrkdwn", "text": f"*Email:*\n{self.email}"},
+                            {"type": "mrkdwn", "text": f"*Reason:*\n{reason}"},
+                            {"type": "mrkdwn", "text": f"*Employees:*\n{self.num_employees or 'Not provided'}"},
+                        ],
+                    },
+                ],
+            }
 
         try:
             async with httpx.AsyncClient() as client:
                 await client.post(
-                    f"https://api.commonroom.io/community/v1/source/{COMMONROOM_DESTINATION_ID}/activity",
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {COMMONROOM_API_TOKEN}",
-                    },
-                    json={
-                        "id": "requested_demo",
-                        "activityType": "requested_demo",
-                        "user": {
-                            "id": str(uuid.uuid4()),
-                            "email": event_instance.company_email,
-                        },
-                        "tags": [
-                            {
-                                "type": "name",
-                                "name": tag,
-                            }
-                            for tag in tags
-                        ],
-                    },
-                )
-        except Exception as ex:
-            log(
-                f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
-            )
-
-    async def send_data_to_slack(self, event_instance: DemoEvent):
-        """Send demo form data to Slack webhook.
-
-        Args:
-            event_instance: An instance of DemoEvent with form data.
-        """
-        slack_payload = {
-            "technicalLevel": event_instance.technical_level,
-            "lookingToBuild": event_instance.internal_tools,
-            "businessEmail": event_instance.company_email,
-            "howDidYouHear": event_instance.referral_source,
-            "jobTitle": event_instance.job_title,
-            "numEmployees": event_instance.num_employees,
-            "companyName": event_instance.company_name,
-            "firstName": event_instance.first_name,
-            "lastName": event_instance.last_name,
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
                     SLACK_DEMO_WEBHOOK_URL,
                     json=slack_payload,
                     headers={"Content-Type": "application/json"},
                 )
-                response.raise_for_status()
         except Exception as e:
-            log(f"Error sending data to Slack webhook: {e}")
+            log(f"Error sending Unify notification to Slack: {e}")
+
+    @rx.event(background=True)
+    async def send_enterprise_notification(self):
+        """Send Slack notification when enterprise user submits demo form."""
+        if not SLACK_DEMO_WEBHOOK_URL:
+            return
+
+        async with self:
+            slack_payload = {
+                "text": "🚀 Enterprise Submitted demo form",
+                "blocks": [
+                    {
+                        "type": "header",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "🚀 Enterprise Submitted Demo Form",
+                        },
+                    },
+                    {
+                        "type": "section",
+                        "fields": [
+                            {"type": "mrkdwn", "text": f"*Name:*\n{self.first_name} {self.last_name}"},
+                            {"type": "mrkdwn", "text": f"*Email:*\n{self.email}"},
+                            {"type": "mrkdwn", "text": f"*Company:*\n{self.company_name}"},
+                            {"type": "mrkdwn", "text": f"*Job Title:*\n{self.job_title}"},
+                            {"type": "mrkdwn", "text": f"*Employees:*\n{self.num_employees}"},
+                            {"type": "mrkdwn", "text": f"*Looking to build:*\n{self.looking_to_build or 'Not specified'}"},
+                        ],
+                    },
+                ],
+            }
+
+        try:
+            async with httpx.AsyncClient() as client:
+                await client.post(
+                    SLACK_DEMO_WEBHOOK_URL,
+                    json=slack_payload,
+                    headers={"Content-Type": "application/json"},
+                )
+        except Exception as e:
+            log(f"Error sending Enterprise notification to Slack: {e}")
+
+
+def input_field(
+    label: str,
+    placeholder: str,
+    name: str,
+    type: str = "text",
+    required: bool = False,
+    default_value: str = "",
+) -> rx.Component:
+    """Create a labeled input field component."""
+    return rx.el.div(
+        rx.el.label(
+            label + (" *" if required else ""),
+            class_name="block text-sm font-medium text-secondary-12",
+        ),
+        ui.input(
+            placeholder=placeholder,
+            name=name,
+            type=type,
+            required=required,
+            default_value=default_value,
+            max_length=255,
+            class_name="w-full",
+        ),
+        class_name="flex flex-col gap-1.5",
+    )
+
+
+def text_area_field(
+    label: str,
+    placeholder: str,
+    name: str,
+    required: bool = False,
+    default_value: str = "",
+) -> rx.Component:
+    """Create a labeled textarea field component."""
+    return rx.el.div(
+        rx.el.label(
+            label + (" *" if required else ""),
+            class_name="block text-sm font-medium text-secondary-12",
+        ),
+        ui.textarea(
+            placeholder=placeholder,
+            name=name,
+            required=required,
+            default_value=default_value,
+            class_name="w-full min-h-24",
+            max_length=800,
+        ),
+        class_name="flex flex-col gap-1.5",
+    )
+
+
+def select_field(
+    label: str,
+    name: str,
+    items: list[str],
+    required: bool = False,
+    default_value: str | rx.Var[str] = "Select",
+) -> rx.Component:
+    """Create a labeled select field component."""
+    return rx.el.div(
+        rx.el.label(
+            label + (" *" if required else ""),
+            class_name="block text-sm font-medium text-secondary-12",
+        ),
+        ui.select(
+            default_value=default_value,
+            name=name,
+            items=items,
+            required=required,
+            class_name="w-full",
+        ),
+        class_name="flex flex-col gap-1.5",
+    )
+
+
+def step_indicator() -> rx.Component:
+    """Create a progress bar showing progress through the form."""
+    return rx.el.div(
+        rx.el.div(
+            rx.el.div(
+                class_name="h-full bg-primary-9 rounded-full transition-all duration-300 ease-out",
+                style={"width": f"{DemoFormState.progress_percentage}%"},
+            ),
+            class_name="h-1.5 bg-secondary-4 rounded-full overflow-hidden",
+        ),
+        class_name="mb-6",
+    )
+
+
+def step_header() -> rx.Component:
+    """Create the header for each step showing title and subtitle."""
+    return rx.el.div(
+        rx.el.h2(
+            DemoFormState.step_title,
+            class_name="text-xl font-semibold text-secondary-12",
+        ),
+        rx.el.p(
+            DemoFormState.step_subtitle,
+            class_name="text-sm text-secondary-11",
+        ),
+        class_name="flex flex-col gap-1 mb-4",
+    )
+
+
+def error_display() -> rx.Component:
+    """Display error message if present."""
+    return rx.cond(
+        DemoFormState.error_message,
+        rx.el.div(
+            rx.el.span(
+                DemoFormState.error_message,
+                class_name="text-sm font-medium",
+            ),
+            class_name="text-destructive-11 bg-destructive-3 border border-destructive-6 rounded-lg px-3 py-2",
+        ),
+    )
+
+
+def step_1_form() -> rx.Component:
+    """Step 1: Collect first name, last name, and company email."""
+    return rx.el.form(
+        rx.el.div(
+            input_field(
+                "First name",
+                "John",
+                "first_name",
+                "text",
+                True,
+                DemoFormState.first_name,
+            ),
+            input_field(
+                "Last name",
+                "Smith",
+                "last_name",
+                "text",
+                True,
+                DemoFormState.last_name,
+            ),
+            class_name="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4",
+        ),
+        input_field(
+            "Company Email (Gmail, etc not allowed)",
+            "john@company.com",
+            "email",
+            "email",
+            True,
+            DemoFormState.email,
+        ),
+        error_display(),
+        ui.button(
+            "Continue",
+            type="submit",
+            class_name="w-full mt-2",
+        ),
+        on_submit=DemoFormState.submit_step_1,
+        class_name="flex flex-col gap-4",
+    )
+
+
+def step_2_form() -> rx.Component:
+    """Step 2: Collect number of employees."""
+    return rx.el.form(
+        select_field(
+            "Number of employees",
+            "num_employees",
+            ["1-5", "6-15", "16-50", "51-200", "201-500", "500+"],
+            True,
+            rx.cond(
+                DemoFormState.num_employees != "",
+                DemoFormState.num_employees,
+                "Select",
+            ),
+        ),
+        error_display(),
+        rx.el.div(
+            ui.button(
+                "Back",
+                type="button",
+                variant="outline",
+                on_click=DemoFormState.go_back,
+                class_name="flex-1",
+            ),
+            ui.button(
+                "Continue",
+                type="submit",
+                class_name="flex-1",
+            ),
+            class_name="flex gap-3 mt-2",
+        ),
+        on_submit=DemoFormState.submit_step_2,
+        class_name="flex flex-col gap-4",
+    )
+
+
+def step_3_form() -> rx.Component:
+    """Step 3: Collect company name, job title, and what they want to build."""
+    return rx.el.form(
+        input_field(
+            "Company name",
+            "Acme Inc.",
+            "company_name",
+            "text",
+            True,
+            DemoFormState.company_name,
+        ),
+        input_field(
+            "Job title",
+            "CTO",
+            "job_title",
+            "text",
+            True,
+            DemoFormState.job_title,
+        ),
+        text_area_field(
+            "What are you looking to build?",
+            "Tell us about your project (optional)",
+            "looking_to_build",
+            False,
+            DemoFormState.looking_to_build,
+        ),
+        error_display(),
+        rx.el.div(
+            ui.button(
+                "Back",
+                type="button",
+                variant="outline",
+                on_click=DemoFormState.go_back,
+                class_name="flex-1",
+            ),
+            ui.button(
+                "Book Demo",
+                type="submit",
+                loading=DemoFormState.is_loading,
+                class_name="flex-1",
+            ),
+            class_name="flex gap-3 mt-2",
+        ),
+        on_submit=DemoFormState.submit_step_3,
+        class_name="flex flex-col gap-4",
+    )
+
+
+def thank_you_screen() -> rx.Component:
+    """Thank you screen shown when user is sent to Unify."""
+    return rx.el.div(
+        # Success icon
+        rx.el.div(
+            rx.el.div(
+                ui.hi("CheckmarkCircle02Icon", class_name="size-8 text-white"),
+                class_name="size-16 rounded-full bg-success-9 flex items-center justify-center",
+            ),
+            class_name="flex justify-center mb-6",
+        ),
+        # Thank you message
+        rx.el.div(
+            rx.el.h2(
+                "Thanks for your response!",
+                class_name="text-xl font-semibold text-secondary-12 text-center",
+            ),
+            rx.el.p(
+                "We'll get back to you soon.",
+                class_name="text-sm text-secondary-11 text-center mt-1",
+            ),
+            class_name="flex flex-col gap-1",
+        ),
+        # Additional info
+        rx.el.p(
+            "One of our team members will reach out to discuss how we can help.",
+            class_name="text-sm text-secondary-10 text-center mt-4",
+        ),
+        # Start over button
+        ui.button(
+            "Start Over",
+            variant="outline",
+            on_click=DemoFormState.reset_form,
+            class_name="w-full mt-6",
+        ),
+        class_name="flex flex-col py-8",
+    )
+
+
+def calendar_embed() -> rx.Component:
+    """Calendar embed component showing the Cal.com inline calendar."""
+    return rx.el.div(
+        # Calendar container - Cal.com inline embed will render here
+        rx.el.div(
+            class_name="w-full min-h-[600px] overflow-auto cal-embed-container relative",
+            style={
+                "zIndex": "99999",
+                "position": "relative",
+                "width": "100%",
+            },
+        ),
+        # Back button
+        ui.button(
+            "Back",
+            variant="outline",
+            on_click=DemoFormState.go_back_from_calendar,
+            class_name="w-full mt-4",
+        ),
+        class_name="flex flex-col relative w-full",
+        style={"zIndex": "99999", "position": "relative", "width": "100%"},
+        on_mount=DemoFormState.init_cal_embed,
+    )
 
 
 def demo_form(**props) -> rx.Component:
-    """Create and return the demo form component.
-
-    Builds a complete form with all required fields, validation,
-    and styling. The form includes personal info, company details,
-    and preferences.
+    """Create and return the multi-step demo form component.
 
     Args:
-        **props: Additional properties to pass to the form component
+        **props: Additional properties to pass to the form container
 
     Returns:
-        A Reflex form component with all demo form fields
+        A Reflex component with the multi-step demo form
     """
-    return rx.el.form(
-        rx.el.div(
-            input_field("First name", "John", "first_name", "text", True),
-            input_field("Last name", "Smith", "last_name", "text", True),
-            class_name="grid grid-cols-2 gap-4",
-        ),
-        input_field("Business Email", "john@company.com", "email", "email", True),
-        rx.el.div(
-            input_field("Job title", "CTO", "job_title", "text", True),
-            input_field("Company name", "Pynecone, Inc.", "company_name", "text", True),
-            class_name="grid grid-cols-2 gap-4",
-        ),
-        text_area_field(
-            "What are you looking to build? *",
-            "Please list any apps, requirements, or data sources you plan on using",
-            "internal_tools",
-            True,
-        ),
-        rx.el.div(
-            select_field(
-                "Number of employees?",
-                "number_of_employees",
-                ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
-            ),
-            select_field(
-                "How did you hear about us?",
-                "how_did_you_hear_about_us",
-                [
-                    "Google Search",
-                    "Social Media",
-                    "Word of Mouth",
-                    "Blog",
-                    "Conference",
-                    "Other",
-                ],
-            ),
-            class_name="grid grid-cols-1 md:grid-cols-2 gap-4",
-        ),
-        select_field(
-            "How technical are you?",
-            "technical_level",
-            ["Non-technical", "Neutral", "Technical"],
-            True,
-        ),
+    # Remove class_name from props to avoid conflict with conditional class_name
+    props.pop("class_name", None)
+    
+    return rx.el.div(
         rx.cond(
-            demo_form_error_message.value,
-            rx.el.span(
-                demo_form_error_message.value,
-                class_name="text-destructive-10 text-sm font-medium px-2 py-1 rounded-md bg-destructive-3 border border-destructive-4",
+            DemoFormState.sent_to_unify,
+            # Show thank you screen when sent to Unify
+            thank_you_screen(),
+            rx.cond(
+                DemoFormState.show_calendar,
+                # Show embedded calendar after form completion
+                calendar_embed(),
+                # Show regular multi-step form
+                rx.fragment(
+                    step_indicator(),
+                    step_header(),
+                    rx.cond(
+                        DemoFormState.current_step == 1,
+                        step_1_form(),
+                        rx.cond(
+                            DemoFormState.current_step == 2,
+                            step_2_form(),
+                            step_3_form(),
+                        ),
+                    ),
+                ),
             ),
         ),
-        ui.button(
-            "Submit",
-            type="submit",
-            class_name="w-full",
-            loading=is_sending_demo_form.value,
-        ),
-        on_submit=DemoFormStateUI.on_submit,
-        class_name=ui.cn(
-            "@container flex flex-col lg:gap-6 gap-2 p-6",
-            props.pop("class_name", ""),
+        class_name=rx.cond(
+            DemoFormState.show_calendar,
+            "flex flex-col p-2",
+            "flex flex-col p-4 sm:p-6",
         ),
         **props,
     )
@@ -518,6 +806,12 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
         A Reflex dialog component containing the demo form
     """
     class_name = ui.cn("w-auto", props.pop("class_name", ""))
+
+    # Create a client state for the dialog open state
+    from reflex.experimental.client_state import ClientStateVar
+
+    demo_form_open_cs = ClientStateVar.create("demo_form_dialog_open", False)
+
     return ui.dialog.root(
         ui.dialog.trigger(render_=trigger),
         ui.dialog.portal(
@@ -529,20 +823,34 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
                             "Book a Demo",
                             class_name="text-xl font-bold text-secondary-12",
                         ),
+                        rx.el.p(
+                            "Hop on a call with the Reflex team.",
+                            class_name="text-sm text-secondary-11",
+                        ),
                         ui.dialog.close(
                             render_=ui.button(
                                 ui.hi("Cancel01Icon"),
                                 variant="ghost",
                                 size="icon-sm",
-                                class_name="text-secondary-11",
+                                on_click=DemoFormState.reset_form,
+                                class_name="text-secondary-11 absolute top-4 right-4",
+                                aria_label="Close",
                             ),
                         ),
-                        class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
+                        class_name="flex flex-col gap-0.5 px-6 pt-4 pb-2 relative",
                     ),
-                    demo_form(class_name="w-full max-w-md"),
-                    class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
+                    demo_form(class_name="w-full"),
+                    class_name=rx.cond(
+                        DemoFormState.show_calendar,
+                        "relative isolate overflow-hidden -m-px w-full max-w-4xl",
+                        "relative isolate overflow-hidden -m-px w-full max-w-md",
+                    ),
                 ),
-                class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
+                class_name=rx.cond(
+                    DemoFormState.show_calendar,
+                    "h-fit mt-1 overflow-hidden w-full max-w-4xl transition-all duration-300",
+                    "h-fit mt-1 overflow-hidden w-full max-w-md transition-all duration-300",
+                ),
             ),
         ),
         open=demo_form_open_cs.value,
