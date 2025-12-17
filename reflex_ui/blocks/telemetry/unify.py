@@ -55,6 +55,7 @@ async def upsert_unify_person(
     # Build the record data
     record_data: dict[str, str | int | bool] = {
         "email": email,
+        "demo_request": True,
     }
 
     if first_name:
