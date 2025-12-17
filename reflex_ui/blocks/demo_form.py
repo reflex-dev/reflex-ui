@@ -287,8 +287,11 @@ class DemoFormState(rx.State):
         self.is_loading = False
         self.show_calendar = True
 
-        # Send Slack notification
-        return DemoFormState.send_enterprise_notification()
+        # Send Slack notification and close dialog
+        return [
+            DemoFormState.send_enterprise_notification(),
+            rx.call_script("document.querySelector('[role=dialog] button[aria-label=Close]')?.click()"),
+        ]
 
     @rx.event
     def go_back(self):
@@ -885,11 +888,7 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
                     class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
                 ),
             ),
-            open=rx.cond(
-                DemoFormState.show_calendar,
-                False,
-                demo_form_open_cs.value,
-            ),
+            open=demo_form_open_cs.value,
             on_open_change=demo_form_open_cs.set_value,
             class_name=class_name,
             **props,
