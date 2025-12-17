@@ -1,7 +1,5 @@
 """Unify analytics tracking integration for Reflex applications."""
 
-import json
-
 import reflex as rx
 
 PIXEL_SCRIPT_UNIFY: str = """
@@ -29,8 +27,10 @@ def unify_identify_js(
     Returns:
         str: JavaScript code to identify the user in Unify
     """
+    import json
+
     # Escape the email to prevent XSS
-    escaped_email = email.replace("\\", "\\\\").replace("'", "\\'").replace('"', '\\"')
+    escaped_email = email.replace("'", "\\'").replace('"', '\\"').replace("\\", "\\\\")
 
     # Build the person object - email is always required
     person_obj: dict[str, str | int | bool] = {"email": email}
