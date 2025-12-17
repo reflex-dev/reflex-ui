@@ -292,14 +292,6 @@ class DemoFormState(rx.State):
     def go_back_from_calendar(self):
         """Go back from calendar to step 3."""
         self.show_calendar = False
-        # Clear the initialized flag so calendar can be reinitialized
-        return rx.call_script("""
-            var containers = document.querySelectorAll('.cal-embed-container');
-            containers.forEach(function(el) {
-                el.dataset.calInitialized = 'false';
-                el.innerHTML = '';
-            });
-        """)
 
     @rx.event
     def init_cal_embed(self):
@@ -310,8 +302,7 @@ class DemoFormState(rx.State):
         init_script = f"""
         (function initCal() {{
             var ns = "{unique_ns}";
-            var el = document.querySelector('[role="dialog"] .cal-embed-container') 
-                  || document.querySelector('.cal-embed-container');
+            var el = document.querySelector('.cal-embed-container');
             
             if (!el || el.dataset.calInit === 'true') return;
             el.dataset.calInit = 'true';
@@ -343,12 +334,12 @@ class DemoFormState(rx.State):
                 calLink: "team/reflex/reflex-intro-call?{self.cal_prefill_query}"
             }});
             
-            // Close dialog on booking success
+            // Close overlay on booking success
             Cal.ns[ns]("on", {{
                 action: "bookingSuccessful",
                 callback: function() {{
                     setTimeout(function() {{
-                        var btn = document.querySelector('[role="dialog"] button[aria-label="Close"]');
+                        var btn = document.querySelector('.cal-embed-container').closest('[class*="fixed"]').querySelector('button[aria-label="Close"]');
                         if (btn) btn.click();
                     }}, 1500);
                 }}
@@ -724,28 +715,46 @@ def thank_you_screen() -> rx.Component:
     )
 
 
-def calendar_embed() -> rx.Component:
-    """Calendar embed component showing the Cal.com inline calendar."""
-    return rx.el.div(
-        # Calendar container - Cal.com inline embed will render here
+def calendar_overlay() -> rx.Component:
+    """Full-screen calendar overlay that replaces the dialog."""
+    return rx.cond(
+        DemoFormState.show_calendar,
         rx.el.div(
-            class_name="w-full min-h-[600px] overflow-auto cal-embed-container relative",
-            style={
-                "zIndex": "99999",
-                "position": "relative",
-                "width": "100%",
-            },
+            # Backdrop
+            rx.el.div(
+                class_name="fixed inset-0 bg-black/50 backdrop-blur-sm",
+                on_click=DemoFormState.go_back_from_calendar,
+            ),
+            # Calendar container
+            rx.el.div(
+                rx.el.div(
+                    rx.el.h1(
+                        "Book a Demo",
+                        class_name="text-xl font-bold text-secondary-12",
+                    ),
+                    rx.el.p(
+                        "Select a time that works for you.",
+                        class_name="text-sm text-secondary-11",
+                    ),
+                    ui.button(
+                        ui.hi("Cancel01Icon"),
+                        variant="ghost",
+                        size="icon-sm",
+                        on_click=DemoFormState.go_back_from_calendar,
+                        class_name="text-secondary-11 absolute top-4 right-4",
+                        aria_label="Close",
+                    ),
+                    class_name="flex flex-col gap-0.5 px-6 pt-4 pb-2 relative",
+                ),
+                rx.el.div(
+                    class_name="w-full min-h-[600px] overflow-auto cal-embed-container px-4 pb-4",
+                ),
+                class_name="relative bg-secondary-1 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto",
+                on_mount=DemoFormState.init_cal_embed,
+            ),
+            class_name="fixed inset-0 z-[100000] flex items-center justify-center p-4",
         ),
-        # Back button
-        ui.button(
-            "Back",
-            variant="outline",
-            on_click=DemoFormState.go_back_from_calendar,
-            class_name="w-full mt-4",
-        ),
-        class_name="flex flex-col relative w-full",
-        style={"zIndex": "99999", "position": "relative", "width": "100%"},
-        on_mount=DemoFormState.init_cal_embed,
+        rx.fragment(),
     )
 
 
@@ -766,31 +775,22 @@ def demo_form(**props) -> rx.Component:
             DemoFormState.sent_to_unify,
             # Show thank you screen when sent to Unify
             thank_you_screen(),
-            rx.cond(
-                DemoFormState.show_calendar,
-                # Show embedded calendar after form completion
-                calendar_embed(),
-                # Show regular multi-step form
-                rx.fragment(
-                    step_indicator(),
-                    step_header(),
+            # Show regular multi-step form
+            rx.fragment(
+                step_indicator(),
+                step_header(),
+                rx.cond(
+                    DemoFormState.current_step == 1,
+                    step_1_form(),
                     rx.cond(
-                        DemoFormState.current_step == 1,
-                        step_1_form(),
-                        rx.cond(
-                            DemoFormState.current_step == 2,
-                            step_2_form(),
-                            step_3_form(),
-                        ),
+                        DemoFormState.current_step == 2,
+                        step_2_form(),
+                        step_3_form(),
                     ),
                 ),
             ),
         ),
-        class_name=rx.cond(
-            DemoFormState.show_calendar,
-            "flex flex-col p-2",
-            "flex flex-col p-4 sm:p-6",
-        ),
+        class_name="flex flex-col p-4 sm:p-6",
         **props,
     )
 
@@ -812,49 +812,49 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
 
     demo_form_open_cs = ClientStateVar.create("demo_form_dialog_open", False)
 
-    return ui.dialog.root(
-        ui.dialog.trigger(render_=trigger),
-        ui.dialog.portal(
-            ui.dialog.backdrop(),
-            ui.dialog.popup(
-                rx.el.div(
+    return rx.fragment(
+        ui.dialog.root(
+            ui.dialog.trigger(render_=trigger),
+            ui.dialog.portal(
+                ui.dialog.backdrop(),
+                ui.dialog.popup(
                     rx.el.div(
-                        rx.el.h1(
-                            "Book a Demo",
-                            class_name="text-xl font-bold text-secondary-12",
-                        ),
-                        rx.el.p(
-                            "Hop on a call with the Reflex team.",
-                            class_name="text-sm text-secondary-11",
-                        ),
-                        ui.dialog.close(
-                            render_=ui.button(
-                                ui.hi("Cancel01Icon"),
-                                variant="ghost",
-                                size="icon-sm",
-                                on_click=DemoFormState.reset_form,
-                                class_name="text-secondary-11 absolute top-4 right-4",
-                                aria_label="Close",
+                        rx.el.div(
+                            rx.el.h1(
+                                "Book a Demo",
+                                class_name="text-xl font-bold text-secondary-12",
                             ),
+                            rx.el.p(
+                                "Hop on a call with the Reflex team.",
+                                class_name="text-sm text-secondary-11",
+                            ),
+                            ui.dialog.close(
+                                render_=ui.button(
+                                    ui.hi("Cancel01Icon"),
+                                    variant="ghost",
+                                    size="icon-sm",
+                                    on_click=DemoFormState.reset_form,
+                                    class_name="text-secondary-11 absolute top-4 right-4",
+                                    aria_label="Close",
+                                ),
+                            ),
+                            class_name="flex flex-col gap-0.5 px-6 pt-4 pb-2 relative",
                         ),
-                        class_name="flex flex-col gap-0.5 px-6 pt-4 pb-2 relative",
+                        demo_form(class_name="w-full"),
+                        class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
                     ),
-                    demo_form(class_name="w-full"),
-                    class_name=rx.cond(
-                        DemoFormState.show_calendar,
-                        "relative isolate overflow-hidden -m-px w-full max-w-4xl",
-                        "relative isolate overflow-hidden -m-px w-full max-w-md",
-                    ),
-                ),
-                class_name=rx.cond(
-                    DemoFormState.show_calendar,
-                    "h-fit mt-1 overflow-hidden w-full max-w-4xl transition-all duration-300",
-                    "h-fit mt-1 overflow-hidden w-full max-w-md transition-all duration-300",
+                    class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
                 ),
             ),
+            open=rx.cond(
+                DemoFormState.show_calendar,
+                False,
+                demo_form_open_cs.value,
+            ),
+            on_open_change=demo_form_open_cs.set_value,
+            class_name=class_name,
+            **props,
         ),
-        open=demo_form_open_cs.value,
-        on_open_change=demo_form_open_cs.set_value,
-        class_name=class_name,
-        **props,
+        # Calendar overlay (shows when form is complete)
+        calendar_overlay(),
     )
