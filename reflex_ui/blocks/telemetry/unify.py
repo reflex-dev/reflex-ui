@@ -86,7 +86,7 @@ async def upsert_unify_person(
             # Use upsert endpoint to create or update based on email
             response = await client.post(
                 f"{UNIFY_API_BASE_URL}/objects/person/records",
-                json=record_data,
+                json={"data": record_data},
                 headers=headers,
                 timeout=10.0,
             )
