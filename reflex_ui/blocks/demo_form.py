@@ -727,27 +727,16 @@ def calendar_overlay() -> rx.Component:
             ),
             # Calendar container
             rx.el.div(
-                rx.el.div(
-                    rx.el.h1(
-                        "Book a Demo",
-                        class_name="text-xl font-bold text-secondary-12",
-                    ),
-                    rx.el.p(
-                        "Select a time that works for you.",
-                        class_name="text-sm text-secondary-11",
-                    ),
-                    ui.button(
-                        ui.hi("Cancel01Icon"),
-                        variant="ghost",
-                        size="icon-sm",
-                        on_click=DemoFormState.go_back_from_calendar,
-                        class_name="text-secondary-11 absolute top-4 right-4",
-                        aria_label="Close",
-                    ),
-                    class_name="flex flex-col gap-0.5 px-6 pt-4 pb-2 relative",
+                ui.button(
+                    ui.hi("Cancel01Icon"),
+                    variant="ghost",
+                    size="icon-sm",
+                    on_click=DemoFormState.go_back_from_calendar,
+                    class_name="text-secondary-11 absolute top-3 right-3 z-10",
+                    aria_label="Close",
                 ),
                 rx.el.div(
-                    class_name="w-full min-h-[600px] overflow-auto cal-embed-container px-4 pb-4",
+                    class_name="w-full min-h-[550px] overflow-auto cal-embed-container",
                 ),
                 class_name="relative bg-secondary-1 rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] overflow-auto",
                 on_mount=DemoFormState.init_cal_embed,
