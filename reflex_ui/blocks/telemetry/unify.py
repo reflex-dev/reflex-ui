@@ -32,16 +32,16 @@ def unify_identify_js(
     # Escape the email to prevent XSS
     escaped_email = email.replace("'", "\\'").replace('"', '\\"').replace("\\", "\\\\")
 
-    # Build the person object - email is always required
+    # Build the person object - email is always required inside person
     person_obj: dict[str, str | int | bool] = {"email": email}
     if person_attributes:
         person_obj.update(person_attributes)
 
-    # Convert to JSON string
-    person_json = json.dumps({"person": person_obj})
+    # Convert to JSON string - wrap in "person" key
+    payload_json = json.dumps({"person": person_obj})
 
     return f"""
     if (window.unify && window.unify.identify) {{
-        window.unify.identify('{escaped_email}', {person_json});
+        window.unify.identify('{escaped_email}', {payload_json});
     }}
     """
