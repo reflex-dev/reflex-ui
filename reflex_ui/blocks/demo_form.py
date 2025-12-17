@@ -15,7 +15,7 @@ import reflex as rx
 from reflex.utils.console import log
 
 import reflex_ui as ui
-from reflex_ui.blocks.telemetry.unify import unify_identify_js
+from reflex_ui.blocks.telemetry.unify import upsert_unify_person
 
 # Environment variables for Cal.com URLs
 CAL_REQUEST_DEMO_URL = os.getenv(
@@ -197,14 +197,9 @@ class DemoFormState(rx.State):
         # Check if personal email -> send to Unify (show thank you screen)
         if not check_if_company_email(self.email):
             self.sent_to_unify = True
-            # Call Unify identify on frontend and send Slack notification
+            # Create/update person in Unify and send Slack notification
             return [
-                rx.call_script(
-                    unify_identify_js(
-                        email=self.email,
-                        person_attributes={"status": "Personal email"},
-                    )
-                ),
+                DemoFormState.create_unify_person("Personal email"),
                 DemoFormState.send_unify_notification("Personal email detected"),
             ]
 
@@ -228,14 +223,9 @@ class DemoFormState(rx.State):
         employee_count = get_employee_count(self.num_employees)
         if employee_count <= SMALL_COMPANY_THRESHOLD:
             self.sent_to_unify = True
-            # Call Unify identify on frontend and send Slack notification
+            # Create/update person in Unify and send Slack notification
             return [
-                rx.call_script(
-                    unify_identify_js(
-                        email=self.email,
-                        person_attributes={"status": f"Small company ({self.num_employees} employees)"},
-                    )
-                ),
+                DemoFormState.create_unify_person(f"Small company ({self.num_employees} employees)"),
                 DemoFormState.send_unify_notification(f"Small company ({self.num_employees} employees)"),
             ]
 
@@ -401,6 +391,28 @@ class DemoFormState(rx.State):
                 )
         except Exception as e:
             log(f"Error sending Unify notification to Slack: {e}")
+
+    @rx.event(background=True)
+    async def create_unify_person(self, lead_source: str):
+        """Create or update a person record in Unify.
+
+        Args:
+            lead_source: The source/reason for this lead (e.g., "Personal email", "Small company")
+        """
+        async with self:
+            result = await upsert_unify_person(
+                email=self.email,
+                first_name=self.first_name,
+                last_name=self.last_name,
+                company_name=self.company_name or None,
+                job_title=self.job_title or None,
+                lead_source=lead_source,
+                num_employees=self.num_employees or None,
+            )
+            if result:
+                log(f"Successfully created/updated Unify person: {self.email}")
+            else:
+                log(f"Failed to create/update Unify person: {self.email}")
 
     @rx.event(background=True)
     async def send_enterprise_notification(self):
