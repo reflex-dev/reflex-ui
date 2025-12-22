@@ -78,9 +78,9 @@ class ToggleGroupRoot(ToggleGroupBaseComponent):
         *children,
         default_value: Var[list[int | str]] | list[int | str] | None = None,
         value: Var[list[int | str]] | list[int | str] | None = None,
-        toggle_multiple: Var[bool] | bool | None = None,
+        multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,

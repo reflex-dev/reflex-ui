@@ -94,17 +94,8 @@ class MenuRoot(MenuBaseComponent):
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
-    # Whether the menu should also open when the trigger is hovered.
-    open_on_hover: Var[bool]
-
-    # How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
-    delay: Var[int]
-
-    # How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
-    close_delay: Var[int]
-
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     # The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to 'vertical'.
     orientation: Var[LiteralMenuOrientation]
@@ -126,6 +117,15 @@ class MenuTrigger(MenuBaseComponent):
 
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
+
+    # Whether the menu should also open when the trigger is hovered.
+    open_on_hover: Var[bool]
+
+    # How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
+    delay: Var[int]
+
+    # How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
+    close_delay: Var[int]
 
     # The render prop.
     render_: Var[Component]
@@ -189,8 +189,8 @@ class MenuPositioner(MenuBaseComponent):
     # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to False.
     sticky: Var[bool]
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPositionMethod]
@@ -293,17 +293,8 @@ class MenuSubMenuRoot(MenuBaseComponent):
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
-    # Whether the menu should also open when the trigger is hovered. Defaults to True.
-    open_on_hover: Var[bool]
-
-    # How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
-    delay: Var[int]
-
-    # How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
-    close_delay: Var[int]
-
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     # The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to 'vertical'.
     orientation: Var[LiteralMenuOrientation]
@@ -329,6 +320,15 @@ class MenuSubMenuTrigger(MenuBaseComponent):
 
     # Whether the component renders a native <button> element when replacing it via the render prop. Set to false if the rendered element is not a button (e.g. <div>). Defaults to False.
     native_button: Var[bool]
+
+    # Whether the menu should also open when the trigger is hovered. Defaults to True.
+    open_on_hover: Var[bool]
+
+    # How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
+    delay: Var[int]
+
+    # How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
+    close_delay: Var[int]
 
     # The render prop
     render_: Var[Component]
@@ -546,7 +546,7 @@ class HighLevelMenu(MenuRoot):
 
     # Props for different component parts
     _item_props = {"close_on_click"}
-    _trigger_props = {"placeholder", "size", "close_on_click"}
+    _trigger_props = {"open_on_hover", "delay", "close_delay"}
     _positioner_props = {
         "align",
         "align_offset",
@@ -555,7 +555,7 @@ class HighLevelMenu(MenuRoot):
         "collision_padding",
         "sticky",
         "position_method",
-        "track_anchor",
+        "disable_anchor_tracking",
         "side_offset",
         "collision_avoidance",
     }
@@ -582,8 +582,8 @@ class HighLevelMenu(MenuRoot):
 
         trigger = props.pop("trigger", None)
         items = props.pop("items", [])
-        size = trigger_props.get("size", "md")
-        trigger_label = trigger_props.get("placeholder", "Open Menu")
+        size = props.pop("size", "md")
+        trigger_label = props.pop("placeholder", "Open Menu")
 
         def create_menu_item(item: str | tuple[str, EventHandler]) -> BaseUIComponent:
             if isinstance(item, tuple):
@@ -634,6 +634,7 @@ class HighLevelMenu(MenuRoot):
                         type="button",
                     )
                 ),
+                **trigger_props,
             ),
             MenuPortal.create(
                 MenuPositioner.create(

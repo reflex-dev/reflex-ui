@@ -44,7 +44,7 @@ class AvatarRoot(AvatarBaseComponent):
 
 
 class AvatarImage(AvatarBaseComponent):
-    """The image to be displayed in the avatar."""
+    """The image to be displayed in the avatar. Renders an <img> element."""
 
     tag = "Avatar.Image"
 

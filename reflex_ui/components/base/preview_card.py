@@ -149,8 +149,8 @@ class PreviewCardPositioner(PreviewCardBaseComponent):
     # Determines which CSS position property to use. Defaults to absolute.
     position_method: Var[LiteralPosition]
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to true.
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # The render prop
     render_: Var[Component]
@@ -213,7 +213,7 @@ class HighLevelPreviewCard(PreviewCardRoot):
         "collision_boundary",
         "sticky",
         "position_method",
-        "track_anchor",
+        "disable_anchor_tracking",
         "anchor",
         "collision_avoidance",
     }

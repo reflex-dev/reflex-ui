@@ -87,6 +87,7 @@ class CheckboxRoot(CheckboxBaseComponent):
         native_button: Var[bool] | bool | None = None,
         parent: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
+        unchecked_value: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -173,6 +174,7 @@ class HighLevelCheckbox(CheckboxRoot):
         native_button: Var[bool] | bool | None = None,
         parent: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
+        unchecked_value: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -221,6 +223,7 @@ class HighLevelCheckbox(CheckboxRoot):
             native_button: Whether the component renders a native <button> element when replacing it via the render prop. Set to false if the rendered element is not a button (e.g. <div>). Defaults to True.
             parent: Whether the checkbox controls a group of child checkboxes. Must be used in a Checkbox Group. Defaults to False.
             read_only: Whether the user should be unable to tick or untick the checkbox. Defaults to False.
+            unchecked_value: The value of the checkbox when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -253,6 +256,7 @@ class CheckboxNamespace(ComponentNamespace):
         native_button: Var[bool] | bool | None = None,
         parent: Var[bool] | bool | None = None,
         read_only: Var[bool] | bool | None = None,
+        unchecked_value: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -301,6 +305,7 @@ class CheckboxNamespace(ComponentNamespace):
             native_button: Whether the component renders a native <button> element when replacing it via the render prop. Set to false if the rendered element is not a button (e.g. <div>). Defaults to True.
             parent: Whether the checkbox controls a group of child checkboxes. Must be used in a Checkbox Group. Defaults to False.
             read_only: Whether the user should be unable to tick or untick the checkbox. Defaults to False.
+            unchecked_value: The value of the checkbox when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

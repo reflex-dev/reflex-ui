@@ -64,15 +64,6 @@ class PopoverRoot(PopoverBaseComponent):
     # - 'trap-focus': focus is trapped inside the popover, but document page scroll is not locked and pointer interactions outside of it remain enabled.
     modal: Var[bool | Literal["trap-focus"]]
 
-    # Whether the popover should also open when the trigger is hovered. Defaults to False.
-    open_on_hover: Var[bool]
-
-    # How long to wait before the popover may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 300.
-    delay: Var[int]
-
-    # How long to wait before closing the popover that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
-    close_delay: Var[int]
-
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the popover root component."""
@@ -87,6 +78,15 @@ class PopoverTrigger(PopoverBaseComponent):
 
     # Whether the component renders a native <button> element when replacing it via the render prop. Set to false if the rendered element is not a button (e.g. <div>).. Defaults to True.
     native_button: Var[bool]
+
+    # Whether the popover should also open when the trigger is hovered. Defaults to False.
+    open_on_hover: Var[bool]
+
+    # How long to wait before the popover may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 300.
+    delay: Var[int]
+
+    # How long to wait before closing the popover that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
+    close_delay: Var[int]
 
     # The render prop
     render_: Var[Component]
@@ -162,8 +162,8 @@ class PopoverPositioner(PopoverBaseComponent):
     # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPosition]
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Determines how to handle collisions when positioning the popup.
     collision_avoidance: Var[str]
@@ -276,6 +276,7 @@ class HighLevelPopover(PopoverRoot):
     description: Var[str | Component | None]
 
     # Props for different component parts
+    _trigger_props = {"open_on_hover", "delay", "close_delay"}
     _positioner_props = {
         "align",
         "align_offset",
@@ -286,7 +287,7 @@ class HighLevelPopover(PopoverRoot):
         "collision_boundary",
         "sticky",
         "position_method",
-        "track_anchor",
+        "disable_anchor_tracking",
         "anchor",
         "collision_avoidance",
     }
@@ -304,6 +305,7 @@ class HighLevelPopover(PopoverRoot):
             The popover component.
         """
         # Extract props for different parts
+        trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
         }
@@ -316,7 +318,9 @@ class HighLevelPopover(PopoverRoot):
         class_name = props.pop("class_name", "")
 
         return PopoverRoot.create(
-            PopoverTrigger.create(render_=trigger) if trigger is not None else None,
+            PopoverTrigger.create(render_=trigger, **trigger_props)
+            if trigger is not None
+            else None,
             PopoverPortal.create(
                 PopoverPositioner.create(
                     PopoverPopup.create(

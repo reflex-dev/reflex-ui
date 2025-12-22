@@ -88,7 +88,7 @@ class AccordionRoot(AccordionBaseComponent):
         hidden_until_found: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -293,7 +293,7 @@ class HighLevelAccordion(AccordionRoot):
         hidden_until_found: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -339,7 +339,7 @@ class HighLevelAccordion(AccordionRoot):
             hidden_until_found: Allows the browser's built-in page search to find and expand the panel contents. Overrides the `keep_mounted` prop and uses `hidden="until-found"` to hide the element without removing it from the DOM. Defaults to False.
             multiple: Whether multiple items can be open at the same time. Defaults to True.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the accordion. Controls whether roving focus uses left/right or up/down arrow keys. Defaults to 'vertical'.
             keep_mounted: Whether to keep the element in the DOM while the panel is closed. This prop is ignored when hidden_until_found is used. Defaults to False.
             render_: The render prop.
@@ -375,7 +375,7 @@ class Accordion(ComponentNamespace):
         hidden_until_found: Var[bool] | bool | None = None,
         multiple: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -421,7 +421,7 @@ class Accordion(ComponentNamespace):
             hidden_until_found: Allows the browser's built-in page search to find and expand the panel contents. Overrides the `keep_mounted` prop and uses `hidden="until-found"` to hide the element without removing it from the DOM. Defaults to False.
             multiple: Whether multiple items can be open at the same time. Defaults to True.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the accordion. Controls whether roving focus uses left/right or up/down arrow keys. Defaults to 'vertical'.
             keep_mounted: Whether to keep the element in the DOM while the panel is closed. This prop is ignored when hidden_until_found is used. Defaults to False.
             render_: The render prop.

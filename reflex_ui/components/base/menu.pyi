@@ -114,10 +114,7 @@ class MenuRoot(MenuBaseComponent):
         close_parent_on_esc: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -164,6 +161,9 @@ class MenuTrigger(MenuBaseComponent):
         *children,
         native_button: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
+        open_on_hover: Var[bool] | bool | None = None,
+        delay: Var[int] | int | None = None,
+        close_delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -255,7 +255,7 @@ class MenuPositioner(MenuBaseComponent):
         collision_padding: Var[int] | int | None = None,
         collision_boundary: Var[str] | str | None = None,
         sticky: Var[bool] | bool | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
@@ -416,10 +416,7 @@ class MenuSubMenuRoot(MenuBaseComponent):
         open: Var[bool] | bool | None = None,
         close_parent_on_esc: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -467,6 +464,9 @@ class MenuSubMenuTrigger(MenuBaseComponent):
         *children,
         label: Var[str] | str | None = None,
         native_button: Var[bool] | bool | None = None,
+        open_on_hover: Var[bool] | bool | None = None,
+        delay: Var[int] | int | None = None,
+        close_delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -841,10 +841,7 @@ class HighLevelMenu(MenuRoot):
         close_parent_on_esc: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -898,10 +895,7 @@ class HighLevelMenu(MenuRoot):
             close_parent_on_esc: When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
             modal: Determines if the menu enters a modal state when open. Defaults to True.  - True: user interaction is limited to the menu: document page scroll is locked and and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            open_on_hover: Whether the menu should also open when the trigger is hovered.
-            delay: How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
-            close_delay: How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
-            loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to 'vertical'.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
@@ -953,10 +947,7 @@ class Menu(ComponentNamespace):
         close_parent_on_esc: Var[bool] | bool | None = None,
         modal: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -1010,10 +1001,7 @@ class Menu(ComponentNamespace):
             close_parent_on_esc: When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
             modal: Determines if the menu enters a modal state when open. Defaults to True.  - True: user interaction is limited to the menu: document page scroll is locked and and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            open_on_hover: Whether the menu should also open when the trigger is hovered.
-            delay: How long to wait before the menu may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 100.
-            close_delay: How long to wait before closing the menu that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
-            loop: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to 'vertical'.
             unstyled: Whether the component should be unstyled
             style: The style of the component.

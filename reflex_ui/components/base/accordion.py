@@ -65,7 +65,7 @@ class AccordionRoot(AccordionBaseComponent):
     disabled: Var[bool]
 
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     # The visual orientation of the accordion. Controls whether roving focus uses left/right or up/down arrow keys. Defaults to 'vertical'.
     orientation: Var[LiteralOrientation]

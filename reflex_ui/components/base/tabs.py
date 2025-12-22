@@ -66,11 +66,11 @@ class TabsList(TabsBaseComponent):
 
     tag = "Tabs.List"
 
-    # Whether to automatically change the active tab on arrow key focus. Otherwise, tabs will be activated using Enter or Spacebar key press. Defaults to True.
+    # Whether to automatically change the active tab on arrow key focus. Otherwise, tabs will be activated using Enter or Spacebar key press. Defaults to False.
     activate_on_focus: Var[bool]
 
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:

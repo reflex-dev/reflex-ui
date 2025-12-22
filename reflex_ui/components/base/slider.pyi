@@ -14,6 +14,8 @@ from reflex.vars.base import Var
 from reflex_ui.components.base_ui import BaseUIComponent
 
 LiteralOrientation = Literal["horizontal", "vertical"]
+LiteralThumbAlignment = Literal["center", "edge", "edge-client-only"]
+LiteralThumbCollisionBehavior = Literal["push", "swap", "none"]
 on_value_event_spec = (
     passthrough_event_spec(int),
     passthrough_event_spec(float),
@@ -110,7 +112,12 @@ class SliderRoot(SliderBaseComponent):
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
-        input_ref: Var[str] | str | None = None,
+        thumb_alignment: Literal["center", "edge", "edge-client-only"]
+        | Var[Literal["center", "edge", "edge-client-only"]]
+        | None = None,
+        thumb_collision_behavior: Literal["none", "push", "swap"]
+        | Var[Literal["none", "push", "swap"]]
+        | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -313,6 +320,8 @@ class SliderThumb(SliderBaseComponent):
         get_aria_label: Var[str] | str | None = None,
         get_aria_value_text: Var[str] | str | None = None,
         disabled: Var[bool] | bool | None = None,
+        index: Var[int] | int | None = None,
+        input_ref: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -372,7 +381,12 @@ class HighLevelSlider(SliderRoot):
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
-        input_ref: Var[str] | str | None = None,
+        thumb_alignment: Literal["center", "edge", "edge-client-only"]
+        | Var[Literal["center", "edge", "edge-client-only"]]
+        | None = None,
+        thumb_collision_behavior: Literal["none", "push", "swap"]
+        | Var[Literal["none", "push", "swap"]]
+        | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -434,7 +448,8 @@ class HighLevelSlider(SliderRoot):
             format: Options to format the input value.
             disabled: Whether the slider is disabled.
             orientation: The component orientation. Defaults to "horizontal".
-            input_ref: A ref to access the hidden input element.
+            thumb_alignment: Determines how the thumb(s) align relative to the slider's control when at min or max. Defaults to "center".
+            thumb_collision_behavior: Controls thumb behavior during pointer interactions. In range sliders, moving a thumb with a pointer will push other thumbs it collides with by default. Defaults to "push".
             render_: The render prop
             unstyled: Whether the component should be unstyled
             style: The style of the component.
@@ -483,7 +498,12 @@ class Slider(ComponentNamespace):
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
-        input_ref: Var[str] | str | None = None,
+        thumb_alignment: Literal["center", "edge", "edge-client-only"]
+        | Var[Literal["center", "edge", "edge-client-only"]]
+        | None = None,
+        thumb_collision_behavior: Literal["none", "push", "swap"]
+        | Var[Literal["none", "push", "swap"]]
+        | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -545,7 +565,8 @@ class Slider(ComponentNamespace):
             format: Options to format the input value.
             disabled: Whether the slider is disabled.
             orientation: The component orientation. Defaults to "horizontal".
-            input_ref: A ref to access the hidden input element.
+            thumb_alignment: Determines how the thumb(s) align relative to the slider's control when at min or max. Defaults to "center".
+            thumb_collision_behavior: Controls thumb behavior during pointer interactions. In range sliders, moving a thumb with a pointer will push other thumbs it collides with by default. Defaults to "push".
             render_: The render prop
             unstyled: Whether the component should be unstyled
             style: The style of the component.
