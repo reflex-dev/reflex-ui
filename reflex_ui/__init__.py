@@ -39,7 +39,7 @@ _SUBMOD_ATTRS = {
     "components": ["base"],
     "components.icons.hugeicon": ["hi", "icon"],
     "components.icons.simple_icon": ["simple_icon"],
-    "components.icons.others": ["spinner"],
+    "components.icons.others": ["spinner", "select_arrow", "arrow_svg"],
     "utils.twmerge": ["cn"],
 }
 

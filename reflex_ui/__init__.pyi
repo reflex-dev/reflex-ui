@@ -34,7 +34,7 @@ from .components.base.toggle import toggle
 from .components.base.toggle_group import toggle_group
 from .components.base.tooltip import tooltip
 from .components.icons.hugeicon import hi, icon
-from .components.icons.others import spinner
+from .components.icons.others import arrow_svg, select_arrow, spinner
 from .components.icons.simple_icon import simple_icon
 from .utils.twmerge import cn
 
@@ -74,12 +74,13 @@ _SUBMOD_ATTRS = {
     "components": ["base"],
     "components.icons.hugeicon": ["hi", "icon"],
     "components.icons.simple_icon": ["simple_icon"],
-    "components.icons.others": ["spinner"],
+    "components.icons.others": ["spinner", "select_arrow", "arrow_svg"],
     "utils.twmerge": ["cn"],
 }
 
 __all__ = [
     "accordion",
+    "arrow_svg",
     "avatar",
     "badge",
     "base",
@@ -103,6 +104,7 @@ __all__ = [
     "preview_card",
     "scroll_area",
     "select",
+    "select_arrow",
     "simple_icon",
     "skeleton",
     "slider",
