@@ -4,8 +4,8 @@
 
 from reflex_ui.components.component import CoreComponent
 
-PACKAGE_NAME = "@base-ui-components/react"
-PACKAGE_VERSION = "1.0.0-beta.4"
+PACKAGE_NAME = "@base-ui/react"
+PACKAGE_VERSION = "1.0.0"
 
 
 class BaseUIComponent(CoreComponent):

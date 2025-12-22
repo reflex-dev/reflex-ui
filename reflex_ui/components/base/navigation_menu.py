@@ -232,9 +232,11 @@ class NavigationMenuPositioner(NavigationMenuBaseComponent):
     # An element or a rectangle that delimits the area that the content is confined to. Defaults to the "clipping-ancestors".
     collision_boundary: Var[str]
 
+    # Whether to maintain the content in the viewport after the anchor element was scrolled out of view. Defaults to False.
     sticky: Var[bool]
 
-    track_anchor: Var[bool]
+    # Whether to disable the content tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPositionMethod]

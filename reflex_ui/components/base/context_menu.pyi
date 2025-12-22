@@ -114,7 +114,7 @@ class ContextMenuRoot(ContextMenuBaseComponent):
         actions_ref: Var[str] | str | None = None,
         close_parent_on_esc: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -287,7 +287,7 @@ class ContextMenuPositioner(ContextMenuBaseComponent):
         collision_padding: Var[int] | int | None = None,
         collision_boundary: Var[str] | str | None = None,
         sticky: Var[bool] | bool | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
@@ -774,7 +774,7 @@ class ContextMenuSubmenuRoot(ContextMenuBaseComponent):
         open_on_hover: Var[bool] | bool | None = None,
         delay: Var[int] | int | None = None,
         close_delay: Var[int] | int | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -871,7 +871,7 @@ class HighLevelContextMenu(ContextMenuRoot):
         actions_ref: Var[str] | str | None = None,
         close_parent_on_esc: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -923,7 +923,7 @@ class HighLevelContextMenu(ContextMenuRoot):
             close_parent_on_esc: When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
             on_open_change_complete: Event handler called after any animations complete when the context menu is closed.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            loop: Whether keyboard navigation should loop around when reaching the end of the items. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to "vertical".
             unstyled: Whether the component should be unstyled
             style: The style of the component.
@@ -974,7 +974,7 @@ class ContextMenu(ComponentNamespace):
         actions_ref: Var[str] | str | None = None,
         close_parent_on_esc: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         orientation: Literal["horizontal", "vertical"]
         | Var[Literal["horizontal", "vertical"]]
         | None = None,
@@ -1026,7 +1026,7 @@ class ContextMenu(ComponentNamespace):
             close_parent_on_esc: When in a submenu, determines whether pressing the Escape key closes the entire menu, or only the current child menu. Defaults to True.
             on_open_change_complete: Event handler called after any animations complete when the context menu is closed.
             disabled: Whether the component should ignore user interaction. Defaults to False.
-            loop: Whether keyboard navigation should loop around when reaching the end of the items. Defaults to True.
+            loop_focus: Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
             orientation: The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to "vertical".
             unstyled: Whether the component should be unstyled
             style: The style of the component.

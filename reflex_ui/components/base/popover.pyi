@@ -93,9 +93,6 @@ class PopoverRoot(PopoverBaseComponent):
         | Var[Literal["trap-focus"] | bool]
         | bool
         | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -138,6 +135,9 @@ class PopoverTrigger(PopoverBaseComponent):
         cls,
         *children,
         native_button: Var[bool] | bool | None = None,
+        open_on_hover: Var[bool] | bool | None = None,
+        delay: Var[int] | int | None = None,
+        close_delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -283,7 +283,7 @@ class PopoverPositioner(PopoverBaseComponent):
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         collision_avoidance: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
@@ -519,9 +519,6 @@ class HighLevelPopover(PopoverRoot):
         | Var[Literal["trap-focus"] | bool]
         | bool
         | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -566,9 +563,6 @@ class HighLevelPopover(PopoverRoot):
             on_open_change: Event handler called when the popover is opened or closed
             on_open_change_complete: Event handler called after any animations complete when the popover is opened or closed.
             modal: Determines if the popover enters a modal state when open.  - True: user interaction is limited to just the popover: focus is trapped, document page scroll is locked, and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.  - 'trap-focus': focus is trapped inside the popover, but document page scroll is not locked and pointer interactions outside of it remain enabled.
-            open_on_hover: Whether the popover should also open when the trigger is hovered. Defaults to False.
-            delay: How long to wait before the popover may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 300.
-            close_delay: How long to wait before closing the popover that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -608,9 +602,6 @@ class Popover(ComponentNamespace):
         | Var[Literal["trap-focus"] | bool]
         | bool
         | None = None,
-        open_on_hover: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -655,9 +646,6 @@ class Popover(ComponentNamespace):
             on_open_change: Event handler called when the popover is opened or closed
             on_open_change_complete: Event handler called after any animations complete when the popover is opened or closed.
             modal: Determines if the popover enters a modal state when open.  - True: user interaction is limited to just the popover: focus is trapped, document page scroll is locked, and pointer interactions on outside elements are disabled.  - False: user interaction with the rest of the document is allowed.  - 'trap-focus': focus is trapped inside the popover, but document page scroll is not locked and pointer interactions outside of it remain enabled.
-            open_on_hover: Whether the popover should also open when the trigger is hovered. Defaults to False.
-            delay: How long to wait before the popover may be opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 300.
-            close_delay: How long to wait before closing the popover that was opened on hover. Specified in milliseconds. Requires the open_on_hover prop. Defaults to 0.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

@@ -83,6 +83,7 @@ class SwitchRoot(SwitchBaseComponent):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Var[str] | str | None = None,
+        unchecked_value: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -166,6 +167,7 @@ class HighLevelSwitch(SwitchRoot):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Var[str] | str | None = None,
+        unchecked_value: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -210,6 +212,7 @@ class HighLevelSwitch(SwitchRoot):
             read_only: Whether the user should be unable to activate or deactivate the switch. Defaults to False.
             required: Whether the user must activate the switch before submitting a form. Defaults to False.
             input_ref: A ref to access the hidden <input> element.
+            unchecked_value: The value of the switch when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
             render_: The render prop
             unstyled: Whether the component should be unstyled
             style: The style of the component.
@@ -240,6 +243,7 @@ class Switch(ComponentNamespace):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Var[str] | str | None = None,
+        unchecked_value: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -284,6 +288,7 @@ class Switch(ComponentNamespace):
             read_only: Whether the user should be unable to activate or deactivate the switch. Defaults to False.
             required: Whether the user must activate the switch before submitting a form. Defaults to False.
             input_ref: A ref to access the hidden <input> element.
+            unchecked_value: The value of the switch when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
             render_: The render prop
             unstyled: Whether the component should be unstyled
             style: The style of the component.

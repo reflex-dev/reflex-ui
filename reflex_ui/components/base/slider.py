@@ -10,6 +10,8 @@ from reflex.vars.base import Var
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
 LiteralOrientation = Literal["horizontal", "vertical"]
+LiteralThumbAlignment = Literal["center", "edge", "edge-client-only"]
+LiteralThumbCollisionBehavior = Literal["push", "swap", "none"]
 
 on_value_event_spec = (
     passthrough_event_spec(int),
@@ -89,8 +91,11 @@ class SliderRoot(SliderBaseComponent):
     # The component orientation. Defaults to "horizontal".
     orientation: Var[LiteralOrientation]
 
-    # A ref to access the hidden input element.
-    input_ref: Var[str]
+    # Determines how the thumb(s) align relative to the slider's control when at min or max. Defaults to "center".
+    thumb_alignment: Var[LiteralThumbAlignment]
+
+    # Controls thumb behavior during pointer interactions. In range sliders, moving a thumb with a pointer will push other thumbs it collides with by default. Defaults to "push".
+    thumb_collision_behavior: Var[LiteralThumbCollisionBehavior]
 
     # The render prop
     render_: Var[Component]
@@ -180,6 +185,12 @@ class SliderThumb(SliderBaseComponent):
 
     # Whether the thumb should ignore user interaction.
     disabled: Var[bool]
+
+    # The zero-based index of the thumb in a range slider. Not required for single-value sliders.
+    index: Var[int]
+
+    # A ref to access the hidden input element.
+    input_ref: Var[str]
 
     # The render prop
     render_: Var[Component]

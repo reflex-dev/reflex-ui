@@ -217,8 +217,8 @@ class SelectPositioner(SelectBaseComponent):
     # Whether the positioner overlaps the trigger so the selected item's text is aligned with the trigger's value text. This only applies to mouse input and is automatically disabled if there is not enough space. Defaults to False.
     align_item_with_trigger: Var[bool] = Var.create(False)
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Distance between the anchor and the popup in pixels. Defaults to 0.
     side_offset: Var[int]
@@ -474,7 +474,7 @@ class HighLevelSelect(SelectRoot):
         "sticky",
         "position_method",
         "align_item_with_trigger",
-        "track_anchor",
+        "disable_anchor_tracking",
         "side_offset",
         "collision_avoidance",
     }

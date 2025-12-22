@@ -69,6 +69,9 @@ class CheckboxRoot(CheckboxBaseComponent):
     # Whether the user should be unable to tick or untick the checkbox. Defaults to False.
     read_only: Var[bool]
 
+    # The value of the checkbox when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
+    unchecked_value: Var[str]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the checkbox root component."""

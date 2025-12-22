@@ -83,7 +83,7 @@ class DialogRoot(DialogBaseComponent):
         *children,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
-        dismissible: Var[bool] | bool | None = None,
+        disable_pointer_dismissal: Var[bool] | bool | None = None,
         modal: Literal["trap-focus"]
         | Var[Literal["trap-focus"] | bool]
         | bool
@@ -417,7 +417,7 @@ class HighLevelDialog(DialogRoot):
         description: Component | Var[Component | str | None] | str | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
-        dismissible: Var[bool] | bool | None = None,
+        disable_pointer_dismissal: Var[bool] | bool | None = None,
         modal: Literal["trap-focus"]
         | Var[Literal["trap-focus"] | bool]
         | bool
@@ -478,7 +478,7 @@ class Dialog(ComponentNamespace):
         description: Component | Var[Component | str | None] | str | None = None,
         default_open: Var[bool] | bool | None = None,
         open: Var[bool] | bool | None = None,
-        dismissible: Var[bool] | bool | None = None,
+        disable_pointer_dismissal: Var[bool] | bool | None = None,
         modal: Literal["trap-focus"]
         | Var[Literal["trap-focus"] | bool]
         | bool

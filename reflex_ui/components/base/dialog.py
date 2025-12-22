@@ -51,8 +51,8 @@ class DialogRoot(DialogBaseComponent):
     # Event handler called when the dialog is opened or closed
     on_open_change: EventHandler[passthrough_event_spec(bool, dict)]
 
-    # Determines whether the dialog should close on outside clicks. Defaults to True.
-    dismissible: Var[bool]
+    # Determines whether pointer dismissal (clicking outside) is disabled. Defaults to False.
+    disable_pointer_dismissal: Var[bool]
 
     # Determines if the dialog enters a modal state when open.
     # - True: user interaction is limited to just the dialog: focus is trapped, document page scroll is locked, and pointer interactions on outside elements are disabled.

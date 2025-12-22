@@ -420,7 +420,7 @@ class NavigationMenuPositioner(NavigationMenuBaseComponent):
         collision_padding: Var[int] | int | None = None,
         collision_boundary: Var[str] | str | None = None,
         sticky: Var[bool] | bool | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,

@@ -124,7 +124,7 @@ class TabsList(TabsBaseComponent):
         cls,
         *children,
         activate_on_focus: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
