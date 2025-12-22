@@ -275,7 +275,7 @@ class PreviewCardPositioner(PreviewCardBaseComponent):
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]

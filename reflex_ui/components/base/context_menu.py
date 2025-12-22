@@ -37,7 +37,7 @@ class ClassNames:
     TRIGGER = "cursor-context-menu"
     PORTAL = "relative"
     BACKDROP = "fixed inset-0"
-    POPUP = "group/popup max-h-[17.25rem] overflow-y-auto origin-(--transform-origin) p-1 border border-secondary-a4 bg-secondary-1 shadow-large transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 outline-none scrollbar-thin scrollbar-thumb-secondary-9 scrollbar-track-transparent min-w-36"
+    POPUP = "group/popup max-h-[17.25rem] overflow-y-auto origin-(--transform-origin) p-1 border border-secondary-a4 bg-secondary-1 shadow-large transition-[transform,scale,opacity] data-[ending-style]:scale-95 data-[starting-style]:scale-95 data-[ending-style]:opacity-0 data-[starting-style]:opacity-0 outline-none [scrollbar-width:thin] min-w-36"
     ITEM = "grid w-full items-center gap-2 text-sm select-none font-medium text-secondary-12 cursor-pointer outline-none data-[highlighted]:bg-secondary-3 scroll-m-1 text-start justify-start"
     ITEM_INDICATOR = "text-current"
     ITEM_TEXT = "text-start"
@@ -91,8 +91,8 @@ class ContextMenuRoot(ContextMenuBaseComponent):
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
-    # Whether keyboard navigation should loop around when reaching the end of the items. Defaults to True.
-    loop: Var[bool]
+    # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
+    loop_focus: Var[bool]
 
     # The visual orientation of the menu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to "vertical".
     orientation: Var[LiteralMenuOrientation]
@@ -190,8 +190,8 @@ class ContextMenuPositioner(ContextMenuBaseComponent):
     # Whether to maintain the popup in the viewport after the anchor element was scrolled out of view. Defaults to False.
     sticky: Var[bool]
 
-    # Whether the popup tracks any layout shift of its positioning anchor. Defaults to True.
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPositionMethod]
@@ -487,7 +487,7 @@ class ContextMenuSubmenuRoot(ContextMenuBaseComponent):
     close_delay: Var[int]
 
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     # The visual orientation of the submenu. Controls whether roving focus uses up/down or left/right arrow keys. Defaults to "vertical".
     orientation: Var[LiteralMenuOrientation]
@@ -546,7 +546,7 @@ class HighLevelContextMenu(ContextMenuRoot):
         "collision_padding",
         "sticky",
         "position_method",
-        "track_anchor",
+        "disable_anchor_tracking",
         "side_offset",
         "collision_avoidance",
         "collision_boundary",

@@ -27,7 +27,7 @@ class SwitchBaseComponent(BaseUIComponent):
 
 
 class SwitchRoot(SwitchBaseComponent):
-    """Represents the switch itself. Renders a button element and a hidden input beside."""
+    """Represents the switch itself. Renders a <span> element and a hidden input beside it."""
 
     tag = "Switch.Root"
 
@@ -57,6 +57,9 @@ class SwitchRoot(SwitchBaseComponent):
 
     # A ref to access the hidden <input> element.
     input_ref: Var[str]
+
+    # The value of the switch when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
+    unchecked_value: Var[str]
 
     # The render prop
     render_: Var[Component]

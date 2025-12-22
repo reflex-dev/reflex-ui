@@ -22,15 +22,18 @@ import reflex_ui as ui
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
+demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
 
 COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
 COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
 CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://app.lemcal.com/@jhtevis/30-minutes?back=1"
+    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
 )
+JH_CAL_URL = os.getenv("JH_CAL_URL", "https://cal.com/team/reflex/demo-with-reflex")
+INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
 CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
     "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://app.lemcal.com/@alek/reflex-demo?back=1",
+    "https://cal.com/team/reflex/reflex-intro",
 )
 SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
 POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
@@ -62,6 +65,7 @@ class DemoEvent(PosthogEvent):
     company_name: str
     num_employees: str
     internal_tools: str
+    technical_level: str
     referral_source: str
 
 
@@ -121,7 +125,7 @@ def text_area_field(
             placeholder=placeholder,
             name=name,
             required=required,
-            class_name="w-full",
+            class_name="w-full min-h-14",
             max_length=800,
         ),
         class_name="flex flex-col gap-1.5",
@@ -148,7 +152,7 @@ def select_field(
     return rx.el.div(
         rx.el.label(
             label + (" *" if required else ""),
-            class_name="block text-sm font-medium text-secondary-12",
+            class_name="block text-xs lg:text-sm font-medium text-secondary-12 truncate min-w-0",
         ),
         ui.select(
             default_value="Select",
@@ -157,13 +161,13 @@ def select_field(
             required=required,
             class_name="w-full",
         ),
-        class_name="flex flex-col gap-1.5",
+        class_name="flex flex-col gap-1.5 min-w-0",
     )
 
 
 def is_small_company(num_employees: str) -> bool:
-    """Check if company has 10 or fewer employees."""
-    return num_employees in ["1", "2-5", "6-10"]
+    """Check if company up to 5 employees."""
+    return num_employees in ["1", "2-5"]
 
 
 def check_if_company_email(email: str) -> bool:
@@ -208,18 +212,13 @@ def check_if_company_email(email: str) -> bool:
     return domain not in personal_domains and ".edu" not in domain
 
 
-def check_if_number_of_employees_is_valid(number_of_employees: str) -> bool:
-    """Check if the number of employees is valid."""
-    return number_of_employees.strip() != "Select"
+def check_if_default_value_is_selected(value: str) -> bool:
+    """Check if the default value is selected."""
+    return value.strip() != "Select"
 
 
-def check_if_referral_source_is_valid(referral_source: str) -> bool:
-    """Check if the referral source is valid."""
-    return referral_source.strip() != "Select"
-
-
-class DemoForm(rx.ComponentState):
-    """Component state for handling demo form submissions and integrations."""
+class DemoFormStateUI(rx.State):
+    """State for handling demo form submissions and integrations."""
 
     @rx.event(background=True)
     async def on_submit(self, form_data: dict[str, Any]):
@@ -234,13 +233,15 @@ class DemoForm(rx.ComponentState):
         if not check_if_company_email(form_data.get("email", "")):
             yield rx.set_focus("email")
             yield rx.toast.error(
-                "Please enter a valid company email",
+                "Please enter a valid company email - gmails, aol, me, etc are not allowed",
                 position="top-center",
             )
-            yield demo_form_error_message.push("Please enter a valid company email")
+            yield demo_form_error_message.push(
+                "Please enter a valid company email - gmails, aol, me, etc are not allowed"
+            )
             return
         # Check if the has selected a number of employees
-        if not check_if_number_of_employees_is_valid(
+        if not check_if_default_value_is_selected(
             form_data.get("number_of_employees", "")
         ):
             yield rx.toast.error(
@@ -249,9 +250,8 @@ class DemoForm(rx.ComponentState):
             )
             yield demo_form_error_message.push("Please select a number of employees")
             return
-
         # Check if the has entered a referral source
-        if not check_if_referral_source_is_valid(
+        if not check_if_default_value_is_selected(
             form_data.get("how_did_you_hear_about_us", "")
         ):
             yield rx.toast.error(
@@ -262,13 +262,21 @@ class DemoForm(rx.ComponentState):
                 "Please select how did you hear about us"
             )
             return
+        # Check if the has entered a technical level
+        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
+            yield rx.set_focus("technical_level")
+            yield rx.toast.error(
+                "Please select a technical level",
+                position="top-center",
+            )
+            yield demo_form_error_message.push("Please select a technical level")
+            return
         yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
-        await self.send_demo_event(form_data)
+        yield DemoFormStateUI.send_demo_event(form_data)
+        # Send data to Google Ads conversion tracking
+        yield rx.call_script("gtag_report_conversion()")
 
-        yield rx.call_script(
-            f"try {{ ko.identify('{form_data.get('email', '')}'); }} catch(e) {{ console.warn('Koala identify failed:', e); }}"
-        )
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
@@ -276,6 +284,7 @@ Job Title: {form_data.get("job_title", "")}
 Company Name: {form_data.get("company_name", "")}
 Number of Employees: {form_data.get("number_of_employees", "")}
 Internal Tools to Build: {form_data.get("internal_tools", "")}
+Technical Level: {form_data.get("technical_level", "")}
 How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         params = {
             "email": form_data.get("email", ""),
@@ -284,15 +293,23 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         }
 
         query_string = urllib.parse.urlencode(params)
+        technical_level = form_data.get("technical_level", "")
+
+        # Route based on company size and technical level
         if is_small_company(form_data.get("number_of_employees", "")):
-            yield rx.redirect(f"{CAL_REQUEST_DEMO_URL}?{query_string}")
-            return
+            # Small companies (up to 5 employees) always go to JH_CAL_URL
+            cal_url = JH_CAL_URL
+        else:
+            # Large companies (more than 5 employees)
+            if technical_level == "Non-technical":
+                cal_url = JH_CAL_URL
+            else:  # Neutral or Technical
+                cal_url = INTRO_CAL_URL
 
-        cal_url_with_params = f"{CAL_ENTERPRISE_FOLLOW_UP_URL}?{query_string}"
+        cal_url_with_params = f"{cal_url}?{query_string}"
+        yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
 
-        yield is_sending_demo_form.push(False)
-        yield rx.redirect(cal_url_with_params)
-
+    @rx.event(background=True)
     async def send_demo_event(self, form_data: dict[str, Any]):
         """Create and send demo event to PostHog and Slack.
 
@@ -313,6 +330,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             company_name=form_data.get("company_name", ""),
             num_employees=form_data.get("number_of_employees", ""),
             internal_tools=form_data.get("internal_tools", ""),
+            technical_level=form_data.get("technical_level", ""),
             referral_source=form_data.get("how_did_you_hear_about_us", ""),
         )
 
@@ -388,6 +406,7 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             event_instance: An instance of DemoEvent with form data.
         """
         slack_payload = {
+            "technicalLevel": event_instance.technical_level,
             "lookingToBuild": event_instance.internal_tools,
             "businessEmail": event_instance.company_email,
             "howDidYouHear": event_instance.referral_source,
@@ -408,80 +427,126 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
         except Exception as e:
             log(f"Error sending data to Slack webhook: {e}")
 
-    @classmethod
-    def get_component(cls, **props):
-        """Create and return the demo form component.
 
-        Builds a complete form with all required fields, validation,
-        and styling. The form includes personal info, company details,
-        and preferences.
+def demo_form(**props) -> rx.Component:
+    """Create and return the demo form component.
 
-        Args:
-            **props: Additional properties to pass to the form component
+    Builds a complete form with all required fields, validation,
+    and styling. The form includes personal info, company details,
+    and preferences.
 
-        Returns:
-            A Reflex form component with all demo form fields
-        """
-        return rx.el.form(
-            rx.el.div(
-                input_field("First name", "John", "first_name", "text", True),
-                input_field("Last name", "Smith", "last_name", "text", True),
-                class_name="grid grid-cols-2 gap-4",
+    Args:
+        **props: Additional properties to pass to the form component
+
+    Returns:
+        A Reflex form component with all demo form fields
+    """
+    return rx.el.form(
+        rx.el.div(
+            input_field("First name", "John", "first_name", "text", True),
+            input_field("Last name", "Smith", "last_name", "text", True),
+            class_name="grid grid-cols-2 gap-4",
+        ),
+        input_field("Business Email", "john@company.com", "email", "email", True),
+        rx.el.div(
+            input_field("Job title", "CTO", "job_title", "text", True),
+            input_field("Company name", "Pynecone, Inc.", "company_name", "text", True),
+            class_name="grid grid-cols-2 gap-4",
+        ),
+        text_area_field(
+            "What are you looking to build? *",
+            "Please list any apps, requirements, or data sources you plan on using",
+            "internal_tools",
+            True,
+        ),
+        rx.el.div(
+            select_field(
+                "Number of employees?",
+                "number_of_employees",
+                ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
             ),
-            input_field("Business Email", "john@company.com", "email", "email", True),
-            rx.el.div(
-                input_field("Job title", "CTO", "job_title", "text", True),
-                input_field(
-                    "Company name", "Pynecone, Inc.", "company_name", "text", True
-                ),
-                class_name="grid grid-cols-2 gap-4",
+            select_field(
+                "How did you hear about us?",
+                "how_did_you_hear_about_us",
+                [
+                    "Google Search",
+                    "Social Media",
+                    "Word of Mouth",
+                    "Blog",
+                    "Conference",
+                    "Other",
+                ],
             ),
-            text_area_field(
-                "What are you looking to build? *",
-                "Please list any apps, requirements, or data sources you plan on using",
-                "internal_tools",
-                True,
-            ),
-            rx.el.div(
-                select_field(
-                    "Number of employees?",
-                    "number_of_employees",
-                    ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
-                ),
-                select_field(
-                    "How did you hear about us?",
-                    "how_did_you_hear_about_us",
-                    [
-                        "Google Search",
-                        "Social Media",
-                        "Word of Mouth",
-                        "Blog",
-                        "Conference",
-                        "Other",
-                    ],
-                ),
-                class_name="grid @max-md:grid-cols-1 grid-cols-2 gap-4",
-            ),
-            rx.cond(
+            class_name="grid grid-cols-1 md:grid-cols-2 gap-4",
+        ),
+        select_field(
+            "How technical are you?",
+            "technical_level",
+            ["Non-technical", "Neutral", "Technical"],
+            True,
+        ),
+        rx.cond(
+            demo_form_error_message.value,
+            rx.el.span(
                 demo_form_error_message.value,
-                rx.el.span(
-                    demo_form_error_message.value,
-                    class_name="text-destructive-10 text-sm font-medium",
+                class_name="text-destructive-10 text-sm font-medium px-2 py-1 rounded-md bg-destructive-3 border border-destructive-4",
+            ),
+        ),
+        ui.button(
+            "Submit",
+            type="submit",
+            class_name="w-full",
+            loading=is_sending_demo_form.value,
+        ),
+        on_submit=DemoFormStateUI.on_submit,
+        class_name=ui.cn(
+            "@container flex flex-col lg:gap-6 gap-2 p-6",
+            props.pop("class_name", ""),
+        ),
+        **props,
+    )
+
+
+def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
+    """Return a demo form dialog container element.
+
+    Args:
+        trigger: The component that triggers the dialog
+        **props: Additional properties to pass to the dialog root
+
+    Returns:
+        A Reflex dialog component containing the demo form
+    """
+    class_name = ui.cn("w-auto", props.pop("class_name", ""))
+    return ui.dialog.root(
+        ui.dialog.trigger(render_=trigger),
+        ui.dialog.portal(
+            ui.dialog.backdrop(),
+            ui.dialog.popup(
+                rx.el.div(
+                    rx.el.div(
+                        rx.el.h1(
+                            "Book a Demo",
+                            class_name="text-xl font-bold text-secondary-12",
+                        ),
+                        ui.dialog.close(
+                            render_=ui.button(
+                                ui.hi("Cancel01Icon"),
+                                variant="ghost",
+                                size="icon-sm",
+                                class_name="text-secondary-11",
+                            ),
+                        ),
+                        class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
+                    ),
+                    demo_form(class_name="w-full max-w-md"),
+                    class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
                 ),
+                class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
             ),
-            ui.button(
-                "Submit",
-                type="submit",
-                class_name="w-full",
-                loading=is_sending_demo_form.value,
-            ),
-            on_submit=cls.on_submit,
-            class_name=ui.cn(
-                "@container flex flex-col gap-6 p-6",
-                props.pop("class_name", ""),
-            ),
-            **props,
-        )
-
-
-demo_form = DemoForm.create
+        ),
+        open=demo_form_open_cs.value,
+        on_open_change=demo_form_open_cs.set_value,
+        class_name=class_name,
+        **props,
+    )

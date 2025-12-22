@@ -15,9 +15,7 @@ class ClassNames:
     """Class names for the checkbox component."""
 
     ROOT = "flex size-4 items-center justify-center rounded-[4px] data-[checked]:bg-primary-9 data-[unchecked]:border data-[unchecked]:border-secondary-8 data-[disabled]:cursor-not-allowed data-[disabled]:border data-[disabled]:border-secondary-4 data-[disabled]:bg-secondary-3 hover:bg-secondary-3 transition-colors cursor-default"
-    INDICATOR = (
-        "flex text-white data-[unchecked]:hidden data-[disabled]:text-secondary-8"
-    )
+    INDICATOR = "flex text-primary-contrast data-[unchecked]:hidden data-[disabled]:text-secondary-8"
     LABEL = "text-sm text-secondary-12 font-medium flex items-center gap-2"
     CONTAINER = "flex flex-row items-center gap-2"
 
@@ -70,6 +68,9 @@ class CheckboxRoot(CheckboxBaseComponent):
 
     # Whether the user should be unable to tick or untick the checkbox. Defaults to False.
     read_only: Var[bool]
+
+    # The value of the checkbox when it is unchecked. Used for form submission when unchecked. Defaults to not submitting any value.
+    unchecked_value: Var[str]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:

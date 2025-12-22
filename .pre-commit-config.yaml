@@ -2,7 +2,7 @@ fail_fast: true
 
 repos:
   - repo: https://github.com/astral-sh/ruff-pre-commit
-    rev: v0.14.1
+    rev: v0.14.10
     hooks:
       - id: ruff-check
         files: ^reflex_ui/
@@ -28,7 +28,7 @@ repos:
   #       entry: python3 scripts/make_pyi.py
 
   - repo: https://github.com/RobertCraigie/pyright-python
-    rev: v1.1.406
+    rev: v1.1.407
     hooks:
       - id: pyright
         files: ^reflex_ui/

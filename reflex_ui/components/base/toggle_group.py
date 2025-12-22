@@ -44,13 +44,13 @@ class ToggleGroupRoot(ToggleGroupBaseComponent):
     on_value_change: EventHandler[passthrough_event_spec(list[str | int], dict)]
 
     # When false only one item in the group can be pressed. If any item in the group becomes pressed, the others will become unpressed. When true multiple items can be pressed. Defaults to False.
-    toggle_multiple: Var[bool]
+    multiple: Var[bool]
 
     # Whether the toggle group should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     # The component orientation (layout flow direction). Defaults to "horizontal".
     orientation: Var[LiteralOrientation]

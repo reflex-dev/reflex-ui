@@ -19,11 +19,11 @@ LiteralButtonVariant = Literal[
 LiteralButtonSize = Literal[
     "xs", "sm", "md", "lg", "xl", "icon-xs", "icon-sm", "icon-md", "icon-lg", "icon-xl"
 ]
-DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:border disabled:border-secondary-4/80 disabled:bg-secondary-3 disabled:text-secondary-8 shrink-0 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 text-medium cursor-pointer box-border"
+DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap text-sm font-medium transition-colors disabled:cursor-not-allowed disabled:border disabled:border-secondary-4/80 disabled:bg-secondary-3 disabled:text-secondary-8 [&_svg]:pointer-events-none [&_svg:not([class*='size-'])]:size-4 shrink-0 [&_svg]:shrink-0 cursor-pointer box-border"
 BUTTON_VARIANTS = {
     "variant": {
-        "primary": "bg-primary-9 text-white hover:bg-primary-10",
-        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-white",
+        "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
+        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast",
         "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
         "ghost": "hover:bg-secondary-3 text-secondary-11",

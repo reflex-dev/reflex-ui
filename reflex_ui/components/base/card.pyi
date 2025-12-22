@@ -16,9 +16,9 @@ from reflex_ui.components.component import CoreComponent
 
 class ClassNames:
     ROOT = "rounded-ui-xl border border-secondary-a4 bg-secondary-1 shadow-small"
-    HEADER = "flex flex-col gap-2 p-6"
+    HEADER = "flex flex-col px-6 pt-6 pb-4"
     TITLE = "text-2xl font-semibold text-secondary-12"
-    DESCRIPTION = "text-sm text-secondary-11 font-[450]"
+    DESCRIPTION = "text-sm text-secondary-11 font-[450] mt-4"
     CONTENT = "flex flex-col gap-4 px-6 pb-6"
     FOOTER = "flex flex-row justify-between items-center px-6 pb-6"
 

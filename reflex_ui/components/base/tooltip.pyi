@@ -87,9 +87,7 @@ class TooltipRoot(TooltipBaseComponent):
         | Var[Literal["bottom", "none", "x", "y"]]
         | None = None,
         disabled: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        hoverable: Var[bool] | bool | None = None,
+        disable_hoverable_popup: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -170,6 +168,8 @@ class TooltipTrigger(TooltipBaseComponent):
     def create(
         cls,
         *children,
+        delay: Var[int] | int | None = None,
+        close_delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -261,7 +261,7 @@ class TooltipPositioner(TooltipBaseComponent):
         position_method: Literal["absolute", "fixed"]
         | Var[Literal["absolute", "fixed"]]
         | None = None,
-        track_anchor: Var[bool] | bool | None = None,
+        disable_anchor_tracking: Var[bool] | bool | None = None,
         collision_avoidance: Var[dict[str, str] | str]
         | dict[str, str]
         | str
@@ -383,9 +383,7 @@ class HighLevelTooltip(TooltipRoot):
         | Var[Literal["bottom", "none", "x", "y"]]
         | None = None,
         disabled: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        hoverable: Var[bool] | bool | None = None,
+        disable_hoverable_popup: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -432,9 +430,7 @@ class HighLevelTooltip(TooltipRoot):
             on_open_change_complete: Event handler called after any animations complete when the tooltip is opened or closed.
             track_cursor_axis: Determines which axis the tooltip should track the cursor on. Defaults to "None".
             disabled: Whether the tooltip is disabled. Defaults to False.
-            delay: How long to wait before opening the tooltip. Specified in milliseconds. Defaults to 600.
-            close_delay: How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
-            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
+            disable_hoverable_popup: Whether to disable the hoverable popup behavior. When true, the popup will close when the pointer leaves the trigger, even if it moves to the popup. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -468,9 +464,7 @@ class Tooltip(ComponentNamespace):
         | Var[Literal["bottom", "none", "x", "y"]]
         | None = None,
         disabled: Var[bool] | bool | None = None,
-        delay: Var[int] | int | None = None,
-        close_delay: Var[int] | int | None = None,
-        hoverable: Var[bool] | bool | None = None,
+        disable_hoverable_popup: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -517,9 +511,7 @@ class Tooltip(ComponentNamespace):
             on_open_change_complete: Event handler called after any animations complete when the tooltip is opened or closed.
             track_cursor_axis: Determines which axis the tooltip should track the cursor on. Defaults to "None".
             disabled: Whether the tooltip is disabled. Defaults to False.
-            delay: How long to wait before opening the tooltip. Specified in milliseconds. Defaults to 600.
-            close_delay: How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
-            hoverable: Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
+            disable_hoverable_popup: Whether to disable the hoverable popup behavior. When true, the popup will close when the pointer leaves the trigger, even if it moves to the popup. Defaults to False.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

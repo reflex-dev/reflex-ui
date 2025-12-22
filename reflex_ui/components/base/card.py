@@ -11,9 +11,9 @@ class ClassNames:
     """Class names for the card component."""
 
     ROOT = "rounded-ui-xl border border-secondary-a4 bg-secondary-1 shadow-small"
-    HEADER = "flex flex-col gap-2 p-6"
+    HEADER = "flex flex-col px-6 pt-6 pb-4"
     TITLE = "text-2xl font-semibold text-secondary-12"
-    DESCRIPTION = "text-sm text-secondary-11 font-[450]"
+    DESCRIPTION = "text-sm text-secondary-11 font-[450] mt-4"
     CONTENT = "flex flex-col gap-4 px-6 pb-6"
     FOOTER = "flex flex-row justify-between items-center px-6 pb-6"
 
@@ -100,10 +100,10 @@ class HighLevelCard(CardComponent):
     @classmethod
     def create(cls, *children, **props):
         """Create the card component."""
-        title = props.pop("title", "")
-        description = props.pop("description", "")
-        content = props.pop("content", "")
-        footer = props.pop("footer", "")
+        title = props.pop("title", None)
+        description = props.pop("description", None)
+        content = props.pop("content", None)
+        footer = props.pop("footer", None)
 
         return CardRoot.create(
             (

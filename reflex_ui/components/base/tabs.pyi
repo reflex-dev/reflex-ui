@@ -124,7 +124,7 @@ class TabsList(TabsBaseComponent):
         cls,
         *children,
         activate_on_focus: Var[bool] | bool | None = None,
-        loop: Var[bool] | bool | None = None,
+        loop_focus: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -164,6 +164,7 @@ class TabsTab(TabsBaseComponent):
         value: Var[int | str] | int | str | None = None,
         native_button: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
+        render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -201,6 +202,7 @@ class TabsIndicator(TabsBaseComponent):
         cls,
         *children,
         render_before_hydration: Var[bool] | bool | None = None,
+        render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -239,6 +241,7 @@ class TabsPanel(TabsBaseComponent):
         *children,
         value: Var[int | str] | int | str | None = None,
         keep_mounted: Var[bool] | bool | None = None,
+        render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]

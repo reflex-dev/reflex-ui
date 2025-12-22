@@ -66,11 +66,11 @@ class TabsList(TabsBaseComponent):
 
     tag = "Tabs.List"
 
-    # Whether to automatically change the active tab on arrow key focus. Otherwise, tabs will be activated using Enter or Spacebar key press. Defaults to True.
+    # Whether to automatically change the active tab on arrow key focus. Otherwise, tabs will be activated using Enter or Spacebar key press. Defaults to False.
     activate_on_focus: Var[bool]
 
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
-    loop: Var[bool]
+    loop_focus: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
@@ -94,6 +94,9 @@ class TabsTab(TabsBaseComponent):
     # Whether the Tab is disabled. Defaults to false.
     disabled: Var[bool]
 
+    # The render prop
+    render_: Var[Component]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs tab component."""
@@ -109,6 +112,9 @@ class TabsIndicator(TabsBaseComponent):
 
     # Whether to render itself before React hydrates. This minimizes the time that the indicator isn't visible after server-side rendering. Defaults to False.
     render_before_hydration: Var[bool]
+
+    # The render prop
+    render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
@@ -128,6 +134,9 @@ class TabsPanel(TabsBaseComponent):
 
     # Whether to keep the HTML element in the DOM while the panel is hidden. Defaults to False.
     keep_mounted: Var[bool]
+
+    # The render prop
+    render_: Var[Component]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:

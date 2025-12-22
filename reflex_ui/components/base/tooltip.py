@@ -59,19 +59,14 @@ class TooltipRoot(TooltipBaseComponent):
     # Whether the tooltip is disabled. Defaults to False.
     disabled: Var[bool]
 
-    # How long to wait before opening the tooltip. Specified in milliseconds. Defaults to 600.
-    delay: Var[int]
-
-    # How long to wait before closing the tooltip. Specified in milliseconds. Defaults to 0.
-    close_delay: Var[int]
-
-    # Whether the tooltip contents can be hovered without closing the tooltip. Defaults to True.
-    hoverable: Var[bool]
+    # Whether to disable the hoverable popup behavior. When true, the popup will close when the pointer leaves the trigger, even if it moves to the popup. Defaults to False.
+    disable_hoverable_popup: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tooltip root component."""
         props["data-slot"] = "tooltip"
+        props.setdefault("disable_hoverable_popup", True)
         return super().create(*children, **props)
 
 
@@ -100,6 +95,12 @@ class TooltipTrigger(TooltipBaseComponent):
     """Trigger element for the tooltip."""
 
     tag = "Tooltip.Trigger"
+
+    # How long to wait before the tooltip may be opened on hover. Specified in milliseconds. Defaults to 300.
+    delay: Var[int]
+
+    # How long to wait before closing the tooltip that was opened on hover. Specified in milliseconds. Defaults to 0.
+    close_delay: Var[int]
 
     # The render prop
     render_: Var[Component]
@@ -165,8 +166,8 @@ class TooltipPositioner(TooltipBaseComponent):
     # Determines which CSS position property to use. Defaults to "absolute".
     position_method: Var[LiteralPositionMethod]
 
-    # Indicates whether the tooltip should track the anchor's position
-    track_anchor: Var[bool]
+    # Whether to disable the popup tracking any layout shift of its positioning anchor. Defaults to False.
+    disable_anchor_tracking: Var[bool]
 
     # Determines how to handle collisions when positioning the popup.
     collision_avoidance: Var[str | dict[str, str]]
@@ -224,9 +225,11 @@ class HighLevelTooltip(TooltipRoot):
         "on_open_change_complete",
         "track_cursor_axis",
         "disabled",
+        "disable_hoverable_popup",
+    }
+    _trigger_props = {
         "delay",
         "close_delay",
-        "hoverable",
     }
     _portal_props = {
         "container",
@@ -243,7 +246,7 @@ class HighLevelTooltip(TooltipRoot):
         "collision_padding",
         "sticky",
         "position_method",
-        "track_anchor",
+        "disable_anchor_tracking",
         "collision_avoidance",
         "class_name",
     }
@@ -271,6 +274,7 @@ class HighLevelTooltip(TooltipRoot):
 
         # Extract props for different parts
         root_props = {k: props.pop(k) for k in cls._root_props & props.keys()}
+        trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
         portal_props = {k: props.pop(k) for k in cls._portal_props & props.keys()}
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
@@ -278,12 +282,13 @@ class HighLevelTooltip(TooltipRoot):
 
         # Set default values
         positioner_props.setdefault("side_offset", 8)
-        root_props.setdefault("delay", 0)
-        root_props.setdefault("close_delay", 0)
+        trigger_props.setdefault("delay", 0)
+        trigger_props.setdefault("close_delay", 0)
 
         return TooltipRoot.create(
             TooltipTrigger.create(
                 render_=trigger,
+                **trigger_props,
             ),
             TooltipPortal.create(
                 TooltipPositioner.create(
