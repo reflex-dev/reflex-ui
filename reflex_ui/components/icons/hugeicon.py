@@ -10,7 +10,7 @@ from reflex_ui.components.component import CoreComponent
 class HugeIcon(CoreComponent):
     """A HugeIcon component."""
 
-    library = "@hugeicons/react@1.1.1"
+    library = "@hugeicons/react@1.1.3"
 
     tag = "HugeiconsIcon"
 
@@ -51,7 +51,7 @@ class HugeIcon(CoreComponent):
                     icon_name,
                     _var_data=VarData(
                         imports={
-                            "@hugeicons/core-free-icons@1.2.1": ImportVar(tag=icon_name)
+                            "@hugeicons/core-free-icons@3.1.0": ImportVar(tag=icon_name)
                         }
                     ),
                 )
