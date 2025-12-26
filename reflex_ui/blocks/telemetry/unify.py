@@ -13,3 +13,35 @@ def get_unify_trackers() -> rx.Component:
         rx.Component: The PIXEL_SCRIPT_UNIFY script component
     """
     return rx.script(PIXEL_SCRIPT_UNIFY)
+
+
+def unify_identify_js(
+    email: str, person_attributes: dict[str, str | int | bool] | None = None
+) -> str:
+    """Generate JavaScript to identify a user in Unify.
+
+    Args:
+        email: The user's email address (required)
+        person_attributes: Optional dictionary of person attributes (status, etc.)
+
+    Returns:
+        str: JavaScript code to identify the user in Unify
+    """
+    import json
+
+    # Escape the email to prevent XSS
+    escaped_email = email.replace("'", "\\'").replace('"', '\\"').replace("\\", "\\\\")
+
+    # Build the person object - email is always required inside person
+    person_obj: dict[str, str | int | bool] = {"email": email}
+    if person_attributes:
+        person_obj.update(person_attributes)
+
+    # Convert to JSON string - wrap in "person" key
+    payload_json = json.dumps({"person": person_obj})
+
+    return f"""
+    if (window.unify && window.unify.identify) {{
+        window.unify.identify('{escaped_email}', {payload_json});
+    }}
+    """

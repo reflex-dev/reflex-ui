@@ -4,28 +4,32 @@ import os
 
 import reflex as rx
 
-DEFAULT_CAL_FORM = os.getenv(
-    "DEFAULT_CAL_FORM", "forms/f87bd9b2-b339-4915-b4d4-0098e2db4394"
-)
+DEFAULT_CAL_NAMESPACE = os.getenv("DEFAULT_CAL_NAMESPACE", "reflex-intro-call")
+
+DEFAULT_CAL_LINK = os.getenv("DEFAULT_CAL_LINK", "team/reflex/reflex-intro-call")
 
 
-def get_cal_attrs(cal_form: str = DEFAULT_CAL_FORM, **kwargs):
+def get_cal_attrs(
+    cal_namespace: str = DEFAULT_CAL_NAMESPACE,
+    cal_link: str = DEFAULT_CAL_LINK,
+    config: str | rx.Var[str] | None = '{"theme": "dark", "layout": "month_view"}',
+    **kwargs,
+):
     """Get Cal.com attributes for embedding.
 
     Args:
-        cal_form: The Cal.com form link
+        cal_namespace: The Cal.com namespace
+        cal_link: The Cal.com form link
+        config: Cal.com configuration dict including theme, layout, name, email, etc.
         **kwargs: Additional attributes to include
 
     Returns:
         Dictionary of Cal.com attributes
     """
     attrs = {
-        "data-cal-link": cal_form,
-        "data-cal-namespace": "talk",
-        "data-cal-config": rx.color_mode_cond(
-            '{"theme":"light","layout":"month_view"}',
-            '{"theme":"dark","layout":"month_view"}',
-        ),
+        "data-cal-link": cal_link,
+        "data-cal-namespace": cal_namespace,
+        "data-cal-config": config,
     }
     attrs.update(kwargs)
     return attrs
@@ -55,7 +59,7 @@ class CalcomPopupEmbed(rx.Fragment):
             """
 useEffect(() => {
   (async function () {
-    const cal = await getCalApi({ namespace: "talk" });
+    const cal = await getCalApi({ namespace: "reflex-intro-call" });
     cal("ui", {
       hideEventTypeDetails: false,
       layout: "month_view",
@@ -81,24 +85,32 @@ class CalEmbed(rx.Component):
 
     cal_link: rx.Var[str]
 
+    namespace: rx.Var[str]
+
     config: rx.Var[dict]
 
     @classmethod
     def create(
         cls,
-        cal_link: str = DEFAULT_CAL_FORM,
-        config: dict | None = None,
+        cal_link: str = DEFAULT_CAL_LINK,
+        cal_namespace: str = DEFAULT_CAL_NAMESPACE,
+        config: rx.Var[dict] | dict | None = None,
         **props,
     ):
         """Create a Cal.com embed component.
 
         Args:
-            cal_link: The Cal.com link (e.g., "forms/...")
-            config: Configuration object for Cal.com (e.g., {"theme": "light"})
+            cal_link: The Cal.com link (e.g., "team/reflex/reflex-intro-call")
+            cal_namespace: The namespace for the Cal.com embed
+            config: Configuration object for Cal.com including prefill data.
+                   According to https://cal.com/help/embedding/prefill-booking-form-embed
+                   you can prefill: name, email, notes, and location.
+                   Example: {"layout": "month_view", "name": "John Doe", "email": "[email protected]", "notes": "Company details..."}
             **props: Additional props to pass to the component
         """
         return super().create(
             cal_link=cal_link,
+            namespace=cal_namespace,
             config=config,
             **props,
         )
