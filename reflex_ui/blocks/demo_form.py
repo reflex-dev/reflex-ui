@@ -5,8 +5,9 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
-import reflex as rx
 from typing import Any
+
+import reflex as rx
 from reflex.experimental.client_state import ClientStateVar
 
 import reflex_ui as ui
@@ -123,6 +124,8 @@ class DemoFormStateUI(rx.State):
                 ),
                 demo_form_error_message.push("Please select a technical level"),
             ]
+
+        return None
 
 
 def input_field(
