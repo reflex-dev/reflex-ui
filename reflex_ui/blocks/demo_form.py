@@ -273,10 +273,7 @@ class DemoFormStateUI(rx.State):
             return
         yield is_sending_demo_form.push(True)
         # Send to PostHog and Slack for all submissions
-        yield DemoFormStateUI.send_demo_event(form_data)
-        # Send data to Google Ads conversion tracking
-        yield rx.call_script("gtag_report_conversion()")
-
+        await self.send_demo_event(form_data)
         notes_content = f"""
 Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
 Business Email: {form_data.get("email", "")}
@@ -292,24 +289,13 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             "notes": notes_content,
         }
 
-        query_string = urllib.parse.urlencode(params)
-        technical_level = form_data.get("technical_level", "")
+        print(params)
 
-        # Route based on company size and technical level
-        if is_small_company(form_data.get("number_of_employees", "")):
-            # Small companies (up to 5 employees) always go to JH_CAL_URL
-            cal_url = JH_CAL_URL
-        else:
-            # Large companies (more than 5 employees)
-            if technical_level == "Non-technical":
-                cal_url = JH_CAL_URL
-            else:  # Neutral or Technical
-                cal_url = INTRO_CAL_URL
+        yield is_sending_demo_form.push(False)
+        yield demo_form_open_cs.set_value(False)
+        yield rx.toast.success("Thank you for your submission!", position="top-center")
 
-        cal_url_with_params = f"{cal_url}?{query_string}"
-        yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
-
-    @rx.event(background=True)
+    # @rx.event(background=True)
     async def send_demo_event(self, form_data: dict[str, Any]):
         """Create and send demo event to PostHog and Slack.
 
@@ -334,99 +320,6 @@ How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
             referral_source=form_data.get("how_did_you_hear_about_us", ""),
         )
 
-        # Send data to PostHog, Common Room, and Slack
-        await asyncio.gather(
-            self.send_data_to_posthog(demo_event),
-            self.send_data_to_common_room(demo_event),
-            self.send_data_to_slack(demo_event),
-        )
-
-    async def send_data_to_posthog(self, event_instance: PosthogEvent):
-        """Send data to PostHog using class introspection.
-
-        Args:
-            event_instance: An instance of a PosthogEvent subclass.
-
-        Raises:
-            httpx.HTTPError: When there is an error sending data to PostHog.
-        """
-        event_data = {
-            "api_key": POSTHOG_API_KEY,
-            "event": event_instance.__class__.__name__,
-            "properties": event_instance.to_dict(),
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "https://app.posthog.com/capture/", json=event_data
-                )
-                response.raise_for_status()
-        except Exception:
-            log("Error sending data to PostHog")
-
-    async def send_data_to_common_room(self, event_instance: DemoEvent):
-        """Update CommonRoom with user login information."""
-        tags: Sequence[str] = [
-            "Requested Demo",
-        ]
-
-        try:
-            async with httpx.AsyncClient() as client:
-                await client.post(
-                    f"https://api.commonroom.io/community/v1/source/{COMMONROOM_DESTINATION_ID}/activity",
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {COMMONROOM_API_TOKEN}",
-                    },
-                    json={
-                        "id": "requested_demo",
-                        "activityType": "requested_demo",
-                        "user": {
-                            "id": str(uuid.uuid4()),
-                            "email": event_instance.company_email,
-                        },
-                        "tags": [
-                            {
-                                "type": "name",
-                                "name": tag,
-                            }
-                            for tag in tags
-                        ],
-                    },
-                )
-        except Exception as ex:
-            log(
-                f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
-            )
-
-    async def send_data_to_slack(self, event_instance: DemoEvent):
-        """Send demo form data to Slack webhook.
-
-        Args:
-            event_instance: An instance of DemoEvent with form data.
-        """
-        slack_payload = {
-            "technicalLevel": event_instance.technical_level,
-            "lookingToBuild": event_instance.internal_tools,
-            "businessEmail": event_instance.company_email,
-            "howDidYouHear": event_instance.referral_source,
-            "jobTitle": event_instance.job_title,
-            "numEmployees": event_instance.num_employees,
-            "companyName": event_instance.company_name,
-            "firstName": event_instance.first_name,
-            "lastName": event_instance.last_name,
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    SLACK_DEMO_WEBHOOK_URL,
-                    json=slack_payload,
-                    headers={"Content-Type": "application/json"},
-                )
-                response.raise_for_status()
-        except Exception as e:
-            log(f"Error sending data to Slack webhook: {e}")
-
 
 def demo_form(**props) -> rx.Component:
     """Create and return the demo form component.
@@ -441,7 +334,7 @@ def demo_form(**props) -> rx.Component:
     Returns:
         A Reflex form component with all demo form fields
     """
-    return rx.el.form(
+    form = rx.el.form(
         rx.el.div(
             input_field("First name", "John", "first_name", "text", True),
             input_field("Last name", "Smith", "last_name", "text", True),
@@ -503,7 +396,11 @@ def demo_form(**props) -> rx.Component:
             "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
         ),
+        data_default_form_id="965991",
         **props,
+    )
+    return rx.fragment(
+        form,
     )
 
 

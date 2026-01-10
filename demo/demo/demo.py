@@ -3,6 +3,7 @@
 import reflex as rx
 
 import reflex_ui as ui
+from reflex_ui.blocks.demo_form import demo_form, demo_form_dialog
 
 
 class State(rx.State):
@@ -15,46 +16,7 @@ class State(rx.State):
 
 def index() -> rx.Component:
     return rx.el.div(
-        rx.el.div(
-            ui.tooltip(
-                ui.button(
-                    ui.icon("SmileIcon"),
-                    "Click me",
-                    on_click=rx.toast.success(
-                        "You are cool :)",
-                        position="top-center",
-                    ),
-                ),
-                content="Seriously, click me",
-            ),
-            ui.checkbox(
-                label="Click me",
-                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
-            ),
-            ui.slider(
-                value=State.seed,
-                on_value_change=State.set_seed,
-                on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
-                class_name="max-w-xs",
-            ),
-            ui.gradient_profile(
-                seed=State.seed,
-                class_name="size-10",
-            ),
-            ui.switch(
-                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
-            ),
-            ui.select(
-                items=[f"Item {i}" for i in range(1, 11)],
-                name="select",
-                default_value="Select an item",
-                on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
-                on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
-            ),
-            class_name="flex flex-col gap-y-6 justify-center items-center",
-        ),
-        ui.theme_switcher(class_name="absolute top-4 right-4"),
-        class_name="flex flex-row gap-16 justify-center items-center h-screen bg-secondary-1 relative",
+        demo_form(),
     )
 
 
@@ -77,6 +39,9 @@ app = rx.App(
         rx.el.link(
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
             rel="stylesheet",
+        ),
+        rx.el.script(
+            """!function(e,t){var _=0;e.__default__=e.__default__||{},e.__default__.form_id=268792,e.__default__.team_id=654,e.__default__.listenToIds=[],function e(){var o=t.createElement("script");o.async=!0,o.src="https://import-cdn.default.com",o.onload=function(){!0,console.info("[Default.com] Powered by Default.com")},o.onerror=function(){++_<=3&&setTimeout(e,1e3*_)},t.head.appendChild(o)}()}(window,document);"""
         ),
     ],
 )
