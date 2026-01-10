@@ -5,68 +5,124 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
-import asyncio
-import os
-import urllib.parse
-import uuid
-from collections.abc import Sequence
-from dataclasses import asdict, dataclass
-from typing import Any
-
-import httpx
 import reflex as rx
+from typing import Any
 from reflex.experimental.client_state import ClientStateVar
-from reflex.utils.console import log
 
 import reflex_ui as ui
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
-is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
 
-COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
-COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
-CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
-)
-JH_CAL_URL = os.getenv("JH_CAL_URL", "https://cal.com/team/reflex/demo-with-reflex")
-INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
-CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
-    "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://cal.com/team/reflex/reflex-intro",
-)
-SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
-POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
+
+def check_if_company_email(email: str) -> bool:
+    """Check if an email address is from a company domain (not a personal email provider).
+
+    Args:
+        email: The email address to check
+
+    Returns:
+        True if it's likely a company email, False if it's from a personal provider
+    """
+    if not email or "@" not in email:
+        return False
+
+    domain = email.split("@")[-1].lower()
+
+    # List of common personal email providers
+    personal_domains = {
+        "gmail.com",
+        "outlook.com",
+        "hotmail.com",
+        "yahoo.com",
+        "icloud.com",
+        "aol.com",
+        "protonmail.com",
+        "proton.me",
+        "mail.com",
+        "yandex.com",
+        "zoho.com",
+        "live.com",
+        "msn.com",
+        "me.com",
+        "mac.com",
+        "googlemail.com",
+        "yahoo.co.uk",
+        "yahoo.ca",
+        "yahoo.co.in",
+        "outlook.co.uk",
+        "hotmail.co.uk",
+    }
+
+    return domain not in personal_domains and ".edu" not in domain
 
 
-@dataclass(kw_only=True)
-class PosthogEvent:
-    """Base event structure."""
+def check_if_default_value_is_selected(value: str) -> bool:
+    """Check if the default value is selected."""
+    return value.strip() != "Select"
 
-    distinct_id: str
 
-    def to_dict(self) -> dict[str, Any]:
-        """Convert the event instance to a dictionary representation.
+class DemoFormStateUI(rx.State):
+    """State for handling demo form submissions and validation."""
 
-        Returns:
-            A dictionary containing all the event data.
+    @rx.event
+    def on_submit(self, form_data: dict[str, Any]):
+        """Handle form submission with validation logic.
+
+        Validates company email and required fields. If successful, clears errors.
+        The actual submission is handled by the external script.
+
+        Args:
+            form_data: Form data dictionary containing user inputs
         """
-        return asdict(self)
-
-
-@dataclass
-class DemoEvent(PosthogEvent):
-    """Event for demo booking."""
-
-    first_name: str
-    last_name: str
-    company_email: str
-    job_title: str
-    company_name: str
-    num_employees: str
-    internal_tools: str
-    technical_level: str
-    referral_source: str
+        if not check_if_company_email(form_data.get("email", "")):
+            return [
+                rx.set_focus("email"),
+                rx.toast.error(
+                    "Please enter a valid company email - gmails, aol, me, etc are not allowed",
+                    position="top-center",
+                ),
+                demo_form_error_message.push(
+                    "Please enter a valid company email - gmails, aol, me, etc are not allowed"
+                ),
+            ]
+        
+        # Check if the has selected a number of employees
+        if not check_if_default_value_is_selected(
+            form_data.get("number_of_employees", "")
+        ):
+            return [
+                rx.toast.error(
+                    "Please select a number of employees",
+                    position="top-center",
+                ),
+                demo_form_error_message.push("Please select a number of employees"),
+            ]
+            
+        # Check if the has entered a referral source
+        if not check_if_default_value_is_selected(
+            form_data.get("how_did_you_hear_about_us", "")
+        ):
+            return [
+                rx.toast.error(
+                    "Please select how did you hear about us",
+                    position="top-center",
+                ),
+                demo_form_error_message.push(
+                    "Please select how did you hear about us"
+                ),
+            ]
+            
+        # Check if the has entered a technical level
+        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
+            return [
+                rx.set_focus("technical_level"),
+                rx.toast.error(
+                    "Please select a technical level",
+                    position="top-center",
+                ),
+                demo_form_error_message.push("Please select a technical level"),
+            ]
 
 
 def input_field(
@@ -165,162 +221,6 @@ def select_field(
     )
 
 
-def is_small_company(num_employees: str) -> bool:
-    """Check if company up to 5 employees."""
-    return num_employees in ["1", "2-5"]
-
-
-def check_if_company_email(email: str) -> bool:
-    """Check if an email address is from a company domain (not a personal email provider).
-
-    Args:
-        email: The email address to check
-
-    Returns:
-        True if it's likely a company email, False if it's from a personal provider
-    """
-    if not email or "@" not in email:
-        return False
-
-    domain = email.split("@")[-1].lower()
-
-    # List of common personal email providers
-    personal_domains = {
-        "gmail.com",
-        "outlook.com",
-        "hotmail.com",
-        "yahoo.com",
-        "icloud.com",
-        "aol.com",
-        "protonmail.com",
-        "proton.me",
-        "mail.com",
-        "yandex.com",
-        "zoho.com",
-        "live.com",
-        "msn.com",
-        "me.com",
-        "mac.com",
-        "googlemail.com",
-        "yahoo.co.uk",
-        "yahoo.ca",
-        "yahoo.co.in",
-        "outlook.co.uk",
-        "hotmail.co.uk",
-    }
-
-    return domain not in personal_domains and ".edu" not in domain
-
-
-def check_if_default_value_is_selected(value: str) -> bool:
-    """Check if the default value is selected."""
-    return value.strip() != "Select"
-
-
-class DemoFormStateUI(rx.State):
-    """State for handling demo form submissions and integrations."""
-
-    @rx.event(background=True)
-    async def on_submit(self, form_data: dict[str, Any]):
-        """Handle form submission with validation and routing logic.
-
-        Validates company email, sends data to PostHog and Slack,
-        then redirects to appropriate Cal.com link based on company size.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        if not check_if_company_email(form_data.get("email", "")):
-            yield rx.set_focus("email")
-            yield rx.toast.error(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed"
-            )
-            return
-        # Check if the has selected a number of employees
-        if not check_if_default_value_is_selected(
-            form_data.get("number_of_employees", "")
-        ):
-            yield rx.toast.error(
-                "Please select a number of employees",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a number of employees")
-            return
-        # Check if the has entered a referral source
-        if not check_if_default_value_is_selected(
-            form_data.get("how_did_you_hear_about_us", "")
-        ):
-            yield rx.toast.error(
-                "Please select how did you hear about us",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please select how did you hear about us"
-            )
-            return
-        # Check if the has entered a technical level
-        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
-            yield rx.set_focus("technical_level")
-            yield rx.toast.error(
-                "Please select a technical level",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a technical level")
-            return
-        yield is_sending_demo_form.push(True)
-        # Send to PostHog and Slack for all submissions
-        await self.send_demo_event(form_data)
-        notes_content = f"""
-Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
-Business Email: {form_data.get("email", "")}
-Job Title: {form_data.get("job_title", "")}
-Company Name: {form_data.get("company_name", "")}
-Number of Employees: {form_data.get("number_of_employees", "")}
-Internal Tools to Build: {form_data.get("internal_tools", "")}
-Technical Level: {form_data.get("technical_level", "")}
-How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
-        params = {
-            "email": form_data.get("email", ""),
-            "name": f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}",
-            "notes": notes_content,
-        }
-
-        print(params)
-
-        yield is_sending_demo_form.push(False)
-        yield demo_form_open_cs.set_value(False)
-        yield rx.toast.success("Thank you for your submission!", position="top-center")
-
-    # @rx.event(background=True)
-    async def send_demo_event(self, form_data: dict[str, Any]):
-        """Create and send demo event to PostHog and Slack.
-
-        Converts form data into a DemoEvent and sends to both analytics
-        platforms. Logs errors but doesn't raise exceptions.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        first_name = form_data.get("first_name", "")
-        last_name = form_data.get("last_name", "")
-        demo_event = DemoEvent(
-            distinct_id=f"{first_name} {last_name}",
-            first_name=first_name,
-            last_name=last_name,
-            company_email=form_data.get("email", ""),
-            job_title=form_data.get("job_title", ""),
-            company_name=form_data.get("company_name", ""),
-            num_employees=form_data.get("number_of_employees", ""),
-            internal_tools=form_data.get("internal_tools", ""),
-            technical_level=form_data.get("technical_level", ""),
-            referral_source=form_data.get("how_did_you_hear_about_us", ""),
-        )
-
-
 def demo_form(**props) -> rx.Component:
     """Create and return the demo form component.
 
@@ -389,7 +289,6 @@ def demo_form(**props) -> rx.Component:
             "Submit",
             type="submit",
             class_name="w-full",
-            loading=is_sending_demo_form.value,
         ),
         on_submit=DemoFormStateUI.on_submit,
         class_name=ui.cn(
