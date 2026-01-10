@@ -109,9 +109,7 @@ class DemoFormStateUI(rx.State):
                     "Please select how did you hear about us",
                     position="top-center",
                 ),
-                demo_form_error_message.push(
-                    "Please select how did you hear about us"
-                ),
+                demo_form_error_message.push("Please select how did you hear about us"),
             ]
 
         # Check if the has entered a technical level
