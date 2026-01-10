@@ -87,7 +87,7 @@ class DemoFormStateUI(rx.State):
                     "Please enter a valid company email - gmails, aol, me, etc are not allowed"
                 ),
             ]
-        
+
         # Check if the has selected a number of employees
         if not check_if_default_value_is_selected(
             form_data.get("number_of_employees", "")
@@ -99,7 +99,7 @@ class DemoFormStateUI(rx.State):
                 ),
                 demo_form_error_message.push("Please select a number of employees"),
             ]
-            
+
         # Check if the has entered a referral source
         if not check_if_default_value_is_selected(
             form_data.get("how_did_you_hear_about_us", "")
@@ -113,7 +113,7 @@ class DemoFormStateUI(rx.State):
                     "Please select how did you hear about us"
                 ),
             ]
-            
+
         # Check if the has entered a technical level
         if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
             return [
