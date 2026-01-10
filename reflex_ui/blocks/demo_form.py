@@ -5,68 +5,125 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
-import asyncio
-import os
-import urllib.parse
-import uuid
-from collections.abc import Sequence
-from dataclasses import asdict, dataclass
 from typing import Any
 
-import httpx
 import reflex as rx
 from reflex.experimental.client_state import ClientStateVar
-from reflex.utils.console import log
 
 import reflex_ui as ui
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
-is_sending_demo_form = ClientStateVar.create("is_sending_demo_form", False)
 demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
 
-COMMONROOM_DESTINATION_ID = os.getenv("COMMONROOM_DESTINATION_ID", "")
-COMMONROOM_API_TOKEN = os.getenv("COMMONROOM_API_TOKEN", "")
-CAL_REQUEST_DEMO_URL = os.getenv(
-    "CAL_REQUEST_DEMO_URL", "https://cal.com/team/reflex/reflex-intro-call"
-)
-JH_CAL_URL = os.getenv("JH_CAL_URL", "https://cal.com/team/reflex/demo-with-reflex")
-INTRO_CAL_URL = os.getenv("INTRO_CAL_URL", "https://cal.com/team/reflex/reflex-intro")
-CAL_ENTERPRISE_FOLLOW_UP_URL = os.getenv(
-    "CAL_ENTERPRISE_FOLLOW_UP_URL",
-    "https://cal.com/team/reflex/reflex-intro",
-)
-SLACK_DEMO_WEBHOOK_URL = os.getenv("SLACK_DEMO_WEBHOOK_URL", "")
-POSTHOG_API_KEY = os.getenv("POSTHOG_API_KEY", "")
+
+def check_if_company_email(email: str) -> bool:
+    """Check if an email address is from a company domain (not a personal email provider).
+
+    Args:
+        email: The email address to check
+
+    Returns:
+        True if it's likely a company email, False if it's from a personal provider
+    """
+    if not email or "@" not in email:
+        return False
+
+    domain = email.split("@")[-1].lower()
+
+    # List of common personal email providers
+    personal_domains = {
+        "gmail.com",
+        "outlook.com",
+        "hotmail.com",
+        "yahoo.com",
+        "icloud.com",
+        "aol.com",
+        "protonmail.com",
+        "proton.me",
+        "mail.com",
+        "yandex.com",
+        "zoho.com",
+        "live.com",
+        "msn.com",
+        "me.com",
+        "mac.com",
+        "googlemail.com",
+        "yahoo.co.uk",
+        "yahoo.ca",
+        "yahoo.co.in",
+        "outlook.co.uk",
+        "hotmail.co.uk",
+    }
+
+    return domain not in personal_domains and ".edu" not in domain
 
 
-@dataclass(kw_only=True)
-class PosthogEvent:
-    """Base event structure."""
+def check_if_default_value_is_selected(value: str) -> bool:
+    """Check if the default value is selected."""
+    return value.strip() != "Select"
 
-    distinct_id: str
 
-    def to_dict(self) -> dict[str, Any]:
-        """Convert the event instance to a dictionary representation.
+class DemoFormStateUI(rx.State):
+    """State for handling demo form submissions and validation."""
 
-        Returns:
-            A dictionary containing all the event data.
+    @rx.event
+    def on_submit(self, form_data: dict[str, Any]):
+        """Handle form submission with validation logic.
+
+        Validates company email and required fields. If successful, clears errors.
+        The actual submission is handled by the external script.
+
+        Args:
+            form_data: Form data dictionary containing user inputs
         """
-        return asdict(self)
+        if not check_if_company_email(form_data.get("email", "")):
+            return [
+                rx.set_focus("email"),
+                rx.toast.error(
+                    "Please enter a valid company email - gmails, aol, me, etc are not allowed",
+                    position="top-center",
+                ),
+                demo_form_error_message.push(
+                    "Please enter a valid company email - gmails, aol, me, etc are not allowed"
+                ),
+            ]
 
+        # Check if the has selected a number of employees
+        if not check_if_default_value_is_selected(
+            form_data.get("number_of_employees", "")
+        ):
+            return [
+                rx.toast.error(
+                    "Please select a number of employees",
+                    position="top-center",
+                ),
+                demo_form_error_message.push("Please select a number of employees"),
+            ]
 
-@dataclass
-class DemoEvent(PosthogEvent):
-    """Event for demo booking."""
+        # Check if the has entered a referral source
+        if not check_if_default_value_is_selected(
+            form_data.get("how_did_you_hear_about_us", "")
+        ):
+            return [
+                rx.toast.error(
+                    "Please select how did you hear about us",
+                    position="top-center",
+                ),
+                demo_form_error_message.push("Please select how did you hear about us"),
+            ]
 
-    first_name: str
-    last_name: str
-    company_email: str
-    job_title: str
-    company_name: str
-    num_employees: str
-    internal_tools: str
-    technical_level: str
-    referral_source: str
+        # Check if the has entered a technical level
+        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
+            return [
+                rx.set_focus("technical_level"),
+                rx.toast.error(
+                    "Please select a technical level",
+                    position="top-center",
+                ),
+                demo_form_error_message.push("Please select a technical level"),
+            ]
+
+        return None
 
 
 def input_field(
@@ -165,269 +222,6 @@ def select_field(
     )
 
 
-def is_small_company(num_employees: str) -> bool:
-    """Check if company up to 5 employees."""
-    return num_employees in ["1", "2-5"]
-
-
-def check_if_company_email(email: str) -> bool:
-    """Check if an email address is from a company domain (not a personal email provider).
-
-    Args:
-        email: The email address to check
-
-    Returns:
-        True if it's likely a company email, False if it's from a personal provider
-    """
-    if not email or "@" not in email:
-        return False
-
-    domain = email.split("@")[-1].lower()
-
-    # List of common personal email providers
-    personal_domains = {
-        "gmail.com",
-        "outlook.com",
-        "hotmail.com",
-        "yahoo.com",
-        "icloud.com",
-        "aol.com",
-        "protonmail.com",
-        "proton.me",
-        "mail.com",
-        "yandex.com",
-        "zoho.com",
-        "live.com",
-        "msn.com",
-        "me.com",
-        "mac.com",
-        "googlemail.com",
-        "yahoo.co.uk",
-        "yahoo.ca",
-        "yahoo.co.in",
-        "outlook.co.uk",
-        "hotmail.co.uk",
-    }
-
-    return domain not in personal_domains and ".edu" not in domain
-
-
-def check_if_default_value_is_selected(value: str) -> bool:
-    """Check if the default value is selected."""
-    return value.strip() != "Select"
-
-
-class DemoFormStateUI(rx.State):
-    """State for handling demo form submissions and integrations."""
-
-    @rx.event(background=True)
-    async def on_submit(self, form_data: dict[str, Any]):
-        """Handle form submission with validation and routing logic.
-
-        Validates company email, sends data to PostHog and Slack,
-        then redirects to appropriate Cal.com link based on company size.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        if not check_if_company_email(form_data.get("email", "")):
-            yield rx.set_focus("email")
-            yield rx.toast.error(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please enter a valid company email - gmails, aol, me, etc are not allowed"
-            )
-            return
-        # Check if the has selected a number of employees
-        if not check_if_default_value_is_selected(
-            form_data.get("number_of_employees", "")
-        ):
-            yield rx.toast.error(
-                "Please select a number of employees",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a number of employees")
-            return
-        # Check if the has entered a referral source
-        if not check_if_default_value_is_selected(
-            form_data.get("how_did_you_hear_about_us", "")
-        ):
-            yield rx.toast.error(
-                "Please select how did you hear about us",
-                position="top-center",
-            )
-            yield demo_form_error_message.push(
-                "Please select how did you hear about us"
-            )
-            return
-        # Check if the has entered a technical level
-        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
-            yield rx.set_focus("technical_level")
-            yield rx.toast.error(
-                "Please select a technical level",
-                position="top-center",
-            )
-            yield demo_form_error_message.push("Please select a technical level")
-            return
-        yield is_sending_demo_form.push(True)
-        # Send to PostHog and Slack for all submissions
-        yield DemoFormStateUI.send_demo_event(form_data)
-        # Send data to Google Ads conversion tracking
-        yield rx.call_script("gtag_report_conversion()")
-
-        notes_content = f"""
-Name: {form_data.get("first_name", "")} {form_data.get("last_name", "")}
-Business Email: {form_data.get("email", "")}
-Job Title: {form_data.get("job_title", "")}
-Company Name: {form_data.get("company_name", "")}
-Number of Employees: {form_data.get("number_of_employees", "")}
-Internal Tools to Build: {form_data.get("internal_tools", "")}
-Technical Level: {form_data.get("technical_level", "")}
-How they heard about Reflex: {form_data.get("how_did_you_hear_about_us", "")}"""
-        params = {
-            "email": form_data.get("email", ""),
-            "name": f"{form_data.get('first_name', '')} {form_data.get('last_name', '')}",
-            "notes": notes_content,
-        }
-
-        query_string = urllib.parse.urlencode(params)
-        technical_level = form_data.get("technical_level", "")
-
-        # Route based on company size and technical level
-        if is_small_company(form_data.get("number_of_employees", "")):
-            # Small companies (up to 5 employees) always go to JH_CAL_URL
-            cal_url = JH_CAL_URL
-        else:
-            # Large companies (more than 5 employees)
-            if technical_level == "Non-technical":
-                cal_url = JH_CAL_URL
-            else:  # Neutral or Technical
-                cal_url = INTRO_CAL_URL
-
-        cal_url_with_params = f"{cal_url}?{query_string}"
-        yield [is_sending_demo_form.push(False), rx.redirect(cal_url_with_params)]
-
-    @rx.event(background=True)
-    async def send_demo_event(self, form_data: dict[str, Any]):
-        """Create and send demo event to PostHog and Slack.
-
-        Converts form data into a DemoEvent and sends to both analytics
-        platforms. Logs errors but doesn't raise exceptions.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        first_name = form_data.get("first_name", "")
-        last_name = form_data.get("last_name", "")
-        demo_event = DemoEvent(
-            distinct_id=f"{first_name} {last_name}",
-            first_name=first_name,
-            last_name=last_name,
-            company_email=form_data.get("email", ""),
-            job_title=form_data.get("job_title", ""),
-            company_name=form_data.get("company_name", ""),
-            num_employees=form_data.get("number_of_employees", ""),
-            internal_tools=form_data.get("internal_tools", ""),
-            technical_level=form_data.get("technical_level", ""),
-            referral_source=form_data.get("how_did_you_hear_about_us", ""),
-        )
-
-        # Send data to PostHog, Common Room, and Slack
-        await asyncio.gather(
-            self.send_data_to_posthog(demo_event),
-            self.send_data_to_common_room(demo_event),
-            self.send_data_to_slack(demo_event),
-        )
-
-    async def send_data_to_posthog(self, event_instance: PosthogEvent):
-        """Send data to PostHog using class introspection.
-
-        Args:
-            event_instance: An instance of a PosthogEvent subclass.
-
-        Raises:
-            httpx.HTTPError: When there is an error sending data to PostHog.
-        """
-        event_data = {
-            "api_key": POSTHOG_API_KEY,
-            "event": event_instance.__class__.__name__,
-            "properties": event_instance.to_dict(),
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    "https://app.posthog.com/capture/", json=event_data
-                )
-                response.raise_for_status()
-        except Exception:
-            log("Error sending data to PostHog")
-
-    async def send_data_to_common_room(self, event_instance: DemoEvent):
-        """Update CommonRoom with user login information."""
-        tags: Sequence[str] = [
-            "Requested Demo",
-        ]
-
-        try:
-            async with httpx.AsyncClient() as client:
-                await client.post(
-                    f"https://api.commonroom.io/community/v1/source/{COMMONROOM_DESTINATION_ID}/activity",
-                    headers={
-                        "Content-Type": "application/json",
-                        "Authorization": f"Bearer {COMMONROOM_API_TOKEN}",
-                    },
-                    json={
-                        "id": "requested_demo",
-                        "activityType": "requested_demo",
-                        "user": {
-                            "id": str(uuid.uuid4()),
-                            "email": event_instance.company_email,
-                        },
-                        "tags": [
-                            {
-                                "type": "name",
-                                "name": tag,
-                            }
-                            for tag in tags
-                        ],
-                    },
-                )
-        except Exception as ex:
-            log(
-                f"CommonRoom: Failed to identify user with email {event_instance.company_email}, err: {ex}"
-            )
-
-    async def send_data_to_slack(self, event_instance: DemoEvent):
-        """Send demo form data to Slack webhook.
-
-        Args:
-            event_instance: An instance of DemoEvent with form data.
-        """
-        slack_payload = {
-            "technicalLevel": event_instance.technical_level,
-            "lookingToBuild": event_instance.internal_tools,
-            "businessEmail": event_instance.company_email,
-            "howDidYouHear": event_instance.referral_source,
-            "jobTitle": event_instance.job_title,
-            "numEmployees": event_instance.num_employees,
-            "companyName": event_instance.company_name,
-            "firstName": event_instance.first_name,
-            "lastName": event_instance.last_name,
-        }
-        try:
-            async with httpx.AsyncClient() as client:
-                response = await client.post(
-                    SLACK_DEMO_WEBHOOK_URL,
-                    json=slack_payload,
-                    headers={"Content-Type": "application/json"},
-                )
-                response.raise_for_status()
-        except Exception as e:
-            log(f"Error sending data to Slack webhook: {e}")
-
-
 def demo_form(**props) -> rx.Component:
     """Create and return the demo form component.
 
@@ -441,7 +235,7 @@ def demo_form(**props) -> rx.Component:
     Returns:
         A Reflex form component with all demo form fields
     """
-    return rx.el.form(
+    form = rx.el.form(
         rx.el.div(
             input_field("First name", "John", "first_name", "text", True),
             input_field("Last name", "Smith", "last_name", "text", True),
@@ -496,14 +290,17 @@ def demo_form(**props) -> rx.Component:
             "Submit",
             type="submit",
             class_name="w-full",
-            loading=is_sending_demo_form.value,
         ),
         on_submit=DemoFormStateUI.on_submit,
         class_name=ui.cn(
             "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
         ),
+        data_default_form_id="965991",
         **props,
+    )
+    return rx.fragment(
+        form,
     )
 
 
