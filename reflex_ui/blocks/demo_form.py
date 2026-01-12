@@ -246,6 +246,8 @@ def demo_form(**props) -> rx.Component:
             "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
         ),
+        # Close the dialog when the form is submitted
+        on_submit=demo_form_open_cs.set_value(False),
         data_default_form_id="965991",
         **props,
     )
