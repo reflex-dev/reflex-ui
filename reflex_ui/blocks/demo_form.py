@@ -159,6 +159,7 @@ def select_field(
                     DEFAULT_CLASS_NAME,
                     BUTTON_VARIANTS["variant"]["outline"],
                     BUTTON_VARIANTS["size"]["md"],
+                    "outline-primary-6 focus:border-primary-6",
                 ),
             ),
             ui.select_arrow(
