@@ -6,6 +6,7 @@ based on company size.
 """
 
 import reflex as rx
+from reflex.event import EventType
 from reflex.experimental.client_state import ClientStateVar
 
 import reflex_ui as ui
@@ -13,6 +14,13 @@ from reflex_ui.components.base.button import BUTTON_VARIANTS, DEFAULT_CLASS_NAME
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
+
+PERSONAL_EMAIL_PROVIDERS = r"^(?!.*@(gmail|outlook|hotmail|yahoo|icloud|aol|protonmail|mail|yandex|zoho|live|msn|me|mac|googlemail)\.com$|.*@(yahoo|outlook|hotmail)\.co\.uk$|.*@yahoo\.ca$|.*@yahoo\.co\.in$|.*@proton\.me$).*$"
+
+
+def get_element_value(element_id: str) -> str:
+    """Get the value of an element by ID."""
+    return f"document.getElementById('{element_id}')?.value"
 
 
 def check_if_company_email(email: str) -> bool:
@@ -62,6 +70,22 @@ def check_if_default_value_is_selected(value: str) -> bool:
     return bool(value.strip())
 
 
+class DemoFormStateUI(rx.State):
+    """State for handling demo form submissions and validation."""
+
+    @rx.event
+    def validate_email(self, email: str):
+        """Validate the email address."""
+        if not check_if_company_email(email):
+            yield [
+                demo_form_error_message.push(
+                    "Please enter a valid company email - gmails, aol, me, etc are not allowed"
+                ),
+            ]
+        else:
+            yield demo_form_error_message.push("")
+
+
 def input_field(
     label: str,
     placeholder: str,
@@ -93,6 +117,51 @@ def input_field(
             required=required,
             max_length=255,
             class_name="w-full",
+        ),
+        class_name="flex flex-col gap-1.5",
+    )
+
+
+def validation_input_field(
+    label: str,
+    placeholder: str,
+    name: str,
+    type: str = "text",
+    required: bool = False,
+    pattern: str | None = None,
+    on_blur: EventType[()] | None = None,
+    id: str = "",
+) -> rx.Component:
+    """Create a labeled input field component.
+
+    Args:
+        label: The label text to display above the input
+        placeholder: Placeholder text for the input
+        name: The name attribute for the input field
+        type: The input type (text, email, tel, etc.)
+        pattern: Regex pattern for input validation
+        required: Whether the field is required
+        on_blur: Event handler for when the input is blurred
+        id: The ID attribute for the input field
+
+    Returns:
+        A Reflex component containing the labeled input field
+    """
+    return rx.el.div(
+        rx.el.label(
+            label + (" *" if required else ""),
+            class_name="block text-sm font-medium text-secondary-12",
+        ),
+        ui.input(
+            placeholder=placeholder,
+            id=id,
+            name=name,
+            type=type,
+            required=required,
+            max_length=255,
+            pattern=pattern,
+            class_name="w-full",
+            on_blur=on_blur,
         ),
         class_name="flex flex-col gap-1.5",
     )
@@ -190,7 +259,18 @@ def demo_form(**props) -> rx.Component:
             input_field("Last name", "Smith", "last_name", "text", True),
             class_name="grid grid-cols-2 gap-4",
         ),
-        input_field("Business Email", "john@company.com", "email", "email", True),
+        validation_input_field(
+            "Business Email",
+            "john@company.com",
+            "email",
+            "email",
+            True,
+            PERSONAL_EMAIL_PROVIDERS,
+            id="user_email",
+            on_blur=DemoFormStateUI.validate_email(
+                rx.Var(get_element_value("user_email"))
+            ),
+        ),
         rx.el.div(
             input_field("Job title", "CTO", "job_title", "text", True),
             input_field("Company name", "Pynecone, Inc.", "company_name", "text", True),
@@ -296,6 +376,9 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
         ),
         open=demo_form_open_cs.value,
         on_open_change=demo_form_open_cs.set_value,
+        on_open_change_complete=[
+            rx.call_function(demo_form_error_message.set_value(""))
+        ],
         class_name=class_name,
         **props,
     )
