@@ -3,7 +3,8 @@
 import reflex as rx
 
 import reflex_ui as ui
-from reflex_ui.blocks.demo_form import demo_form, demo_form_dialog
+from reflex_ui.blocks.demo_form import demo_form_dialog
+from reflex_ui.blocks.telemetry.default import get_default_telemetry_script
 
 
 class State(rx.State):
@@ -16,7 +17,7 @@ class State(rx.State):
 
 def index() -> rx.Component:
     return rx.el.div(
-        demo_form(),
+        demo_form_dialog(ui.button("Test")),
     )
 
 
@@ -40,9 +41,7 @@ app = rx.App(
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
             rel="stylesheet",
         ),
-        rx.el.script(
-            """!function(e,t){var _=0;e.__default__=e.__default__||{},e.__default__.form_id=268792,e.__default__.team_id=654,e.__default__.listenToIds=[],function e(){var o=t.createElement("script");o.async=!0,o.src="https://import-cdn.default.com",o.onload=function(){!0,console.info("[Default.com] Powered by Default.com")},o.onerror=function(){++_<=3&&setTimeout(e,1e3*_)},t.head.appendChild(o)}()}(window,document);"""
-        ),
+        get_default_telemetry_script(),
     ],
 )
 app.add_page(index)

@@ -5,12 +5,11 @@ sends data to PostHog and Slack, and redirects users to appropriate Cal.com link
 based on company size.
 """
 
-from typing import Any
-
 import reflex as rx
 from reflex.experimental.client_state import ClientStateVar
 
 import reflex_ui as ui
+from reflex_ui.components.base.button import BUTTON_VARIANTS, DEFAULT_CLASS_NAME
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
@@ -60,70 +59,7 @@ def check_if_company_email(email: str) -> bool:
 
 def check_if_default_value_is_selected(value: str) -> bool:
     """Check if the default value is selected."""
-    return value.strip() != "Select"
-
-
-class DemoFormStateUI(rx.State):
-    """State for handling demo form submissions and validation."""
-
-    @rx.event
-    def on_submit(self, form_data: dict[str, Any]):
-        """Handle form submission with validation logic.
-
-        Validates company email and required fields. If successful, clears errors.
-        The actual submission is handled by the external script.
-
-        Args:
-            form_data: Form data dictionary containing user inputs
-        """
-        if not check_if_company_email(form_data.get("email", "")):
-            return [
-                rx.set_focus("email"),
-                rx.toast.error(
-                    "Please enter a valid company email - gmails, aol, me, etc are not allowed",
-                    position="top-center",
-                ),
-                demo_form_error_message.push(
-                    "Please enter a valid company email - gmails, aol, me, etc are not allowed"
-                ),
-            ]
-
-        # Check if the has selected a number of employees
-        if not check_if_default_value_is_selected(
-            form_data.get("number_of_employees", "")
-        ):
-            return [
-                rx.toast.error(
-                    "Please select a number of employees",
-                    position="top-center",
-                ),
-                demo_form_error_message.push("Please select a number of employees"),
-            ]
-
-        # Check if the has entered a referral source
-        if not check_if_default_value_is_selected(
-            form_data.get("how_did_you_hear_about_us", "")
-        ):
-            return [
-                rx.toast.error(
-                    "Please select how did you hear about us",
-                    position="top-center",
-                ),
-                demo_form_error_message.push("Please select how did you hear about us"),
-            ]
-
-        # Check if the has entered a technical level
-        if not check_if_default_value_is_selected(form_data.get("technical_level", "")):
-            return [
-                rx.set_focus("technical_level"),
-                rx.toast.error(
-                    "Please select a technical level",
-                    position="top-center",
-                ),
-                demo_form_error_message.push("Please select a technical level"),
-            ]
-
-        return None
+    return bool(value.strip())
 
 
 def input_field(
@@ -211,12 +147,24 @@ def select_field(
             label + (" *" if required else ""),
             class_name="block text-xs lg:text-sm font-medium text-secondary-12 truncate min-w-0",
         ),
-        ui.select(
-            default_value="Select",
-            name=name,
-            items=items,
-            required=required,
-            class_name="w-full",
+        rx.el.div(
+            rx.el.select(
+                rx.el.option("Select", value=""),
+                *[rx.el.option(item, value=item) for item in items],
+                default_value="",
+                name=name,
+                required=required,
+                class_name=ui.cn(
+                    "w-full appearance-none pr-9",
+                    DEFAULT_CLASS_NAME,
+                    BUTTON_VARIANTS["variant"]["outline"],
+                    BUTTON_VARIANTS["size"]["md"],
+                ),
+            ),
+            ui.select_arrow(
+                class_name="size-4 text-secondary-9 absolute right-2.5 top-1/2 -translate-y-1/2 pointer-events-none"
+            ),
+            class_name="relative",
         ),
         class_name="flex flex-col gap-1.5 min-w-0",
     )
@@ -258,6 +206,7 @@ def demo_form(**props) -> rx.Component:
                 "Number of employees?",
                 "number_of_employees",
                 ["1", "2-5", "6-10", "11-50", "51-100", "101-500", "500+"],
+                required=True,
             ),
             select_field(
                 "How did you hear about us?",
@@ -270,6 +219,7 @@ def demo_form(**props) -> rx.Component:
                     "Conference",
                     "Other",
                 ],
+                required=True,
             ),
             class_name="grid grid-cols-1 md:grid-cols-2 gap-4",
         ),
@@ -291,7 +241,6 @@ def demo_form(**props) -> rx.Component:
             type="submit",
             class_name="w-full",
         ),
-        on_submit=DemoFormStateUI.on_submit,
         class_name=ui.cn(
             "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
