@@ -8,6 +8,7 @@ based on company size.
 import reflex as rx
 from reflex.event import EventType
 from reflex.experimental.client_state import ClientStateVar
+from reflex.vars.base import get_unique_variable_name
 
 import reflex_ui as ui
 from reflex_ui.components.base.button import BUTTON_VARIANTS, DEFAULT_CLASS_NAME
@@ -240,7 +241,7 @@ def select_field(
     )
 
 
-def demo_form(**props) -> rx.Component:
+def demo_form(id_prefix: str = "", **props) -> rx.Component:
     """Create and return the demo form component.
 
     Builds a complete form with all required fields, validation,
@@ -248,11 +249,15 @@ def demo_form(**props) -> rx.Component:
     and preferences.
 
     Args:
+        id_prefix: Optional prefix for all element IDs to ensure uniqueness when multiple forms exist.
+                If empty, a unique prefix will be auto-generated.
         **props: Additional properties to pass to the form component
 
     Returns:
         A Reflex form component with all demo form fields
     """
+    prefix = id_prefix or get_unique_variable_name()
+    email_id = f"{prefix}_user_email"
     form = rx.el.form(
         rx.el.div(
             input_field("First name", "John", "first_name", "text", True),
@@ -266,10 +271,8 @@ def demo_form(**props) -> rx.Component:
             "email",
             True,
             PERSONAL_EMAIL_PROVIDERS,
-            id="user_email",
-            on_blur=DemoFormStateUI.validate_email(
-                rx.Var(get_element_value("user_email"))
-            ),
+            id=email_id,
+            on_blur=DemoFormStateUI.validate_email(rx.Var(get_element_value(email_id))),
         ),
         rx.el.div(
             input_field("Job title", "CTO", "job_title", "text", True),
@@ -336,11 +339,14 @@ def demo_form(**props) -> rx.Component:
     )
 
 
-def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
+def demo_form_dialog(
+    trigger: rx.Component | None, id_prefix: str = "", **props
+) -> rx.Component:
     """Return a demo form dialog container element.
 
     Args:
         trigger: The component that triggers the dialog
+        id_prefix: Optional prefix for all element IDs to ensure uniqueness when multiple dialogs exist
         **props: Additional properties to pass to the dialog root
 
     Returns:
@@ -368,7 +374,7 @@ def demo_form_dialog(trigger: rx.Component | None, **props) -> rx.Component:
                         ),
                         class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
                     ),
-                    demo_form(class_name="w-full max-w-md"),
+                    demo_form(id_prefix=id_prefix, class_name="w-full max-w-md"),
                     class_name="relative isolate overflow-hidden -m-px w-full max-w-md",
                 ),
                 class_name="h-fit mt-1 overflow-hidden w-full max-w-md",
