@@ -340,7 +340,7 @@ def demo_form(id_prefix: str = "", **props) -> rx.Component:
 
 
 def demo_form_dialog(
-    trigger: rx.Component | None, id_prefix: str = "", **props
+    trigger: rx.Component | None = None, id_prefix: str = "", **props
 ) -> rx.Component:
     """Return a demo form dialog container element.
 
@@ -352,6 +352,8 @@ def demo_form_dialog(
     Returns:
         A Reflex dialog component containing the demo form
     """
+    if trigger is None:
+        trigger = rx.fragment()
     class_name = ui.cn("w-auto", props.pop("class_name", ""))
     return ui.dialog.root(
         ui.dialog.trigger(render_=trigger),
