@@ -140,6 +140,10 @@ class SelectTrigger(SelectBaseComponent):
     # Whether the component should ignore user interaction. Defaults to False.
     disabled: Var[bool]
 
+    # Whether the component renders a native <button> element when replacing it via the render prop.
+    # Set to False if the rendered element is not a button (e.g. <div>). Defaults to True.
+    native_button: Var[bool]
+
     # The render prop
     render_: Var[Component]
 

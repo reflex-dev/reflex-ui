@@ -149,6 +149,7 @@ class SelectTrigger(SelectBaseComponent):
         cls,
         *children,
         disabled: Var[bool] | bool | None = None,
+        native_button: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
