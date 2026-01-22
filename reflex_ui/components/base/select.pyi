@@ -187,6 +187,7 @@ class SelectValue(SelectBaseComponent):
     def create(
         cls,
         *children,
+        placeholder: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]

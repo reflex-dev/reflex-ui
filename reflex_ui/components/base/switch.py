@@ -34,6 +34,9 @@ class SwitchRoot(SwitchBaseComponent):
     # Identifies the field when a form is submitted.
     name: Var[str]
 
+    # The value of the switch when it is checked. Used for form submission. Defaults to 'on'.
+    value: Var[str]
+
     # Whether the switch is initially active. To render a controlled switch, use the checked prop instead. Defaults to False.
     default_checked: Var[bool]
 

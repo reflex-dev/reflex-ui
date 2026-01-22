@@ -3,8 +3,6 @@
 import reflex as rx
 
 import reflex_ui as ui
-from reflex_ui.blocks.demo_form import demo_form_dialog
-from reflex_ui.blocks.telemetry.default import get_default_telemetry_script
 
 
 class State(rx.State):
@@ -17,7 +15,46 @@ class State(rx.State):
 
 def index() -> rx.Component:
     return rx.el.div(
-        demo_form_dialog(ui.button("Test")),
+        rx.el.div(
+            ui.tooltip(
+                ui.button(
+                    ui.icon("SmileIcon"),
+                    "Click me",
+                    on_click=rx.toast.success(
+                        "You are cool :)",
+                        position="top-center",
+                    ),
+                ),
+                content="Seriously, click me",
+            ),
+            ui.checkbox(
+                label="Click me",
+                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+            ),
+            ui.slider(
+                value=State.seed,
+                on_value_change=State.set_seed,
+                on_value_committed=lambda value: rx.toast.success(f"Value: {value}"),
+                class_name="max-w-xs",
+            ),
+            ui.gradient_profile(
+                seed=State.seed,
+                class_name="size-10",
+            ),
+            ui.switch(
+                on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),
+            ),
+            ui.select(
+                items=[f"Item {i}" for i in range(1, 11)],
+                name="select",
+                placeholder="Hello",
+                on_value_change=lambda value: rx.toast.success(f"Value: {value}"),
+                on_open_change=lambda value: rx.toast.success(f"Open: {value}"),
+            ),
+            class_name="flex flex-col gap-y-6 justify-center items-center",
+        ),
+        ui.theme_switcher(class_name="absolute top-4 right-4"),
+        class_name="flex flex-row gap-16 justify-center items-center h-screen bg-secondary-1 relative font-sans",
     )
 
 
@@ -41,7 +78,6 @@ app = rx.App(
             href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400..700&display=swap",
             rel="stylesheet",
         ),
-        get_default_telemetry_script(),
     ],
 )
 app.add_page(index)

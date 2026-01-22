@@ -160,6 +160,9 @@ class SelectValue(SelectBaseComponent):
 
     tag = "Select.Value"
 
+    # Placeholder text to display when no item is selected.
+    placeholder: Var[str]
+
     # The render prop
     render_: Var[Component]
 
@@ -467,7 +470,8 @@ class HighLevelSelect(SelectRoot):
     size: Var[LiteralSelectSize]
 
     # Props for different component parts
-    _trigger_props = {"placeholder", "size"}
+    _trigger_props = {"size"}
+    _value_props = {"placeholder"}
     _items_props = {"items"}
     _positioner_props = {
         "align",
@@ -497,6 +501,7 @@ class HighLevelSelect(SelectRoot):
         """
         # Extract props for different parts
         trigger_props = {k: props.pop(k) for k in cls._trigger_props & props.keys()}
+        value_props = {k: props.pop(k) for k in cls._value_props & props.keys()}
         items_props = {k: props.pop(k) for k in cls._items_props & props.keys()}
         positioner_props = {
             k: props.pop(k) for k in cls._positioner_props & props.keys()
@@ -555,7 +560,7 @@ class HighLevelSelect(SelectRoot):
         return SelectRoot.create(
             SelectTrigger.create(
                 render_=button(
-                    SelectValue.create(),
+                    SelectValue.create(**value_props),
                     SelectIcon.create(
                         select_arrow(class_name="size-4 text-secondary-9")
                     ),

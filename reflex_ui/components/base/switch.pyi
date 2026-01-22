@@ -76,6 +76,7 @@ class SwitchRoot(SwitchBaseComponent):
         cls,
         *children,
         name: Var[str] | str | None = None,
+        value: Var[str] | str | None = None,
         default_checked: Var[bool] | bool | None = None,
         checked: Var[bool] | bool | None = None,
         native_button: Var[bool] | bool | None = None,
@@ -160,6 +161,7 @@ class HighLevelSwitch(SwitchRoot):
         cls,
         *children,
         name: Var[str] | str | None = None,
+        value: Var[str] | str | None = None,
         default_checked: Var[bool] | bool | None = None,
         checked: Var[bool] | bool | None = None,
         native_button: Var[bool] | bool | None = None,
@@ -204,6 +206,7 @@ class HighLevelSwitch(SwitchRoot):
         Args:
             *children: Additional children to include in the switch.
             name: Identifies the field when a form is submitted.
+            value: The value of the switch when it is checked. Used for form submission. Defaults to 'on'.
             default_checked: Whether the switch is initially active. To render a controlled switch, use the checked prop instead. Defaults to False.
             checked: Whether the switch is currently active. To render an uncontrolled switch, use the default_checked prop instead.
             on_checked_change: Event handler called when the switch is activated or deactivated.
@@ -236,6 +239,7 @@ class Switch(ComponentNamespace):
     def __call__(
         *children,
         name: Var[str] | str | None = None,
+        value: Var[str] | str | None = None,
         default_checked: Var[bool] | bool | None = None,
         checked: Var[bool] | bool | None = None,
         native_button: Var[bool] | bool | None = None,
@@ -280,6 +284,7 @@ class Switch(ComponentNamespace):
         Args:
             *children: Additional children to include in the switch.
             name: Identifies the field when a form is submitted.
+            value: The value of the switch when it is checked. Used for form submission. Defaults to 'on'.
             default_checked: Whether the switch is initially active. To render a controlled switch, use the checked prop instead. Defaults to False.
             checked: Whether the switch is currently active. To render an uncontrolled switch, use the default_checked prop instead.
             on_checked_change: Event handler called when the switch is activated or deactivated.
