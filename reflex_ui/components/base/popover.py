@@ -276,7 +276,7 @@ class HighLevelPopover(PopoverRoot):
     description: Var[str | Component | None]
 
     # Props for different component parts
-    _trigger_props = {"open_on_hover", "delay", "close_delay"}
+    _trigger_props = {"open_on_hover", "delay", "close_delay", "native_button"}
     _positioner_props = {
         "align",
         "align_offset",
