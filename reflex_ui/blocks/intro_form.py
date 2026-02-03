@@ -391,7 +391,8 @@ def intro_form_dialog(
         ),
         open=intro_form_open_cs.value,
         on_open_change_complete=[
-            rx.call_function(intro_form_error_message.set_value(""))
+            rx.call_function(intro_form_error_message.set_value("")),
+            rx.call_function(is_submitting_intro_form_cs.set_value(False)),
         ],
         class_name=class_name,
         **props,
