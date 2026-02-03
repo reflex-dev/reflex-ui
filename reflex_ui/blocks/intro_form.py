@@ -3,6 +3,8 @@
 This module provides a comprehensive intro form that validates company emails.
 """
 
+from typing import Any
+
 import reflex as rx
 from reflex.event import EventType
 from reflex.experimental.client_state import ClientStateVar
@@ -241,7 +243,9 @@ def select_field(
 
 
 def intro_form(
-    id_prefix: str = "", on_submit: EventType[()] | None = None, **props
+    id_prefix: str = "",
+    on_submit: EventType[dict[str, Any]] | EventType[()] | None = None,
+    **props,
 ) -> rx.Component:
     """Create and return the intro form component.
 
@@ -349,7 +353,7 @@ def intro_form(
 def intro_form_dialog(
     trigger: rx.Component | None = None,
     id_prefix: str = "",
-    on_submit: EventType[()] | None = None,
+    on_submit: EventType[dict[str, Any]] | EventType[()] | None = None,
     **props,
 ) -> rx.Component:
     """Return a intro form dialog container element.
