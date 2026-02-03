@@ -13,6 +13,7 @@ from reflex_ui.components.base.button import BUTTON_VARIANTS, DEFAULT_CLASS_NAME
 
 intro_form_error_message = ClientStateVar.create("intro_form_error_message", "")
 intro_form_open_cs = ClientStateVar.create("intro_form_open", False)
+is_submitting_intro_form_cs = ClientStateVar.create("is_submitting_intro_form", False)
 
 PERSONAL_EMAIL_PROVIDERS = r"^(?!.*@(gmail|outlook|hotmail|yahoo|icloud|aol|protonmail|mail|yandex|zoho|live|msn|me|mac|googlemail)\.com$|.*@(yahoo|outlook|hotmail)\.co\.uk$|.*@yahoo\.ca$|.*@yahoo\.co\.in$|.*@proton\.me$).*$"
 
@@ -331,6 +332,7 @@ def intro_form(
             "Submit",
             type="submit",
             class_name="w-full",
+            loading=is_submitting_intro_form_cs.value,
         ),
         class_name=ui.cn(
             "@container flex flex-col lg:gap-6 gap-2 p-6",
