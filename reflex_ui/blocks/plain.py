@@ -18,10 +18,10 @@ class PlainChat(rx.Component):
 
     tag = "PlainChat"
 
-    full_name: rx.Var[str]
-    short_name: rx.Var[str]
-    chat_avatar_url: rx.Var[str]
-    external_id: rx.Var[str]
+    full_name: rx.Var[str] = rx.Var.create("User")
+    short_name: rx.Var[str] = rx.Var.create("User")
+    chat_avatar_url: rx.Var[str] = rx.Var.create("")
+    external_id: rx.Var[str] = rx.Var.create("")
     hide_launcher: rx.Var[bool] = rx.Var.create(True)
 
     # Optional email authentication
@@ -42,11 +42,20 @@ class PlainChat(rx.Component):
                 f"""useEffect(() => {{
   if (typeof window === 'undefined') return;
 
-  const customerDetails = {{
-    fullName: {self.full_name!s},
-    shortName: {self.short_name!s},
-    chatAvatarUrl: {self.chat_avatar_url!s},
-  }};
+  const customerDetails = {{}};
+
+  // Add fullName and shortName if provided
+  if ({self.full_name!s}) {{
+    customerDetails.fullName = {self.full_name!s};
+  }}
+  if ({self.short_name!s}) {{
+    customerDetails.shortName = {self.short_name!s};
+  }}
+
+  // Add chatAvatarUrl if provided
+  if ({self.chat_avatar_url!s}) {{
+    customerDetails.chatAvatarUrl = {self.chat_avatar_url!s};
+  }}
 
   // Add email if provided
   if ({self.email!s}) {{
@@ -62,10 +71,14 @@ class PlainChat(rx.Component):
     hideBranding: true,
     theme: 'auto',
     customerDetails: customerDetails,
-    threadDetails: {{
-      externalId: {self.external_id!s},
-    }},
   }};
+
+  // Add threadDetails if externalId is provided
+  if ({self.external_id!s}) {{
+    initOptions.threadDetails = {{
+      externalId: {self.external_id!s},
+    }};
+  }}
 
   // Add requireAuthentication if true
   if ({self.require_authentication!s}) {{
