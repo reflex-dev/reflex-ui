@@ -18,7 +18,6 @@ class PlainChat(rx.Component):
 
     tag = "PlainChat"
 
-    app_id: rx.Var[str]
     full_name: rx.Var[str]
     short_name: rx.Var[str]
     chat_avatar_url: rx.Var[str]
@@ -61,7 +60,7 @@ class PlainChat(rx.Component):
   }}
 
   const initOptions = {{
-    appId: {PLAIN_APP_ID if PLAIN_APP_ID else self.app_id!s},
+    appId: '{PLAIN_APP_ID}',
     hideLauncher: {self.hide_launcher!s},
     hideBranding: true,
     theme: 'auto',
