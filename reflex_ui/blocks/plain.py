@@ -4,12 +4,13 @@ This module provides integration with Plain.com chat widget for live customer su
 See: https://plain.support.site/article/chat-customization
 """
 
+import os
 from typing import Any
 
 import reflex as rx
 from reflex.components.tags.tag import Tag
 
-PLAIN_APP_ID = "liveChatApp_01KGG4JD5JHG8JY8X5CCN7811V"
+PLAIN_APP_ID = os.getenv("PLAIN_APP_ID")
 
 
 class PlainChat(rx.Component):
