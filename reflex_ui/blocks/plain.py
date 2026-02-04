@@ -10,7 +10,7 @@ from typing import Any
 import reflex as rx
 from reflex.components.tags.tag import Tag
 
-PLAIN_APP_ID = os.getenv("PLAIN_APP_ID", "")
+PLAIN_APP_ID = os.getenv("PLAIN_APP_ID", "liveChatApp_01KGG4JD5JHG8JY8X5CCN7811V")
 
 
 class PlainChat(rx.Component):
