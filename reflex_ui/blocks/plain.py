@@ -10,7 +10,7 @@ from typing import Any
 import reflex as rx
 from reflex.components.tags.tag import Tag
 
-PLAIN_APP_ID = os.getenv("PLAIN_APP_ID")
+PLAIN_APP_ID = os.getenv("PLAIN_APP_ID", "")
 
 
 class PlainChat(rx.Component):
@@ -18,6 +18,7 @@ class PlainChat(rx.Component):
 
     tag = "PlainChat"
 
+    app_id: rx.Var[str]
     full_name: rx.Var[str]
     short_name: rx.Var[str]
     chat_avatar_url: rx.Var[str]
@@ -42,6 +43,9 @@ class PlainChat(rx.Component):
                 f"""useEffect(() => {{
   if (typeof window === 'undefined') return;
 
+  // Skip if already initialized
+  if (window.__plainChatInitialized) return;
+
   const customerDetails = {{
     fullName: {self.full_name!s},
     shortName: {self.short_name!s},
@@ -57,7 +61,7 @@ class PlainChat(rx.Component):
   }}
 
   const initOptions = {{
-    appId: '{PLAIN_APP_ID}',
+    appId: {PLAIN_APP_ID if PLAIN_APP_ID else self.app_id!s},
     hideLauncher: {self.hide_launcher!s},
     hideBranding: true,
     theme: 'auto',
@@ -72,17 +76,22 @@ class PlainChat(rx.Component):
     initOptions.requireAuthentication = true;
   }}
 
-  if (window.Plain) {{
+  const doInit = () => {{
     Plain.init(initOptions);
+    window.__plainChatInitialized = true;
+  }};
+
+  if (window.Plain) {{
+    doInit();
     return;
   }}
 
   const script = document.createElement('script');
   script.async = false;
   script.src = 'https://chat.cdn-plain.com/index.js';
-  script.onload = () => Plain.init(initOptions);
+  script.onload = doInit;
   document.head.appendChild(script);
-}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.email!s}, {self.email_hash!s}])"""
+}}, [])"""
             )
         ]
 
