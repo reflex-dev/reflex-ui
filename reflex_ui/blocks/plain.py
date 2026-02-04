@@ -75,7 +75,9 @@ class PlainChat(rx.Component):
   if (window.Plain) {{
     if (Plain.isInitialized()) {{
       // Already initialized, update in-place
-      Plain.update(initOptions);
+      // Exclude appId from update - it's only valid for init()
+      const {{ appId, ...updateOptions }} = initOptions;
+      Plain.update(updateOptions);
     }} else {{
       Plain.init(initOptions);
     }}
