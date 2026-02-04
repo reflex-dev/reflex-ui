@@ -40,30 +40,49 @@ class PlainChat(rx.Component):
         return [
             rx.Var(
                 f"""useEffect(() => {{
+  if (typeof window === 'undefined') return;
+
+  const customerDetails = {{
+    fullName: {self.full_name!s},
+    shortName: {self.short_name!s},
+    chatAvatarUrl: {self.chat_avatar_url!s},
+  }};
+
+  // Add email if provided
+  if ({self.email!s}) {{
+    customerDetails.email = {self.email!s};
+  }}
+  if ({self.email_hash!s}) {{
+    customerDetails.emailHash = {self.email_hash!s};
+  }}
+
+  const initOptions = {{
+    appId: '{PLAIN_APP_ID}',
+    hideLauncher: {self.hide_launcher!s},
+    hideBranding: true,
+    theme: 'auto',
+    customerDetails: customerDetails,
+    threadDetails: {{
+      externalId: {self.external_id!s},
+    }},
+  }};
+
+  // Add requireAuthentication if true
+  if ({self.require_authentication!s}) {{
+    initOptions.requireAuthentication = true;
+  }}
+
+  if (window.Plain) {{
+    Plain.init(initOptions);
+    return;
+  }}
+
   const script = document.createElement('script');
   script.async = false;
   script.src = 'https://chat.cdn-plain.com/index.js';
-  script.onload = () => {{
-    Plain.init({{
-      appId: '{PLAIN_APP_ID}',
-      hideLauncher: {self.hide_launcher!s},
-      hideBranding: true,
-      theme: 'auto',
-      customerDetails: {{
-        fullName: {self.full_name!s},
-        shortName: {self.short_name!s},
-        chatAvatarUrl: {self.chat_avatar_url!s},
-        email: {self.email!s},
-        emailHash: {self.email_hash!s},
-      }},
-      threadDetails: {{
-        externalId: {self.external_id!s},
-      }},
-      requireAuthentication: {self.require_authentication!s},
-    }});
-  }};
+  script.onload = () => Plain.init(initOptions);
   document.head.appendChild(script);
-}}, [])"""
+}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.email!s}, {self.email_hash!s}])"""
             )
         ]
 
