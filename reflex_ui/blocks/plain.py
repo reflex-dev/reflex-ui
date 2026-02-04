@@ -73,7 +73,12 @@ class PlainChat(rx.Component):
   }}
 
   if (window.Plain) {{
-    Plain.init(initOptions);
+    if (Plain.isInitialized()) {{
+      // Already initialized, update in-place
+      Plain.update(initOptions);
+    }} else {{
+      Plain.init(initOptions);
+    }}
     return;
   }}
 
