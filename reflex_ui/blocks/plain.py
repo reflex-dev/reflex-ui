@@ -34,6 +34,14 @@ class PlainChat(rx.Component):
     # Optional tier ID for thread details
     tier_id: rx.Var[str] = rx.Var.create("")
 
+    # Entry point options
+    # Type is either 'default' or 'chat'. 'default' opens intro screen, 'chat' opens straight into chat
+    entry_point_type: rx.Var[str] = rx.Var.create("")
+    # The external ID of which chat to open. If not provided it defaults to the last conversation
+    entry_point_external_id: rx.Var[str] = rx.Var.create("")
+    # Prevents the user from going back to the intro screen to start a new chat
+    single_chat_mode: rx.Var[bool] = rx.Var.create(False)
+
     def add_imports(self) -> dict:
         """Add React imports."""
         return {"react": ["useEffect"]}
@@ -92,6 +100,20 @@ class PlainChat(rx.Component):
     initOptions.requireAuthentication = true;
   }}
 
+  // Add entryPoint if type, externalId, or singleChatMode is provided
+  if ({self.entry_point_type!s} || {self.entry_point_external_id!s} || {self.single_chat_mode!s}) {{
+    initOptions.entryPoint = {{}};
+    if ({self.entry_point_type!s}) {{
+      initOptions.entryPoint.type = {self.entry_point_type!s};
+    }}
+    if ({self.entry_point_external_id!s}) {{
+      initOptions.entryPoint.externalId = {self.entry_point_external_id!s};
+    }}
+    if ({self.single_chat_mode!s}) {{
+      initOptions.entryPoint.singleChatMode = true;
+    }}
+  }}
+
   if (window.Plain) {{
     if (Plain.isInitialized()) {{
       // Already initialized, update in-place
@@ -109,7 +131,7 @@ class PlainChat(rx.Component):
   script.src = 'https://chat.cdn-plain.com/index.js';
   script.onload = () => Plain.init(initOptions);
   document.head.appendChild(script);
-}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.tier_id!s}, {self.email!s}, {self.email_hash!s}])"""
+}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.tier_id!s}, {self.entry_point_type!s}, {self.entry_point_external_id!s}, {self.single_chat_mode!s}, {self.email!s}, {self.email_hash!s}])"""
             )
         ]
 
