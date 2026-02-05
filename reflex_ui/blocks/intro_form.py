@@ -378,7 +378,7 @@ def intro_form_dialog(
                 rx.el.div(
                     rx.el.div(
                         rx.el.h1(
-                            "Get Started",
+                            "Get Started With Your Free Trial",
                             class_name="text-xl font-bold text-secondary-12",
                         ),
                         class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
