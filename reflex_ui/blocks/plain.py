@@ -31,6 +31,9 @@ class PlainChat(rx.Component):
     # Optional built-in email verification
     require_authentication: rx.Var[bool] = rx.Var.create(False)
 
+    # Optional tier ID for thread details
+    tier_id: rx.Var[str] = rx.Var.create("")
+
     def add_imports(self) -> dict:
         """Add React imports."""
         return {"react": ["useEffect"]}
@@ -73,11 +76,15 @@ class PlainChat(rx.Component):
     customerDetails: customerDetails,
   }};
 
-  // Add threadDetails if externalId is provided
-  if ({self.external_id!s}) {{
-    initOptions.threadDetails = {{
-      externalId: {self.external_id!s},
-    }};
+  // Add threadDetails if externalId or tierId is provided
+  if ({self.external_id!s} || {self.tier_id!s}) {{
+    initOptions.threadDetails = {{}};
+    if ({self.external_id!s}) {{
+      initOptions.threadDetails.externalId = {self.external_id!s};
+    }}
+    if ({self.tier_id!s}) {{
+      initOptions.threadDetails.tierIdentifier = {{ tierId: {self.tier_id!s} }};
+    }}
   }}
 
   // Add requireAuthentication if true
@@ -102,7 +109,7 @@ class PlainChat(rx.Component):
   script.src = 'https://chat.cdn-plain.com/index.js';
   script.onload = () => Plain.init(initOptions);
   document.head.appendChild(script);
-}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.email!s}, {self.email_hash!s}])"""
+}}, [{self.full_name!s}, {self.short_name!s}, {self.chat_avatar_url!s}, {self.external_id!s}, {self.tier_id!s}, {self.email!s}, {self.email_hash!s}])"""
             )
         ]
 
