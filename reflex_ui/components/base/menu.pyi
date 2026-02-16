@@ -407,6 +407,47 @@ class MenuItem(MenuBaseComponent):
     ) -> MenuItem:
         """Create the menu item component."""
 
+class MenuLinkItem(MenuBaseComponent):
+    @classmethod
+    def create(
+        cls,
+        *children,
+        label: Var[str] | str | None = None,
+        href: Var[str] | str | None = None,
+        close_on_click: Var[bool] | bool | None = None,
+        disabled: Var[bool] | bool | None = None,
+        render_: Component | Var[Component] | None = None,
+        unstyled: Var[bool] | bool | None = None,
+        style: Sequence[Mapping[str, Any]]
+        | Mapping[str, Any]
+        | Var[Mapping[str, Any]]
+        | Breakpoints
+        | None = None,
+        key: Any | None = None,
+        id: Any | None = None,
+        ref: Var | None = None,
+        class_name: Any | None = None,
+        custom_attrs: dict[str, Var | Any] | None = None,
+        on_blur: EventType[()] | None = None,
+        on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_focus: EventType[()] | None = None,
+        on_mount: EventType[()] | None = None,
+        on_mouse_down: EventType[()] | None = None,
+        on_mouse_enter: EventType[()] | None = None,
+        on_mouse_leave: EventType[()] | None = None,
+        on_mouse_move: EventType[()] | None = None,
+        on_mouse_out: EventType[()] | None = None,
+        on_mouse_over: EventType[()] | None = None,
+        on_mouse_up: EventType[()] | None = None,
+        on_scroll: EventType[()] | None = None,
+        on_scroll_end: EventType[()] | None = None,
+        on_unmount: EventType[()] | None = None,
+        **props,
+    ) -> MenuLinkItem:
+        """Create the menu link item component."""
+
 class MenuSubMenuRoot(MenuBaseComponent):
     @classmethod
     def create(
@@ -918,6 +959,7 @@ class Menu(ComponentNamespace):
     popup = staticmethod(MenuPopup.create)
     arrow = staticmethod(MenuArrow.create)
     item = staticmethod(MenuItem.create)
+    link_item = staticmethod(MenuLinkItem.create)
     separator = staticmethod(MenuSeparator.create)
     group = staticmethod(MenuGroup.create)
     group_label = staticmethod(MenuGroupLabel.create)

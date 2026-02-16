@@ -10,7 +10,7 @@ from reflex_ui.components.component import CoreComponent
 class HugeIcon(CoreComponent):
     """A HugeIcon component."""
 
-    library = "@hugeicons/react@1.1.4"
+    library = "@hugeicons/react@1.1.5"
 
     tag = "HugeiconsIcon"
 

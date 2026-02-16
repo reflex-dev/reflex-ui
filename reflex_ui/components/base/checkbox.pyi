@@ -128,6 +128,7 @@ class CheckboxIndicator(CheckboxBaseComponent):
     def create(
         cls,
         *children,
+        keep_mounted: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]

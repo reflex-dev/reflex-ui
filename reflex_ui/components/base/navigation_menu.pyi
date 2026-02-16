@@ -254,6 +254,7 @@ class NavigationMenuContent(NavigationMenuBaseComponent):
     def create(
         cls,
         *children,
+        keep_mounted: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]

@@ -109,6 +109,7 @@ class SelectRoot(SelectBaseComponent):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Any | Var[Any] | None = None,
+        auto_complete: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -385,6 +386,7 @@ class SelectPopup(SelectBaseComponent):
     def create(
         cls,
         *children,
+        final_focus: Var[str] | str | None = None,
         render_: Component | Var[Component] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
@@ -858,6 +860,7 @@ class HighLevelSelect(SelectRoot):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Any | Var[Any] | None = None,
+        auto_complete: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -915,6 +918,7 @@ class HighLevelSelect(SelectRoot):
             read_only: Whether the user should be unable to choose a different option from the select popup. Defaults to False.
             required: Whether the user must choose a value before submitting a form. Defaults to False.
             input_ref: A ref to access the hidden input element.
+            auto_complete: Enables explicit browser autofill support. Useful for select components that are part of a form.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.
@@ -972,6 +976,7 @@ class Select(ComponentNamespace):
         read_only: Var[bool] | bool | None = None,
         required: Var[bool] | bool | None = None,
         input_ref: Any | Var[Any] | None = None,
+        auto_complete: Var[str] | str | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -1029,6 +1034,7 @@ class Select(ComponentNamespace):
             read_only: Whether the user should be unable to choose a different option from the select popup. Defaults to False.
             required: Whether the user must choose a value before submitting a form. Defaults to False.
             input_ref: A ref to access the hidden input element.
+            auto_complete: Enables explicit browser autofill support. Useful for select components that are part of a form.
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

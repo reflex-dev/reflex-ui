@@ -140,6 +140,9 @@ class NavigationMenuContent(NavigationMenuBaseComponent):
 
     tag = "NavigationMenu.Content"
 
+    # Whether to keep the HTML element in the DOM while the content is hidden. Defaults to False.
+    keep_mounted: Var[bool]
+
     # The render prop.
     render_: Var[Component]
 

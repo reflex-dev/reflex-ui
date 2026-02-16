@@ -125,6 +125,9 @@ class SelectRoot(SelectBaseComponent):
     # A ref to access the hidden input element.
     input_ref: Var[Any]
 
+    # Enables explicit browser autofill support. Useful for select components that are part of a form.
+    auto_complete: Var[str]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the select root component."""
@@ -249,6 +252,9 @@ class SelectPopup(SelectBaseComponent):
     """A container for the select items."""
 
     tag = "Select.Popup"
+
+    # Determines the element to focus when the select popup is closed. By default, focus returns to the trigger.
+    final_focus: Var[str]
 
     # The render prop
     render_: Var[Component]

@@ -270,6 +270,34 @@ class MenuItem(MenuBaseComponent):
         return super().create(*children, **props)
 
 
+class MenuLinkItem(MenuBaseComponent):
+    """A menu item that renders as a link. Renders an <a> element."""
+
+    tag = "Menu.LinkItem"
+
+    # Overrides the text label to use when the item is matched during keyboard text navigation.
+    label: Var[str]
+
+    # The URL the link points to.
+    href: Var[str]
+
+    # Whether to close the menu when the item is clicked. Defaults to True.
+    close_on_click: Var[bool]
+
+    # Whether the component should ignore user interaction. Defaults to False.
+    disabled: Var[bool]
+
+    # The render prop.
+    render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the menu link item component."""
+        props["data-slot"] = "menu-link-item"
+        cls.set_class_name(ClassNames.ITEM, props)
+        return super().create(*children, **props)
+
+
 class MenuSubMenuRoot(MenuBaseComponent):
     """Groups all parts of a submenu. Doesn't render its own HTML element."""
 
@@ -664,6 +692,7 @@ class Menu(ComponentNamespace):
     popup = staticmethod(MenuPopup.create)
     arrow = staticmethod(MenuArrow.create)
     item = staticmethod(MenuItem.create)
+    link_item = staticmethod(MenuLinkItem.create)
     separator = staticmethod(MenuSeparator.create)
     group = staticmethod(MenuGroup.create)
     group_label = staticmethod(MenuGroupLabel.create)

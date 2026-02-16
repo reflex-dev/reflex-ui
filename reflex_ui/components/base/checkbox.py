@@ -85,6 +85,10 @@ class CheckboxIndicator(CheckboxBaseComponent):
 
     tag = "Checkbox.Indicator"
 
+    # Whether to keep the HTML element in the DOM when the checkbox is unchecked.
+    # When False, allows exit animations on the indicator. Defaults to True.
+    keep_mounted: Var[bool]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the checkbox indicator component."""
