@@ -381,6 +381,15 @@ def intro_form_dialog(
                             "Get Started With Your Free Trial",
                             class_name="text-xl font-bold text-secondary-12",
                         ),
+                        ui.dialog.close(
+                            render_=ui.button(
+                                ui.hi("Cancel01Icon"),
+                                variant="ghost",
+                                size="icon-sm",
+                                on_click=intro_form_open_cs.set_value(False),
+                                class_name="text-secondary-11",
+                            ),
+                        ),
                         class_name="flex flex-row justify-between items-center gap-1 px-6 pt-4 -mb-4",
                     ),
                     intro_form(
