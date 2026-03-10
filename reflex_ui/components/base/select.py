@@ -8,7 +8,7 @@ from reflex.event import EventHandler, passthrough_event_spec
 from reflex.utils.imports import ImportVar
 from reflex.vars.base import Var
 
-from reflex_ui.components.base.button import button
+from reflex_ui.components.base.button import LiteralButtonVariant, button
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 from reflex_ui.components.icons.hugeicon import hi
 from reflex_ui.components.icons.others import select_arrow
@@ -476,7 +476,7 @@ class HighLevelSelect(SelectRoot):
     size: Var[LiteralSelectSize]
 
     # Props for different component parts
-    _trigger_props = {"size"}
+    _trigger_props = {"size", "trigger_variant"}
     _value_props = {"placeholder"}
     _items_props = {"items"}
     _positioner_props = {
@@ -516,6 +516,9 @@ class HighLevelSelect(SelectRoot):
 
         # Get extracted values with defaults
         size = trigger_props.get("size", "md")
+        trigger_variant: LiteralButtonVariant = trigger_props.get(
+            "trigger_variant", "outline"
+        )
         items = items_props.get("items", [])
 
         # Create the items children
@@ -570,7 +573,7 @@ class HighLevelSelect(SelectRoot):
                     SelectIcon.create(
                         select_arrow(class_name="size-4 text-secondary-9")
                     ),
-                    variant="outline",
+                    variant=trigger_variant,
                     size=size,
                     type="button",
                     class_name=ClassNames.TRIGGER,

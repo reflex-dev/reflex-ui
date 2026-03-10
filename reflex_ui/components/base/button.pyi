@@ -15,6 +15,7 @@ from reflex_ui.components.component import CoreComponent
 
 LiteralButtonVariant = Literal[
     "primary",
+    "primary-bordered",
     "destructive",
     "outline",
     "outline-shadow",
@@ -30,6 +31,7 @@ DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap 
 BUTTON_VARIANTS = {
     "variant": {
         "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
+        "primary-bordered": "bg-primary-9 text-primary-contrast hover:bg-primary-10 shadow-[0_0_0_1px_var(--primary-9)_inset,0_2px_0_0_rgba(255,255,255,0.22)_inset]",
         "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast",
         "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "outline-shadow": "dark:border dark:border-secondary-a4 bg-white dark:bg-secondary-1 hover:bg-secondary-3 text-secondary-12 shadow-[0_-1px_0_0_rgba(0,0,0,0.08)_inset,0_0_0_1px_rgba(0,0,0,0.08)_inset,0_1px_2px_0_rgba(0,0,0,0.02),0_1px_4px_0_rgba(0,0,0,0.02)] dark:shadow-none",
@@ -65,6 +67,7 @@ class Button(BaseButton, CoreComponent):
             "outline",
             "outline-shadow",
             "primary",
+            "primary-bordered",
             "secondary",
         ]
         | Var[
@@ -76,6 +79,7 @@ class Button(BaseButton, CoreComponent):
                 "outline",
                 "outline-shadow",
                 "primary",
+                "primary-bordered",
                 "secondary",
             ]
         ]
