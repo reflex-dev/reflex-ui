@@ -14,7 +14,14 @@ from reflex.vars.base import Var
 from reflex_ui.components.component import CoreComponent
 
 LiteralButtonVariant = Literal[
-    "primary", "destructive", "outline", "secondary", "ghost", "link", "dark"
+    "primary",
+    "destructive",
+    "outline",
+    "outline-shadow",
+    "secondary",
+    "ghost",
+    "link",
+    "dark",
 ]
 LiteralButtonSize = Literal[
     "xs", "sm", "md", "lg", "xl", "icon-xs", "icon-sm", "icon-md", "icon-lg", "icon-xl"
@@ -25,6 +32,7 @@ BUTTON_VARIANTS = {
         "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
         "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast",
         "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
+        "outline-shadow": "dark:border dark:border-secondary-a4 bg-white dark:bg-secondary-1 hover:bg-secondary-3 text-secondary-12 shadow-[0_-1px_0_0_rgba(0,0,0,0.08)_inset,0_0_0_1px_rgba(0,0,0,0.08)_inset,0_1px_2px_0_rgba(0,0,0,0.02),0_1px_4px_0_rgba(0,0,0,0.02)] dark:shadow-none",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
         "ghost": "hover:bg-secondary-3 text-secondary-11",
         "link": "text-secondary-12 underline-offset-4 hover:underline",
@@ -50,7 +58,14 @@ class Button(BaseButton, CoreComponent):
         cls,
         *children,
         variant: Literal[
-            "dark", "destructive", "ghost", "link", "outline", "primary", "secondary"
+            "dark",
+            "destructive",
+            "ghost",
+            "link",
+            "outline",
+            "outline-shadow",
+            "primary",
+            "secondary",
         ]
         | Var[
             Literal[
@@ -59,6 +74,7 @@ class Button(BaseButton, CoreComponent):
                 "ghost",
                 "link",
                 "outline",
+                "outline-shadow",
                 "primary",
                 "secondary",
             ]

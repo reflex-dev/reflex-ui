@@ -651,8 +651,7 @@ class HighLevelMenu(MenuRoot):
             MenuTrigger.create(
                 render_=(
                     trigger
-                    if trigger
-                    else button(
+                    or button(
                         trigger_label,
                         select_arrow(class_name="size-4 text-secondary-9"),
                         variant="outline",
