@@ -2,6 +2,7 @@
 
 from typing import Literal
 
+from reflex.components.component import ComponentNamespace
 from reflex.components.core.cond import cond
 from reflex.components.el import Button as BaseButton
 from reflex.vars.base import Var
@@ -51,6 +52,18 @@ BUTTON_VARIANTS = {
         "icon-xl": "size-12 rounded-ui-xl",
     },
 }
+
+
+class ClassNames:
+    """Class names for button components."""
+
+    DEFAULT = DEFAULT_CLASS_NAME
+    VARIANTS = BUTTON_VARIANTS
+
+    @staticmethod
+    def for_button(variant: str = "primary", size: str = "md") -> str:
+        """Return combined class string for the given variant and size."""
+        return f"{ClassNames.DEFAULT} {ClassNames.VARIANTS['variant'][variant]} {ClassNames.VARIANTS['size'][size]}"
 
 
 class Button(BaseButton, CoreComponent):
@@ -119,4 +132,12 @@ class Button(BaseButton, CoreComponent):
         ]
 
 
-button = Button.create
+class ButtonNamespace(ComponentNamespace):
+    """Namespace for Button components."""
+
+    create = staticmethod(Button.create)
+    class_names = ClassNames
+    __call__ = staticmethod(Button.create)
+
+
+button = ButtonNamespace()

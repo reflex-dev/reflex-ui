@@ -6,6 +6,7 @@
 from collections.abc import Mapping, Sequence
 from typing import Any, Literal
 
+from reflex.components.component import ComponentNamespace
 from reflex.components.core.breakpoints import Breakpoints
 from reflex.components.el import Button as BaseButton
 from reflex.event import EventType, PointerEventInfo
@@ -53,6 +54,13 @@ BUTTON_VARIANTS = {
         "icon-xl": "size-12 rounded-ui-xl",
     },
 }
+
+class ClassNames:
+    DEFAULT = DEFAULT_CLASS_NAME
+    VARIANTS = BUTTON_VARIANTS
+
+    @staticmethod
+    def for_button(variant: str = "primary", size: str = "md") -> str: ...
 
 class Button(BaseButton, CoreComponent):
     @classmethod
@@ -340,4 +348,287 @@ class Button(BaseButton, CoreComponent):
     @staticmethod
     def validate_size(size: LiteralButtonSize): ...
 
-button = Button.create
+class ButtonNamespace(ComponentNamespace):
+    create = staticmethod(Button.create)
+    class_names = ClassNames
+
+    @staticmethod
+    def __call__(
+        *children,
+        variant: Literal[
+            "dark",
+            "destructive",
+            "ghost",
+            "link",
+            "outline",
+            "outline-shadow",
+            "primary",
+            "primary-bordered",
+            "secondary",
+        ]
+        | Var[
+            Literal[
+                "dark",
+                "destructive",
+                "ghost",
+                "link",
+                "outline",
+                "outline-shadow",
+                "primary",
+                "primary-bordered",
+                "secondary",
+            ]
+        ]
+        | None = None,
+        size: Literal[
+            "icon-lg",
+            "icon-md",
+            "icon-sm",
+            "icon-xl",
+            "icon-xs",
+            "lg",
+            "md",
+            "sm",
+            "xl",
+            "xs",
+        ]
+        | Var[
+            Literal[
+                "icon-lg",
+                "icon-md",
+                "icon-sm",
+                "icon-xl",
+                "icon-xs",
+                "lg",
+                "md",
+                "sm",
+                "xl",
+                "xs",
+            ]
+        ]
+        | None = None,
+        loading: Var[bool] | bool | None = None,
+        auto_focus: Var[bool] | bool | None = None,
+        disabled: Var[bool] | bool | None = None,
+        form: Var[str] | str | None = None,
+        form_action: Var[str] | str | None = None,
+        form_enc_type: Var[str] | str | None = None,
+        form_method: Var[str] | str | None = None,
+        form_no_validate: Var[bool] | bool | None = None,
+        form_target: Var[str] | str | None = None,
+        name: Var[str] | str | None = None,
+        type: Literal["button", "reset", "submit"]
+        | Var[Literal["button", "reset", "submit"]]
+        | None = None,
+        value: Var[float | int | str] | float | int | str | None = None,
+        access_key: Var[str] | str | None = None,
+        auto_capitalize: Literal[
+            "characters", "none", "off", "on", "sentences", "words"
+        ]
+        | Var[Literal["characters", "none", "off", "on", "sentences", "words"]]
+        | None = None,
+        content_editable: Literal["inherit", "plaintext-only"]
+        | Var[Literal["inherit", "plaintext-only"] | bool]
+        | bool
+        | None = None,
+        context_menu: Var[str] | str | None = None,
+        dir: Var[str] | str | None = None,
+        draggable: Var[bool] | bool | None = None,
+        enter_key_hint: Literal[
+            "done", "enter", "go", "next", "previous", "search", "send"
+        ]
+        | Var[Literal["done", "enter", "go", "next", "previous", "search", "send"]]
+        | None = None,
+        hidden: Var[bool] | bool | None = None,
+        input_mode: Literal[
+            "decimal", "email", "none", "numeric", "search", "tel", "text", "url"
+        ]
+        | Var[
+            Literal[
+                "decimal", "email", "none", "numeric", "search", "tel", "text", "url"
+            ]
+        ]
+        | None = None,
+        item_prop: Var[str] | str | None = None,
+        lang: Var[str] | str | None = None,
+        role: Literal[
+            "alert",
+            "alertdialog",
+            "application",
+            "article",
+            "banner",
+            "button",
+            "cell",
+            "checkbox",
+            "columnheader",
+            "combobox",
+            "complementary",
+            "contentinfo",
+            "definition",
+            "dialog",
+            "directory",
+            "document",
+            "feed",
+            "figure",
+            "form",
+            "grid",
+            "gridcell",
+            "group",
+            "heading",
+            "img",
+            "link",
+            "list",
+            "listbox",
+            "listitem",
+            "log",
+            "main",
+            "marquee",
+            "math",
+            "menu",
+            "menubar",
+            "menuitem",
+            "menuitemcheckbox",
+            "menuitemradio",
+            "navigation",
+            "none",
+            "note",
+            "option",
+            "presentation",
+            "progressbar",
+            "radio",
+            "radiogroup",
+            "region",
+            "row",
+            "rowgroup",
+            "rowheader",
+            "scrollbar",
+            "search",
+            "searchbox",
+            "separator",
+            "slider",
+            "spinbutton",
+            "status",
+            "switch",
+            "tab",
+            "table",
+            "tablist",
+            "tabpanel",
+            "term",
+            "textbox",
+            "timer",
+            "toolbar",
+            "tooltip",
+            "tree",
+            "treegrid",
+            "treeitem",
+        ]
+        | Var[
+            Literal[
+                "alert",
+                "alertdialog",
+                "application",
+                "article",
+                "banner",
+                "button",
+                "cell",
+                "checkbox",
+                "columnheader",
+                "combobox",
+                "complementary",
+                "contentinfo",
+                "definition",
+                "dialog",
+                "directory",
+                "document",
+                "feed",
+                "figure",
+                "form",
+                "grid",
+                "gridcell",
+                "group",
+                "heading",
+                "img",
+                "link",
+                "list",
+                "listbox",
+                "listitem",
+                "log",
+                "main",
+                "marquee",
+                "math",
+                "menu",
+                "menubar",
+                "menuitem",
+                "menuitemcheckbox",
+                "menuitemradio",
+                "navigation",
+                "none",
+                "note",
+                "option",
+                "presentation",
+                "progressbar",
+                "radio",
+                "radiogroup",
+                "region",
+                "row",
+                "rowgroup",
+                "rowheader",
+                "scrollbar",
+                "search",
+                "searchbox",
+                "separator",
+                "slider",
+                "spinbutton",
+                "status",
+                "switch",
+                "tab",
+                "table",
+                "tablist",
+                "tabpanel",
+                "term",
+                "textbox",
+                "timer",
+                "toolbar",
+                "tooltip",
+                "tree",
+                "treegrid",
+                "treeitem",
+            ]
+        ]
+        | None = None,
+        slot: Var[str] | str | None = None,
+        spell_check: Var[bool] | bool | None = None,
+        tab_index: Var[int] | int | None = None,
+        title: Var[str] | str | None = None,
+        unstyled: Var[bool] | bool | None = None,
+        style: Sequence[Mapping[str, Any]]
+        | Mapping[str, Any]
+        | Var[Mapping[str, Any]]
+        | Breakpoints
+        | None = None,
+        key: Any | None = None,
+        id: Any | None = None,
+        ref: Var | None = None,
+        class_name: Any | None = None,
+        custom_attrs: dict[str, Var | Any] | None = None,
+        on_blur: EventType[()] | None = None,
+        on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_focus: EventType[()] | None = None,
+        on_mount: EventType[()] | None = None,
+        on_mouse_down: EventType[()] | None = None,
+        on_mouse_enter: EventType[()] | None = None,
+        on_mouse_leave: EventType[()] | None = None,
+        on_mouse_move: EventType[()] | None = None,
+        on_mouse_out: EventType[()] | None = None,
+        on_mouse_over: EventType[()] | None = None,
+        on_mouse_up: EventType[()] | None = None,
+        on_scroll: EventType[()] | None = None,
+        on_scroll_end: EventType[()] | None = None,
+        on_unmount: EventType[()] | None = None,
+        **props,
+    ) -> Button:
+        """Create the button component."""
+
+button = ButtonNamespace()
