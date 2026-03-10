@@ -12,6 +12,9 @@ from reflex.vars.base import Var
 
 from reflex_ui.components.component import CoreComponent
 
+REACT_LIBRARY = "@hugeicons/react@1.1.6"
+CORE_ICONS_LIBRARY = "@hugeicons/core-free-icons@4.0.0"
+
 class HugeIcon(CoreComponent):
     @classmethod
     def create(
@@ -20,8 +23,13 @@ class HugeIcon(CoreComponent):
         icon: Var[str] | str | None = None,
         alt_icon: Var[str | None] | str | None = None,
         show_alt: Var[bool] | bool | None = None,
-        size: Var[int] | int | None = None,
+        size: Var[int | str] | int | str | None = None,
+        color: Var[str] | str | None = None,
         stroke_width: Var[float] | float | None = None,
+        absolute_stroke_width: Var[bool] | bool | None = None,
+        primary_color: Var[str] | str | None = None,
+        secondary_color: Var[str] | str | None = None,
+        disable_secondary_opacity: Var[bool] | bool | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -59,7 +67,12 @@ class HugeIcon(CoreComponent):
             alt_icon: Alternative icon for states/interactions
             show_alt: Whether to show the alternative icon
             size: The size of the icon in pixels
+            color: Icon color (CSS color value)
             stroke_width: The stroke width of the icon
+            absolute_stroke_width: When true, stroke width scales relative to icon size
+            primary_color: Primary color for multicolor icons (Bulk, Duotone, Twotone styles)
+            secondary_color: Secondary color for multicolor icons (Bulk, Duotone, Twotone styles)
+            disable_secondary_opacity: Disables the default opacity applied to the secondary color
             unstyled: Whether the component should be unstyled
             style: The style of the component.
             key: A unique key for the component.

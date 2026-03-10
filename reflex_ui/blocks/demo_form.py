@@ -11,7 +11,6 @@ from reflex.experimental.client_state import ClientStateVar
 from reflex.vars.base import get_unique_variable_name
 
 import reflex_ui as ui
-from reflex_ui.components.base.button import BUTTON_VARIANTS, DEFAULT_CLASS_NAME
 
 demo_form_error_message = ClientStateVar.create("demo_form_error_message", "")
 demo_form_open_cs = ClientStateVar.create("demo_form_open", False)
@@ -226,9 +225,7 @@ def select_field(
                 required=required,
                 class_name=ui.cn(
                     "w-full appearance-none pr-9",
-                    DEFAULT_CLASS_NAME,
-                    BUTTON_VARIANTS["variant"]["outline"],
-                    BUTTON_VARIANTS["size"]["md"],
+                    ui.button.class_names.for_button("outline", "md"),
                     "outline-primary-6 focus:border-primary-6",
                 ),
             ),

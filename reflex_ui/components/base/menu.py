@@ -574,7 +574,7 @@ class HighLevelMenu(MenuRoot):
 
     # Props for different component parts
     _item_props = {"close_on_click"}
-    _trigger_props = {"open_on_hover", "delay", "close_delay"}
+    _trigger_props = {"open_on_hover", "delay", "close_delay", "trigger_variant"}
     _positioner_props = {
         "align",
         "align_offset",
@@ -612,6 +612,7 @@ class HighLevelMenu(MenuRoot):
         items = props.pop("items", [])
         size = props.pop("size", "md")
         trigger_label = props.pop("placeholder", "Open Menu")
+        trigger_variant = trigger_props.pop("trigger_variant", "outline")
 
         def create_menu_item(item: str | tuple[str, EventHandler]) -> BaseUIComponent:
             if isinstance(item, tuple):
@@ -651,11 +652,10 @@ class HighLevelMenu(MenuRoot):
             MenuTrigger.create(
                 render_=(
                     trigger
-                    if trigger
-                    else button(
+                    or button(
                         trigger_label,
                         select_arrow(class_name="size-4 text-secondary-9"),
-                        variant="outline",
+                        variant=trigger_variant,
                         class_name=ClassNames.TRIGGER,
                         disabled=props.get("disabled", False),
                         size=size,

@@ -6,11 +6,14 @@ from reflex.vars.base import Var, VarData
 
 from reflex_ui.components.component import CoreComponent
 
+REACT_LIBRARY = "@hugeicons/react@1.1.6"
+CORE_ICONS_LIBRARY = "@hugeicons/core-free-icons@4.0.0"
+
 
 class HugeIcon(CoreComponent):
-    """A HugeIcon component."""
+    """A HugeIcon component using HugeiconsIcon from @hugeicons/react."""
 
-    library = "@hugeicons/react@1.1.5"
+    library = REACT_LIBRARY
 
     tag = "HugeiconsIcon"
 
@@ -24,10 +27,25 @@ class HugeIcon(CoreComponent):
     show_alt: Var[bool]
 
     # The size of the icon in pixels
-    size: Var[int] = Var.create(16)
+    size: Var[int | str] = Var.create(16)
+
+    # Icon color (CSS color value)
+    color: Var[str]
 
     # The stroke width of the icon
-    stroke_width: Var[float] = Var.create(2)
+    stroke_width: Var[float] = Var.create(1.5)
+
+    # When true, stroke width scales relative to icon size
+    absolute_stroke_width: Var[bool]
+
+    # Primary color for multicolor icons (Bulk, Duotone, Twotone styles)
+    primary_color: Var[str]
+
+    # Secondary color for multicolor icons (Bulk, Duotone, Twotone styles)
+    secondary_color: Var[str]
+
+    # Disables the default opacity applied to the secondary color
+    disable_secondary_opacity: Var[bool]
 
     @classmethod
     def create(cls, *children, **props) -> Component:
@@ -50,9 +68,7 @@ class HugeIcon(CoreComponent):
                 props[prop] = Var(
                     icon_name,
                     _var_data=VarData(
-                        imports={
-                            "@hugeicons/core-free-icons@3.1.1": ImportVar(tag=icon_name)
-                        }
+                        imports={CORE_ICONS_LIBRARY: ImportVar(tag=icon_name)}
                     ),
                 )
         stroke_width = props.pop("stroke_width", 2)

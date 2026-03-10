@@ -1104,6 +1104,14 @@
 		0px -24px 12px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0)),
 		0px -8px 8px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0)),
 		0px -2px 6px 0px light-dark(rgba(28, 32, 36, 0.02), rgba(0, 0, 0, 0));
+	--shadow-button-bordered:
+		0 0 0 1px var(--primary-9) inset,
+		0 2px 0 0 rgba(255, 255, 255, 0.22) inset;
+	--shadow-button-outline:
+		0 -1px 0 0 light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) inset,
+		0 0 0 1px light-dark(rgba(0, 0, 0, 0.08), rgba(0, 0, 0, 0)) inset,
+		0 1px 2px 0 light-dark(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0)),
+		0 1px 4px 0 light-dark(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0));
 	/* Radius */
 	--radius-ui-xxs: calc(var(--radius) - 0.25rem);
 	--radius-ui-xs: calc(var(--radius) - 0.125rem);
