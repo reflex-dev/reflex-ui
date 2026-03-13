@@ -96,6 +96,9 @@ class TooltipTrigger(TooltipBaseComponent):
 
     tag = "Tooltip.Trigger"
 
+    # Whether the tooltip should close when this trigger is clicked. Defaults to True.
+    close_on_click: Var[bool]
+
     # How long to wait before the tooltip may be opened on hover. Specified in milliseconds. Defaults to 300.
     delay: Var[int]
 
@@ -228,6 +231,7 @@ class HighLevelTooltip(TooltipRoot):
         "disable_hoverable_popup",
     }
     _trigger_props = {
+        "close_on_click",
         "delay",
         "close_delay",
     }

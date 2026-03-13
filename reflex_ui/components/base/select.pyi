@@ -20,6 +20,7 @@ LiteralPosition = Literal["absolute", "fixed"]
 LiteralOrientation = Literal["horizontal", "vertical"]
 
 class ClassNames:
+    LABEL = "block text-sm font-medium text-secondary-12"
     TRIGGER = "flex min-w-48 items-center justify-between gap-3 select-none text-sm [&>span]:line-clamp-1 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4 group/trigger"
     VALUE = "flex-1 text-left"
     ICON = "flex size-4 text-secondary-10 group-data-[disabled]/trigger:text-current"
@@ -143,6 +144,43 @@ class SelectRoot(SelectBaseComponent):
         **props,
     ) -> SelectRoot:
         """Create the select root component."""
+
+class SelectLabel(SelectBaseComponent):
+    @classmethod
+    def create(
+        cls,
+        *children,
+        render_: Component | Var[Component] | None = None,
+        unstyled: Var[bool] | bool | None = None,
+        style: Sequence[Mapping[str, Any]]
+        | Mapping[str, Any]
+        | Var[Mapping[str, Any]]
+        | Breakpoints
+        | None = None,
+        key: Any | None = None,
+        id: Any | None = None,
+        ref: Var | None = None,
+        class_name: Any | None = None,
+        custom_attrs: dict[str, Var | Any] | None = None,
+        on_blur: EventType[()] | None = None,
+        on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_focus: EventType[()] | None = None,
+        on_mount: EventType[()] | None = None,
+        on_mouse_down: EventType[()] | None = None,
+        on_mouse_enter: EventType[()] | None = None,
+        on_mouse_leave: EventType[()] | None = None,
+        on_mouse_move: EventType[()] | None = None,
+        on_mouse_out: EventType[()] | None = None,
+        on_mouse_over: EventType[()] | None = None,
+        on_mouse_up: EventType[()] | None = None,
+        on_scroll: EventType[()] | None = None,
+        on_scroll_end: EventType[()] | None = None,
+        on_unmount: EventType[()] | None = None,
+        **props,
+    ) -> SelectLabel:
+        """Create the select label component."""
 
 class SelectTrigger(SelectBaseComponent):
     @classmethod
@@ -934,6 +972,7 @@ class HighLevelSelect(SelectRoot):
 
 class Select(ComponentNamespace):
     root = staticmethod(SelectRoot.create)
+    label = staticmethod(SelectLabel.create)
     trigger = staticmethod(SelectTrigger.create)
     value = staticmethod(SelectValue.create)
     icon = staticmethod(SelectIcon.create)
