@@ -168,6 +168,7 @@ class TooltipTrigger(TooltipBaseComponent):
     def create(
         cls,
         *children,
+        close_on_click: Var[bool] | bool | None = None,
         delay: Var[int] | int | None = None,
         close_delay: Var[int] | int | None = None,
         render_: Component | Var[Component] | None = None,

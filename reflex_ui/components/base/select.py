@@ -24,6 +24,7 @@ LiteralOrientation = Literal["horizontal", "vertical"]
 class ClassNames:
     """Class names for select components."""
 
+    LABEL = "block text-sm font-medium text-secondary-12"
     TRIGGER = "flex min-w-48 items-center justify-between gap-3 select-none text-sm [&>span]:line-clamp-1 cursor-pointer focus:outline-none focus-visible:ring-1 focus-visible:ring-primary-4 group/trigger"
     VALUE = "flex-1 text-left"
     ICON = "flex size-4 text-secondary-10 group-data-[disabled]/trigger:text-current"
@@ -132,6 +133,22 @@ class SelectRoot(SelectBaseComponent):
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the select root component."""
         props["data-slot"] = "select"
+        return super().create(*children, **props)
+
+
+class SelectLabel(SelectBaseComponent):
+    """An accessible label for the select trigger."""
+
+    tag = "Select.Label"
+
+    # The render prop
+    render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the select label component."""
+        props["data-slot"] = "select-label"
+        cls.set_class_name(ClassNames.LABEL, props)
         return super().create(*children, **props)
 
 
@@ -602,6 +619,7 @@ class Select(ComponentNamespace):
     """Namespace for Select components."""
 
     root = staticmethod(SelectRoot.create)
+    label = staticmethod(SelectLabel.create)
     trigger = staticmethod(SelectTrigger.create)
     value = staticmethod(SelectValue.create)
     icon = staticmethod(SelectIcon.create)

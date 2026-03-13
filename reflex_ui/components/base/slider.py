@@ -26,6 +26,7 @@ class ClassNames:
     """Class names for slider components."""
 
     ROOT = "flex max-w-64 w-full touch-none items-center select-none"
+    LABEL = "text-sm text-secondary-12 font-medium"
     VALUE = "text-sm text-primary-11 font-medium"
     CONTROL = "flex items-center justify-center w-full"
     TRACK = "h-2 w-full rounded-full bg-secondary-4 select-none"
@@ -42,6 +43,22 @@ class SliderBaseComponent(BaseUIComponent):
     def import_var(self):
         """Return the import variable for the slider component."""
         return ImportVar(tag="Slider", package_path="", install=False)
+
+
+class SliderLabel(SliderBaseComponent):
+    """An accessible label for the slider."""
+
+    tag = "Slider.Label"
+
+    # The render prop
+    render_: Var[Component]
+
+    @classmethod
+    def create(cls, *children, **props) -> BaseUIComponent:
+        """Create the slider label component."""
+        props["data-slot"] = "slider-label"
+        cls.set_class_name(ClassNames.LABEL, props)
+        return super().create(*children, **props)
 
 
 class SliderRoot(SliderBaseComponent):
@@ -231,6 +248,7 @@ class Slider(ComponentNamespace):
     """Namespace for Slider components."""
 
     root = staticmethod(SliderRoot.create)
+    label = staticmethod(SliderLabel.create)
     value = staticmethod(SliderValue.create)
     control = staticmethod(SliderControl.create)
     track = staticmethod(SliderTrack.create)

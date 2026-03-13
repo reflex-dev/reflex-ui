@@ -26,6 +26,7 @@ on_value_event_spec = (
 
 class ClassNames:
     ROOT = "flex max-w-64 w-full touch-none items-center select-none"
+    LABEL = "text-sm text-secondary-12 font-medium"
     VALUE = "text-sm text-primary-11 font-medium"
     CONTROL = "flex items-center justify-center w-full"
     TRACK = "h-2 w-full rounded-full bg-secondary-4 select-none"
@@ -84,6 +85,43 @@ class SliderBaseComponent(BaseUIComponent):
         Returns:
             The component.
         """
+
+class SliderLabel(SliderBaseComponent):
+    @classmethod
+    def create(
+        cls,
+        *children,
+        render_: Component | Var[Component] | None = None,
+        unstyled: Var[bool] | bool | None = None,
+        style: Sequence[Mapping[str, Any]]
+        | Mapping[str, Any]
+        | Var[Mapping[str, Any]]
+        | Breakpoints
+        | None = None,
+        key: Any | None = None,
+        id: Any | None = None,
+        ref: Var | None = None,
+        class_name: Any | None = None,
+        custom_attrs: dict[str, Var | Any] | None = None,
+        on_blur: EventType[()] | None = None,
+        on_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_context_menu: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_double_click: EventType[()] | EventType[PointerEventInfo] | None = None,
+        on_focus: EventType[()] | None = None,
+        on_mount: EventType[()] | None = None,
+        on_mouse_down: EventType[()] | None = None,
+        on_mouse_enter: EventType[()] | None = None,
+        on_mouse_leave: EventType[()] | None = None,
+        on_mouse_move: EventType[()] | None = None,
+        on_mouse_out: EventType[()] | None = None,
+        on_mouse_over: EventType[()] | None = None,
+        on_mouse_up: EventType[()] | None = None,
+        on_scroll: EventType[()] | None = None,
+        on_scroll_end: EventType[()] | None = None,
+        on_unmount: EventType[()] | None = None,
+        **props,
+    ) -> SliderLabel:
+        """Create the slider label component."""
 
 class SliderRoot(SliderBaseComponent):
     @classmethod
@@ -466,6 +504,7 @@ class HighLevelSlider(SliderRoot):
 
 class Slider(ComponentNamespace):
     root = staticmethod(SliderRoot.create)
+    label = staticmethod(SliderLabel.create)
     value = staticmethod(SliderValue.create)
     control = staticmethod(SliderControl.create)
     track = staticmethod(SliderTrack.create)
