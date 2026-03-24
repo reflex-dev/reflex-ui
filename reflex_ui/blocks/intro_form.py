@@ -310,6 +310,7 @@ def intro_form(
                     "Word of Mouth",
                     "Blog",
                     "Conference",
+                    "LLM (Claude, ChatGPT, etc)",
                     "Other",
                 ],
                 required=True,

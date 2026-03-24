@@ -298,6 +298,7 @@ def demo_form(id_prefix: str = "", **props) -> rx.Component:
                     "Word of Mouth",
                     "Blog",
                     "Conference",
+                    "LLM (Claude, ChatGPT, etc)",
                     "Other",
                 ],
                 required=True,
