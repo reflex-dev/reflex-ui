@@ -1114,10 +1114,10 @@
 		0 1px 4px 0 light-dark(rgba(0, 0, 0, 0.02), rgba(0, 0, 0, 0));
 	/* Radius */
 	--radius-ui-xxs: calc(var(--radius) - 0.25rem);
-	--radius-ui-xs: calc(var(--radius) - 0.125rem);
+	--radius-ui-xs: var(--radius);
 	--radius-ui-sm: var(--radius);
 	--radius-ui-md: calc(var(--radius) + 0.125rem);
-	--radius-ui-lg: calc(var(--radius) + 0.25rem);
+	--radius-ui-lg: calc(var(--radius) + 0.125rem);
 	--radius-ui-xl: calc(var(--radius) + 0.375rem);
 	--radius-ui-2xl: calc(var(--radius) + 0.5rem);
 }
