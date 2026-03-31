@@ -27,6 +27,29 @@ def index() -> rx.Component:
                 ),
                 content="Seriously, click me",
             ),
+            ui.input(
+                icon="SmileIcon",
+                placeholder="Hello",
+            ),
+            ui.textarea(
+                placeholder="Hello",
+            ),
+            ui.tabs.root(
+                ui.tabs.list(
+                    ui.tabs.tab(
+                        rx.el.span("Item 1", class_name="px-1"),
+                        value="item-1",
+                        size="sm",
+                    ),
+                    ui.tabs.tab("Item 2", value="item-2", size="sm"),
+                    ui.tabs.tab("Item 3", value="item-3", size="sm"),
+                    ui.tabs.indicator(size="sm"),
+                    size="sm",
+                ),
+                ui.tabs.panel("Item 1", value="item-1"),
+                ui.tabs.panel("Item 2", value="item-2"),
+                ui.tabs.panel("Item 3", value="item-3"),
+            ),
             ui.checkbox(
                 label="Click me",
                 on_checked_change=lambda value: rx.toast.success(f"Value: {value}"),

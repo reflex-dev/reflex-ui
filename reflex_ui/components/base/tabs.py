@@ -10,16 +10,63 @@ from reflex.vars.base import Var
 from reflex_ui.components.base_ui import PACKAGE_NAME, BaseUIComponent
 
 LiteralOrientation = Literal["horizontal", "vertical"]
+LiteralTabsSize = Literal["sm", "md", "lg"]
+
+DEFAULT_LIST_CLASS_NAME = "bg-secondary-1 inline-flex items-center justify-start relative z-0 shadow-button-outline dark:border dark:border-secondary-4"
+DEFAULT_TAB_CLASS_NAME = "justify-center items-center inline-flex font-medium text-secondary-11 cursor-pointer z-[1] hover:text-primary-9 transition-color text-nowrap data-[active]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8 text-sm"
+DEFAULT_INDICATOR_CLASS_NAME = "absolute left-0 inset-y-0 my-0.5 -z-1 w-(--active-tab-width) translate-x-(--active-tab-left) transition-all duration-200 ease-in-out dark:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset] bg-white dark:bg-secondary-3 text-secondary-12 shadow-button-outline"
+
+TABS_SIZES = {
+    "list": {
+        "sm": "p-0.5 rounded-ui-md gap-0.5",
+        "md": "p-0.5 rounded-ui-md gap-0.5",
+        "lg": "p-0.5 rounded-ui-md gap-0.5",
+    },
+    "tab": {
+        "sm": "h-7 px-1.5 rounded-ui-sm gap-1",
+        "md": "h-8 px-2 rounded-ui-sm gap-1.5",
+        "lg": "h-9 px-2.5 rounded-ui-sm gap-2",
+    },
+    "indicator": {
+        "sm": "rounded-ui-sm",
+        "md": "rounded-ui-sm",
+        "lg": "rounded-ui-sm",
+    },
+}
+
+
+def _validate_tabs_size(kind: Literal["list", "tab", "indicator"], size: str) -> None:
+    allowed = TABS_SIZES[kind]
+    if size not in allowed:
+        available = ", ".join(allowed.keys())
+        msg = f"Invalid tabs {kind} size: {size!r}. Available sizes: {available}"
+        raise ValueError(msg)
 
 
 class ClassNames:
     """Class names for tabs components."""
 
     ROOT = "flex flex-col gap-2"
-    LIST = "bg-secondary-3 inline-flex gap-1 p-1 items-center justify-start rounded-ui-md relative z-0"
-    TAB = "h-7 px-1.5 rounded-ui-sm justify-center items-center gap-1.5 inline-flex text-sm font-medium text-secondary-11 cursor-pointer z-[1] hover:text-secondary-12 transition-color text-nowrap data-[active]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8"
-    INDICATOR = "absolute top-1/2 left-0 -z-1 h-7 w-(--active-tab-width) -translate-y-1/2 translate-x-(--active-tab-left) rounded-ui-sm bg-secondary-1 shadow-small transition-all duration-200 ease-in-out"
+    LIST = f"{DEFAULT_LIST_CLASS_NAME} {TABS_SIZES['list']['sm']}"
+    TAB = f"{DEFAULT_TAB_CLASS_NAME} {TABS_SIZES['tab']['sm']}"
+    INDICATOR = f"{DEFAULT_INDICATOR_CLASS_NAME} {TABS_SIZES['indicator']['sm']}"
     PANEL = "flex flex-col gap-2"
+    SIZES = TABS_SIZES
+
+    @staticmethod
+    def for_list(size: str = "sm") -> str:
+        """Return combined class string for the given size."""
+        return f"{DEFAULT_LIST_CLASS_NAME} {TABS_SIZES['list'][size]}"
+
+    @staticmethod
+    def for_tab(size: str = "sm") -> str:
+        """Return combined class string for the given size."""
+        return f"{DEFAULT_TAB_CLASS_NAME} {TABS_SIZES['tab'][size]}"
+
+    @staticmethod
+    def for_indicator(size: str = "sm") -> str:
+        """Return combined class string for the given size."""
+        return f"{DEFAULT_INDICATOR_CLASS_NAME} {TABS_SIZES['indicator'][size]}"
 
 
 class TabsBaseComponent(BaseUIComponent):
@@ -72,12 +119,21 @@ class TabsList(TabsBaseComponent):
     # Whether to loop keyboard focus back to the first item when the end of the list is reached while using the arrow keys. Defaults to True.
     loop_focus: Var[bool]
 
+    # The size of the tabs list. Defaults to "sm".
+    size: Var[LiteralTabsSize]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs list component."""
+        size = props.pop("size", "sm")
+        _validate_tabs_size("list", size)
         props["data-slot"] = "tabs-list"
-        cls.set_class_name(ClassNames.LIST, props)
+        list_classes = f"{DEFAULT_LIST_CLASS_NAME} {TABS_SIZES['list'][size]}"
+        cls.set_class_name(list_classes, props)
         return super().create(*children, **props)
+
+    def _exclude_props(self) -> list[str]:
+        return [*super()._exclude_props(), "size"]
 
 
 class TabsTab(TabsBaseComponent):
@@ -97,12 +153,21 @@ class TabsTab(TabsBaseComponent):
     # The render prop
     render_: Var[Component]
 
+    # The size of the tab. Defaults to "sm".
+    size: Var[LiteralTabsSize]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs tab component."""
+        size = props.pop("size", "sm")
+        _validate_tabs_size("tab", size)
         props["data-slot"] = "tabs-tab"
-        cls.set_class_name(ClassNames.TAB, props)
+        tab_classes = f"{DEFAULT_TAB_CLASS_NAME} {TABS_SIZES['tab'][size]}"
+        cls.set_class_name(tab_classes, props)
         return super().create(*children, **props)
+
+    def _exclude_props(self) -> list[str]:
+        return [*super()._exclude_props(), "size"]
 
 
 class TabsIndicator(TabsBaseComponent):
@@ -116,12 +181,23 @@ class TabsIndicator(TabsBaseComponent):
     # The render prop
     render_: Var[Component]
 
+    # The size of the indicator. Defaults to "sm".
+    size: Var[LiteralTabsSize]
+
     @classmethod
     def create(cls, *children, **props) -> BaseUIComponent:
         """Create the tabs indicator component."""
+        size = props.pop("size", "sm")
+        _validate_tabs_size("indicator", size)
         props["data-slot"] = "tabs-indicator"
-        cls.set_class_name(ClassNames.INDICATOR, props)
+        indicator_classes = (
+            f"{DEFAULT_INDICATOR_CLASS_NAME} {TABS_SIZES['indicator'][size]}"
+        )
+        cls.set_class_name(indicator_classes, props)
         return super().create(*children, **props)
+
+    def _exclude_props(self) -> list[str]:
+        return [*super()._exclude_props(), "size"]
 
 
 class TabsPanel(TabsBaseComponent):
