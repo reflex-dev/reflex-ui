@@ -5,16 +5,16 @@ repos:
     rev: v0.15.5
     hooks:
       - id: ruff-check
-        files: ^reflex_ui/
+        files: ^(reflex_ui|shared)/
         args: ["--fix", "--exit-non-zero-on-fix", "--no-unsafe-fixes"]
       - id: ruff-format
-        files: ^reflex_ui/
+        files: ^(reflex_ui|shared)/
 
   - repo: https://github.com/codespell-project/codespell
     rev: v2.4.2
     hooks:
       - id: codespell
-        files: ^reflex_ui/
+        files: ^(reflex_ui|shared)/
 
   # Run pyi check before pyright because pyright can fail if pyi files are wrong.
   # - repo: local
@@ -31,5 +31,5 @@ repos:
     rev: v1.1.408
     hooks:
       - id: pyright
-        files: ^reflex_ui/
+        files: ^(reflex_ui|shared)/
         language: system
