@@ -1,7 +1,7 @@
 # pyright: reportAttributeAccessIssue=false
 import flexdown
 import reflex as rx
-from reflex_core.constants.colors import ColorType
+from reflex_base.constants.colors import ColorType
 
 import reflex_ui as ui
 from shared.components.blocks.code import code_block_markdown, code_block_markdown_dark
