@@ -1,22 +1,15 @@
 import contextlib
 import os
-from datetime import datetime
 from typing import Any
 
 import httpx
 import reflex as rx
 from email_validator import EmailNotValidError, ValidatedEmail, validate_email
-from sqlmodel import Field
 
 from shared.constants import (
     API_BASE_URL_LOOPS,
     REFLEX_DEV_WEB_NEWSLETTER_FORM_WEBHOOK_URL,
 )
-
-
-class Waitlist(rx.Model, table=True):
-    email: str
-    date_created: datetime = Field(default_factory=datetime.utcnow, nullable=False)
 
 
 class IndexState(rx.State):
