@@ -69,7 +69,7 @@ lint.pydocstyle.convention = "google"
 "*.pyi" = ["D301", "D415", "D417", "D418", "E742", "N", "PGH"]
 "**/alembic/*.py" = ["D", "ERA"]
 "__init__.py" = ["ERA"]
-"shared/**" = ["D100", "D101", "D102", "D103", "D104", "T201"]
+"shared/reflex_ui_shared/**" = ["D100", "D101", "D102", "D103", "D104", "T201"]
 
 [tool.pyright]
 reportIncompatibleMethodOverride = false
