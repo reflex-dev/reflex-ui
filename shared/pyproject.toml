@@ -1,0 +1,18 @@
+[project]
+name = "reflex-ui-shared"
+version = "0.0.1"
+description = "Shared components and utilities for Reflex web projects"
+readme = "README.md"
+requires-python = ">=3.11"
+dependencies = [
+    "reflex (>=0.8.0)",
+    "httpx",
+    "email-validator",
+    "flexdown",
+    "mistletoe",
+    "ruff-format",
+]
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
