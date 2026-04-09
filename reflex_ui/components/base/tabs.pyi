@@ -14,13 +14,31 @@ from reflex.vars.base import Var
 from reflex_ui.components.base_ui import BaseUIComponent
 
 LiteralOrientation = Literal["horizontal", "vertical"]
+LiteralTabsSize = Literal["sm", "md", "lg"]
 
 class ClassNames:
     ROOT = "flex flex-col gap-2"
-    LIST = "bg-secondary-3 inline-flex gap-1 p-1 items-center justify-start rounded-ui-md relative z-0"
-    TAB = "h-7 px-1.5 rounded-ui-sm justify-center items-center gap-1.5 inline-flex text-sm font-medium text-secondary-11 cursor-pointer z-[1] hover:text-secondary-12 transition-color text-nowrap data-[active]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8"
-    INDICATOR = "absolute top-1/2 left-0 -z-1 h-7 w-(--active-tab-width) -translate-y-1/2 translate-x-(--active-tab-left) rounded-ui-sm bg-secondary-1 shadow-small transition-all duration-200 ease-in-out"
+    LIST = "bg-secondary-1 inline-flex items-center justify-start relative z-0 shadow-button-outline dark:border dark:border-secondary-4"
+    TAB = "justify-center items-center inline-flex font-medium text-secondary-11 cursor-pointer z-[1] hover:text-primary-9 transition-color text-nowrap data-[active]:text-secondary-12 data-[disabled]:cursor-not-allowed data-[disabled]:text-secondary-8 text-sm"
+    INDICATOR = "absolute left-0 inset-y-0 my-0.5 -z-1 w-(--active-tab-width) translate-x-(--active-tab-left) transition-all duration-200 ease-in-out dark:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset] bg-white dark:bg-secondary-3 text-secondary-12 shadow-button-outline"
     PANEL = "flex flex-col gap-2"
+    SIZES = {
+        "list": {
+            "sm": "p-0.5 rounded-ui-md gap-0.5",
+            "md": "p-0.5 rounded-ui-md gap-0.5",
+            "lg": "p-0.5 rounded-ui-md gap-0.5",
+        },
+        "tab": {
+            "sm": "h-7 px-1.5 rounded-ui-sm gap-1",
+            "md": "h-8 px-2 rounded-ui-sm gap-1.5",
+            "lg": "h-9 px-2.5 rounded-ui-sm gap-2",
+        },
+        "indicator": {
+            "sm": "rounded-ui-sm",
+            "md": "rounded-ui-sm",
+            "lg": "rounded-ui-sm",
+        },
+    }
 
 class TabsBaseComponent(BaseUIComponent):
     @property
@@ -125,6 +143,7 @@ class TabsList(TabsBaseComponent):
         *children,
         activate_on_focus: Var[bool] | bool | None = None,
         loop_focus: Var[bool] | bool | None = None,
+        size: Literal["lg", "md", "sm"] | Var[Literal["lg", "md", "sm"]] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -154,7 +173,11 @@ class TabsList(TabsBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> TabsList:
-        """Create the tabs list component."""
+        """Create the tabs list component.
+
+        Returns:
+            The component.
+        """
 
 class TabsTab(TabsBaseComponent):
     @classmethod
@@ -165,6 +188,7 @@ class TabsTab(TabsBaseComponent):
         native_button: Var[bool] | bool | None = None,
         disabled: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
+        size: Literal["lg", "md", "sm"] | Var[Literal["lg", "md", "sm"]] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -194,7 +218,11 @@ class TabsTab(TabsBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> TabsTab:
-        """Create the tabs tab component."""
+        """Create the tabs tab component.
+
+        Returns:
+            The component.
+        """
 
 class TabsIndicator(TabsBaseComponent):
     @classmethod
@@ -203,6 +231,7 @@ class TabsIndicator(TabsBaseComponent):
         *children,
         render_before_hydration: Var[bool] | bool | None = None,
         render_: Component | Var[Component] | None = None,
+        size: Literal["lg", "md", "sm"] | Var[Literal["lg", "md", "sm"]] | None = None,
         unstyled: Var[bool] | bool | None = None,
         style: Sequence[Mapping[str, Any]]
         | Mapping[str, Any]
@@ -232,7 +261,11 @@ class TabsIndicator(TabsBaseComponent):
         on_unmount: EventType[()] | None = None,
         **props,
     ) -> TabsIndicator:
-        """Create the tabs indicator component."""
+        """Create the tabs indicator component.
+
+        Returns:
+            The component.
+        """
 
 class TabsPanel(TabsBaseComponent):
     @classmethod
