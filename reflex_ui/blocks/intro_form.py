@@ -6,11 +6,12 @@ This module provides a comprehensive intro form that validates company emails.
 from typing import Any
 
 import reflex as rx
-from reflex.event import EventType
+from reflex.event import EventType, IndividualEventType
 from reflex.experimental.client_state import ClientStateVar
 from reflex.vars.base import get_unique_variable_name
 
 import reflex_ui as ui
+from reflex_ui.blocks.telemetry.posthog import track_intro_form_posthog_submission
 
 intro_form_error_message = ClientStateVar.create("intro_form_error_message", "")
 intro_form_open_cs = ClientStateVar.create("intro_form_open", False)
@@ -85,6 +86,15 @@ class IntroFormStateUI(rx.State):
             ]
         else:
             yield intro_form_error_message.push("")
+
+    @rx.event
+    def track_intro_form_posthog(self, form_data: dict[str, Any]):
+        """Send intro form fields to PostHog (identify + capture) in the browser.
+
+        Returns:
+            Event that runs PostHog identify and capture in the browser.
+        """
+        return track_intro_form_posthog_submission(form_data)
 
 
 def input_field(
@@ -241,7 +251,7 @@ def select_field(
 
 def intro_form(
     id_prefix: str = "",
-    on_submit: EventType[dict[str, Any]] | EventType[()] | None = None,
+    on_submit: EventType[dict[str, Any]] | None = None,
     **props,
 ) -> rx.Component:
     """Create and return the intro form component.
@@ -261,6 +271,11 @@ def intro_form(
     """
     prefix = id_prefix or get_unique_variable_name()
     email_id = f"{prefix}_user_email"
+
+    extra: list[IndividualEventType[dict[str, Any]]] = (
+        on_submit if isinstance(on_submit, list) else [on_submit] if on_submit else []
+    )
+
     form = rx.el.form(
         rx.el.div(
             input_field("First name", "John", "first_name", "text", True),
@@ -340,7 +355,7 @@ def intro_form(
             "@container flex flex-col lg:gap-6 gap-2 p-6",
             props.pop("class_name", ""),
         ),
-        on_submit=on_submit,
+        on_submit=[IntroFormStateUI.track_intro_form_posthog, *extra],
         **props,
     )
     return rx.fragment(
@@ -351,7 +366,7 @@ def intro_form(
 def intro_form_dialog(
     trigger: rx.Component | None = None,
     id_prefix: str = "",
-    on_submit: EventType[dict[str, Any]] | EventType[()] | None = None,
+    on_submit: EventType[dict[str, Any]] | None = None,
     **props,
 ) -> rx.Component:
     """Return a intro form dialog container element.
