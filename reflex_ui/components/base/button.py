@@ -12,10 +12,12 @@ from reflex_ui.components.icons.others import spinner
 
 LiteralButtonVariant = Literal[
     "primary",
+    "primary-old",
     "primary-bordered",
     "destructive",
     "outline",
     "outline-shadow",
+    "outline-old",
     "secondary",
     "ghost",
     "ghost-highlight",
@@ -30,10 +32,12 @@ DEFAULT_CLASS_NAME = "inline-flex items-center justify-center whitespace-nowrap 
 
 BUTTON_VARIANTS = {
     "variant": {
-        "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
+        "primary": "bg-primary-9 text-primary-contrast hover:bg-primary-10 shadow-button-bordered disabled:shadow-none",
+        "primary-old": "bg-primary-9 text-primary-contrast hover:bg-primary-10",
         "primary-bordered": "bg-primary-9 text-primary-contrast hover:bg-primary-10 shadow-button-bordered disabled:shadow-none",
-        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast",
-        "outline": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
+        "destructive": "bg-destructive-9 hover:bg-destructive-10 text-primary-contrast shadow-[0_0_0_1px_var(--destructive-9)_inset,0_2px_0_0_rgba(255,255,255,0.22)_inset]",
+        "outline": "dark:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset] bg-white hover:bg-secondary-2 dark:bg-secondary-3 dark:hover:bg-secondary-4 text-secondary-12 shadow-button-outline disabled:shadow-none",
+        "outline-old": "border border-secondary-a4 bg-secondary-1 hover:bg-secondary-3 text-secondary-12",
         "outline-shadow": "dark:shadow-[0_1px_0_0_rgba(255,255,255,0.08)_inset] bg-white hover:bg-secondary-2 dark:bg-secondary-3 dark:hover:bg-secondary-4 text-secondary-12 shadow-button-outline disabled:shadow-none",
         "secondary": "bg-secondary-4 text-secondary-12 hover:bg-secondary-5",
         "ghost": "hover:bg-secondary-3 text-secondary-11",
